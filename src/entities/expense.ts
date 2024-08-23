@@ -16,6 +16,10 @@ export class Expense {
       throw new Error('Description is required')
     }
 
+    if (value.length > 255) {
+      throw new Error('Description length cannot be greather than 255')
+    }
+
     this._description = value
   }
 
