@@ -6,8 +6,11 @@ export class Expense {
     if (!description) {
       throw new Error('Description is required')
     }
+    if (!amount) {
+      throw new Error('Amount is required. It should be greater than 0')
+    }
 
-    throw new Error('Amount is required. It should be greater than 0')
+    throw new Error('Amount cannot be a negative value. It should be greater than 0')
 
     this._description = description
     this._amount = amount
