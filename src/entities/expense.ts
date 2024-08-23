@@ -1,19 +1,14 @@
 export class Expense {
-  private _description: string
-  private _amount: number
+  private _description!: string
+  private _amount!: number
 
   constructor(description: string, amount: number) {
     if (!description) {
       throw new Error('Description is required')
     }
-    if (!amount) {
-      throw new Error('Amount is required. It should be greater than 0')
-    }
-
-    throw new Error('Amount cannot be a negative value. It should be greater than 0')
 
     this._description = description
-    this._amount = amount
+    this.amount = amount
   }
 
   get description(): string {
@@ -22,5 +17,17 @@ export class Expense {
 
   get amount(): number {
     return this._amount
+  }
+
+  set amount(value: number) {
+    if (!value) {
+      throw new Error('Amount is required. It should be greater than 0')
+    }
+
+    if (value < 0) {
+      throw new Error('Amount cannot be a negative value. It should be greater than 0')
+    }
+
+    this._amount = value
   }
 }
