@@ -31,4 +31,11 @@ describe('Given is needed to create a expense,', () => {
 
     expect(classInstantiation).toThrowError('Amount cannot be a negative value. It should be greater than 0')
   })
+
+  it('when a valid description and amount is provided, should create a new expense', () => {
+    const expense = new Expense('Credit card bill', 100)
+
+    expect(expense.description).toBe('Credit card bill')
+    expect(expense.amount).toBe(100)
+  })
 })
