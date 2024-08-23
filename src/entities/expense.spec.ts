@@ -13,4 +13,10 @@ describe('Given is needed to create a expense,', () => {
 
     expect(classInstantiation).toThrowError('Amount is required. It should be greater than 0')
   })
+
+  it('when amount less than 0 is provided, should throw an exception', () => {
+    const classInstantiation = () => new Expense('Credit card bill', -100)
+
+    expect(classInstantiation).toThrowError('Amount cannot be a negative value. It should be greater than 0')
+  })
 })
