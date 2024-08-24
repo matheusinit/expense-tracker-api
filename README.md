@@ -31,11 +31,21 @@ Copy content of `.env.sameple` to a new file `.env`, then define the values for 
 
 ## Execution
 
+### Database
+
 To start the PostgreSQL service, it is needed Docker. To start runs:
 
 ```bash
 docker compose up -d database
 ```
+
+We need to apply migrations to our database using the chosen ORM. For development, you can run the following command:
+
+```bash
+pnpm migrate:dev
+```
+
+> For production, the command to run is `pnpm migrate:prod`
 
 ## Contribute
 
