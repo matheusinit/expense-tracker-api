@@ -11,21 +11,19 @@ class AddExpenseController {
   async handle(request: Request, response: Response) {
     const { description, amount } = request.body
 
+    const required_fields = ['description', 'amount']
+
+    for (const field of required_fields) {
+      if (!request.body[field]) {
+        return response.status(400).send({
+          message: `Missing required fields: ${field}`
+        })
+      }
+    }
+
     const expenseData = {
       description,
       amount
-    }
-
-    if (!description) {
-      return response.status(400).send({
-        message: 'Missing required fields: description'
-      })
-    }
-
-    if (!amount) {
-      return response.status(400).send({
-        message: 'Missing required fields: amount'
-      })
     }
 
     const expense = await this.repository.add(expenseData)
