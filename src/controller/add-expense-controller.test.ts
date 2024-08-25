@@ -42,4 +42,17 @@ describe('Given add expense controller', () => {
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: description')
   })
+
+  it('when required field amount is missing, then should return bad request status and message error', async () => {
+    const expense = {
+      description: 'Credit card bill'
+    }
+
+    const response = await request(app).post('/v1/expenses').send(expense)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toEqual(400)
+    expect(responseBody.message).toEqual('Missing required fields: amount')
+  })
 })
