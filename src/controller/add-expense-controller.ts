@@ -16,6 +16,12 @@ class AddExpenseController {
       amount
     }
 
+    if (!description) {
+      return response.status(400).send({
+        message: 'Missing required fields: description'
+      })
+    }
+
     const expense = await this.repository.add(expenseData)
 
     return response.status(201).send(expense)

@@ -28,6 +28,7 @@ const { doubleCsrfProtection, generateToken } = doubleCsrf({
 
     return csrfTokenSecret
   },
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS', 'POST']
 })
 
 app.use(helmet())
