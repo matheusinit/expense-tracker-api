@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "scan-code": "snyk code test",
+    "scan-code": "snyk code test --org=$SNYK_ORG",
     "scan-dependencies": "snyk test",
     "monitor-vulnerabilities": "snyk monitor",
     "migrate:dev": "prisma migrate dev",
