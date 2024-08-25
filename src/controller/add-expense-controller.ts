@@ -14,8 +14,11 @@ class AddExpenseController {
     const required_fields = ['description', 'amount']
 
     if (required_fields.every(field => !request.body[field])) {
+      const required_fields_sorted = required_fields.sort()
+      const required_fields_text = required_fields_sorted.join(', ')
+
       return response.status(400).send({
-        message: 'Missing required fields: ' + required_fields.sort().join(', ')
+        message: `Missing required fields: ${required_fields_text}`
       })
     }
 
