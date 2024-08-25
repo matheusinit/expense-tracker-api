@@ -44,8 +44,5 @@ const expenseRepository = new ExpenseRepository()
 const addExpenseController = new AddExpenseController(expenseRepository)
 
 app.post('/v1/expenses', (request, response) => addExpenseController.handle(request, response))
-app.get('/v1/sample', (request, response) => {
-  return response.status(200).send({ message: 'Hello World' })
-})
 
 export default app
