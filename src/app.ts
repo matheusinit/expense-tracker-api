@@ -27,19 +27,16 @@ const { doubleCsrfProtection, generateToken } = doubleCsrf({
     if (!csrfTokenSecret) throw new Error('CSRF_TOKEN_SECRET not defined')
 
     return csrfTokenSecret
-  },
-  ignoredMethods: ['GET', 'HEAD', 'OPTIONS', 'POST']
+  }
 })
-
-app.use(helmet())
 app.use(express.json())
-
 const myRoute = (req, res) => {
   const csrfToken = generateToken(req, res)
   res.json({ csrfToken })
 }
 app.get('/csrf-token', myRoute)
 app.use(doubleCsrfProtection)
+app.use(helmet())
 
 const expenseRepository = new ExpenseRepository()
 const addExpenseController = new AddExpenseController(expenseRepository)

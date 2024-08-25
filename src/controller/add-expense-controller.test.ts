@@ -16,13 +16,22 @@ type MessageErrorDTO = {
 }
 
 describe('Given add expense controller', () => {
-  it('when required data is provided, then should return the data in response body', async () => {
+  it.only('when required data is provided, then should return the data in response body', async () => {
     const expense = {
       description: 'Credit card bill',
       amount: 100
     }
 
-    const response = await request(app).post('/v1/expenses').send(expense)
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
 
     const responseBody: ExpenseResponseDTO = response.body
 
@@ -35,7 +44,16 @@ describe('Given add expense controller', () => {
       amount: 100
     }
 
-    const response = await request(app).post('/v1/expenses').send(expense)
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
 
@@ -48,7 +66,16 @@ describe('Given add expense controller', () => {
       description: 'Credit card bill'
     }
 
-    const response = await request(app).post('/v1/expenses').send(expense)
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
 
@@ -59,7 +86,16 @@ describe('Given add expense controller', () => {
   it('when all required fields is missing, then should return message error listing all fields', async () => {
     const expense = {}
 
-    const response = await request(app).post('/v1/expenses').send(expense)
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
 
@@ -70,7 +106,16 @@ describe('Given add expense controller', () => {
   it('when all required fields is missing, then should return bad request status code', async () => {
     const expense = {}
 
-    const response = await request(app).post('/v1/expenses').send(expense)
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
 
