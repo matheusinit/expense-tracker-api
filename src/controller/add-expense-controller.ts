@@ -4,8 +4,8 @@ import ExpenseRepository from '../repository/expense-repository'
 class AddExpenseController {
   private readonly repository: ExpenseRepository
 
-  constructor() {
-    this.repository = new ExpenseRepository()
+  constructor(repository: ExpenseRepository) {
+    this.repository = repository
   }
 
   async handle(request: Request, response: Response) {
