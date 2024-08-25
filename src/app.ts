@@ -8,8 +8,18 @@ import session from 'express-session'
 import ExpenseRepository from './repository/expense-repository'
 
 const app = express()
-app.use(cookieParser())
 
+app.use(cookieParser())
+app.use(session({
+  secret: process.env['SESSION_SECRET'] || 'default',
+  name: 'sessionId',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    sameSite: 'strict',
+    secure: true
+  }
+}))
 const { doubleCsrfProtection, generateToken } = doubleCsrf({
   getSecret: () => {
     const csrfTokenSecret = process.env['CSRF_TOKEN_SECRET']
