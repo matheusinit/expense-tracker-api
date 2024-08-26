@@ -1,6 +1,7 @@
 services:
   database:
     image: postgres:15.7-bookworm
+    container_name: expense-tracker-db
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
