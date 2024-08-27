@@ -16,7 +16,7 @@ type MessageErrorDTO = {
 }
 
 describe('Given add expense controller', () => {
-  it.only('when required data is provided, then should return the data in response body', async () => {
+  it('when required data is provided, then should return the data in response body', async () => {
     const expense = {
       description: 'Credit card bill',
       amount: 100
