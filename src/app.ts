@@ -6,6 +6,7 @@ import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import ExpenseRepository from './repository/expense-repository'
+import { errorHandler } from './middleware/error-handler'
 
 const app = express()
 
@@ -42,17 +43,7 @@ const myRoute = (req, res) => {
 app.get('/csrf-token', myRoute)
 app.use(doubleCsrfProtection)
 app.use(helmet())
-app.use((error, request, response, next) => {
-  const errorType = String(error).split(':').shift()
-  const errorMessage = String(error).split(' ').slice(1).join(' ')
-
-  const csrfErrorMessage = 'CSRF token not provided. Please, request a new CSRF token at /csrf-token.'
-  const csrfErrorType = 'ForbiddenError'
-
-  if (errorType === csrfErrorType && errorMessage === csrfErrorMessage) {
-    response.status(403).json({ message: errorMessage })
-  }
-})
+app.use(errorHandler)
 
 const expenseRepository = new ExpenseRepository()
 const addExpenseController = new AddExpenseController(expenseRepository)
