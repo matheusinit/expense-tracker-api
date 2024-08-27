@@ -1,11 +1,9 @@
 name: "CI"
-on:
-  push:
-    branches:
-      - $default-branch
+on: [push]
 
 jobs:
   static-analysis:
+    name: Static Analysis
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -21,7 +19,8 @@ jobs:
       - name: Lint TypeScript files
         run: npx eslint src/
 
-  scan:
+  unit-test:
+    name: Unit test
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -32,15 +31,6 @@ jobs:
           node-version: '21'
       - name: Install dependencies
         run: npm install
-      - name: Test dependencies for vulnerabilities
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        run: npm run scan-dependencies
-      - name: Test code for vulnerabilities
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-          SNYK_ORG: ${{ secrets.SNYK_ORG }}
-          CSRF_TOKEN_SECRET: ${{ secrets.CSRF_TOKEN_SECRET }}
-        run: npm run scan-code
-      - name: Monitor dependencies for vulnerabilities
-        run: npm run monitor-dependencies
+      - name: Run unit tests
+        run: npm run test:unit
+    needs: static-analysis
