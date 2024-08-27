@@ -9,11 +9,20 @@ export const errorHandler = (error: ErrorRequestHandler, request: Request, respo
   const csrfErrorType = 'ForbiddenError'
 
   const csrfTokenHeader = request.headers['x-csrf-token']
+  const csrfTokenCookie = request.cookies['__Host-psifi.x-csrf-token']
 
   if (!csrfTokenHeader && errorType === csrfErrorType && errorMessage === csrfErrorMessage) {
     const errorMessage = 'CSRF token not provided. Please, request a new CSRF token at /csrf-token.'
-    response.status(403).json({ message: errorMessage })
+    return response.status(403).json({ message: errorMessage })
   }
 
-  return response.status(403).json({ message: 'CSRF token provided is invalid. Please, request a new CSRF token at /csrf-token.' })
+  if (!!csrfTokenHeader && !!csrfTokenCookie && errorType === csrfErrorType && errorMessage === csrfErrorMessage) {
+    return response.status(403).json({ message: 'CSRF token provided is invalid. Please, request a new CSRF token at /csrf-token.' })
+  }
+
+  if (!csrfTokenCookie && errorType === csrfErrorType && errorMessage === csrfErrorMessage) {
+    const errorMessage = 'CSRF token not provided in cookies. Please, request a new CSRF token at /csrf-token.'
+    return response.status(403).json({ message: errorMessage })
+
+  }
 }
