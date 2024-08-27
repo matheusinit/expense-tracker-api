@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
+    "test:unit": "vitest run ./src/**/*.spec.ts",
+    "test:integration": "vitest run ./src/**/*.test.ts",
     "scan-code": "snyk code test --org=$SNYK_ORG",
     "scan-dependencies": "snyk test",
     "monitor-vulnerabilities": "snyk monitor",
