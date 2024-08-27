@@ -17,7 +17,7 @@ jobs:
       - name: Security audit dependencies
         run: npm audit
       - name: Lint TypeScript files
-        run: npx eslint src/
+        run: npm run lint
 
   unit-test:
     name: Unit test
