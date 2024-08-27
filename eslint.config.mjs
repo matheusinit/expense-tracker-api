@@ -23,7 +23,13 @@ export default [
       '@stylistic/object-curly-spacing': ['error', 'always'],
       '@stylistic/rest-spread-spacing': ['error', 'never'],
       '@stylistic/function-paren-newline': ['error', 'consistent'],
-      '@stylistic/no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0, 'maxBOF': 0 }]
+      '@stylistic/no-multiple-empty-lines': ['error', { 'max': 1, 'maxEOF': 0, 'maxBOF': 0 }],
+      '@typescript-eslint/no-unused-vars': ['error', {
+        'argsIgnorePattern': '^_',
+        'caughtErrorsIgnorePattern': '^_',
+        'destructuredArrayIgnorePattern': '^_',
+        'varsIgnorePattern': '^_',
+      }],
     },
   },
   pluginJs.configs.recommended,
