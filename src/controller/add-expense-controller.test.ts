@@ -140,6 +140,6 @@ describe('Given add expense controller', () => {
     const responseBody: MessageErrorDTO = response.body
 
     expect(response.status).toEqual(400)
-    expect(responseBody.message).toEqual('Invalid value for amount. It should be greater than 0')
+    expect(responseBody.message).toEqual('Invalid value for amount. It should be greater than 0.')
   })
 })
