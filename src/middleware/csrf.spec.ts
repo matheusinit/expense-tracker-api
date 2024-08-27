@@ -7,13 +7,13 @@ type MessageError = {
 }
 
 describe('CSRF Middleware', () => {
-  it('when CSRF token is missing, then should return 403 status', async () => {
+  it('when CSRF token is not provided in HTTP headers, then should return 403 status', async () => {
     const response = await request(app).post('/v1/expenses').send({})
 
     expect(response.status).toEqual(403)
   })
 
-  it('when CSRF token is missing, then should return a message error', async () => {
+  it('when CSRF token is not provided in HTTP headers, then should return a message error', async () => {
     const response = await request(app).post('/v1/expenses').send({})
 
     const requestBody: MessageError = response.body
