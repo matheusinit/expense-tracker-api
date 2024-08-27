@@ -20,8 +20,8 @@ describe('Given is needed to create a expense,', () => {
     expect(classInstantiation).toThrowError('Description length cannot be greather than 255')
   })
 
-  it('when amount equals 0 is provided, should throw an exception', () => {
-    const classInstantiation = () => new Expense('Credit card bill', 0)
+  it('when amount equals undefined is provided, should throw an exception', () => {
+    const classInstantiation = () => new Expense('Credit card bill', undefined)
 
     expect(classInstantiation).toThrowError('Amount is required. It should be greater than 0')
   })

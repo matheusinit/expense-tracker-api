@@ -119,4 +119,27 @@ describe('Given add expense controller', () => {
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount, description')
   })
+
+  it('when a required field is invalid, then should return bad request', async () => {
+    const expense = {
+      description: 'Credit card bill',
+      amount: 0
+    }
+
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toEqual(400)
+    expect(responseBody.message).toEqual('Invalid value for amount. It should be greater than 0')
+  })
 })
