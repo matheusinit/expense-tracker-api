@@ -40,4 +40,23 @@ describe('CSRF Middleware', () => {
 
     expect(responseBody.message).toEqual('CSRF token provided is invalid. Please, request a new CSRF token at /csrf-token.')
   })
+
+  it('when CSRF token is provided and valid, then shouldn\'t return any errors', async () => {
+    const csrfTokenResponse = await request(app)
+      .get('/csrf-token')
+
+    const csrfToken = csrfTokenResponse.body['csrfToken']
+    const csrfCookies = csrfTokenResponse.headers['set-cookie']
+
+    const response = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', csrfCookies)
+      .set('x-csrf-token', csrfToken)
+      .send({
+        description: 'Credit bill',
+        amount: 100
+      })
+
+    expect(response.status).not.toEqual(403)
+  })
 })
