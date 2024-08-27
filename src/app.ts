@@ -15,9 +15,9 @@ app.use(cookieParser())
 app.use(serverSession)
 
 app.use(express.json())
-app.get('/csrf-token', applyCsrfTokenController)
-app.use(csrf)
 app.use(helmet())
+app.use(csrf)
+app.get('/csrf-token', applyCsrfTokenController)
 app.use(applyCustomCsrfErrors)
 
 app.post('/v1/expenses', (request, response) => makeAddExpenseController().handle(request, response))
