@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
 import app from '../app'
+import { MessageErrorDTO } from '../dtos/error-message'
 
 type ExpenseResponseDTO = {
   id: string
@@ -9,10 +10,6 @@ type ExpenseResponseDTO = {
   createdAt: string
   updatedAt: string
   deletedAt?: string
-}
-
-type MessageErrorDTO = {
-  message: string
 }
 
 describe('Given add expense controller', () => {

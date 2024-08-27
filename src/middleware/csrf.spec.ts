@@ -1,16 +1,13 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
 import app from '../app'
-
-type MessageError = {
-  message: string
-}
+import { MessageErrorDTO } from '../dtos/error-message'
 
 describe('CSRF Middleware', () => {
   it('when CSRF token is not provided in HTTP headers, then should return forbidden with a message error', async () => {
     const response = await request(app).post('/v1/expenses').send({})
 
-    const requestBody: MessageError = response.body
+    const requestBody: MessageErrorDTO = response.body
 
     expect(response.status).toEqual(403)
     expect(requestBody.message).toEqual('CSRF token not provided. Please, request a new CSRF token at /csrf-token.')
@@ -23,7 +20,7 @@ describe('CSRF Middleware', () => {
       .set('x-csrf-token', 'invalid-csrf-token')
       .send({})
 
-    const responseBody: MessageError = response.body
+    const responseBody: MessageErrorDTO = response.body
 
     expect(response.status).toEqual(403)
     expect(responseBody.message).toEqual('CSRF token provided is invalid. Please, request a new CSRF token at /csrf-token.')
@@ -39,7 +36,7 @@ describe('CSRF Middleware', () => {
       .set('x-csrf-token', csrfToken)
       .send({})
 
-    const requestBody: MessageError = response.body
+    const requestBody: MessageErrorDTO = response.body
 
     expect(response.status).toEqual(403)
     expect(requestBody.message).toEqual('CSRF token not provided in cookies. Please, request a new CSRF token at /csrf-token.')
