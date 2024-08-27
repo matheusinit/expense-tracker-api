@@ -19,15 +19,28 @@ pnpm i
 To ensure that applications run with credentials, it is needed to configure secrets and variables that **should not be shared** in `.env` file. The sample for `.env` is the following:
 
 ```env
+# Database
 DATABASE_URL="postgresql://user:password@localhost:5432/dbname?schema=schema_name"
 POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=dbname
+
+# Server
+CSRF_TOKEN_SECRET=secret
+SESSION_SECRET=secret
 ```
 
 > Set with your own information for `POSTGRES_USER`, `POSTGRES_DB` and `POSTGRES_PASSWORD`, and just fill in in `DATABASE_URL`.
 
 Copy content of `.env.sameple` to a new file `.env`, then define the values for the environment variables
+
+To generate the secret for `CSRF_TOKEN_SECRET` and `SESSION_SECRET` use the following command:
+
+```bash
+openssl rand -base64 24 | tr -d '=' | cut -c1-32
+```
+
+> But remember, the content must no bbe the same!
 
 ## Execution
 
