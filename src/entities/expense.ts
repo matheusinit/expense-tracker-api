@@ -33,7 +33,7 @@ export class Expense {
     }
 
     if (value === 0) {
-      throw new Error('Invalid value for amount. It should be greater than 0')
+      throw new Error('Invalid value for amount. It should be greater than 0.')
     }
 
     if (value < 0) {
