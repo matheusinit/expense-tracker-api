@@ -41,6 +41,7 @@ describe('CSRF Middleware', () => {
 
     const requestBody: MessageError = response.body
 
+    expect(response.status).toEqual(403)
     expect(requestBody.message).toEqual('CSRF token not provided in cookies. Please, request a new CSRF token at /csrf-token.')
   })
 
