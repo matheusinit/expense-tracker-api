@@ -20,11 +20,11 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         run: npm run scan-dependencies
-      # - name: Test code for vulnerabilities
-      #   env:
-      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      #     SNYK_ORG: ${{ secrets.SNYK_ORG }}
-      #     CSRF_TOKEN_SECRET: ${{ secrets.CSRF_TOKEN_SECRET }}
-        # run: npm run scan-code
+      - name: Test code for vulnerabilities
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          SNYK_ORG: ${{ secrets.SNYK_ORG }}
+          CSRF_TOKEN_SECRET: ${{ secrets.CSRF_TOKEN_SECRET }}
+        run: npm run scan-code
       - name: Monitor dependencies for vulnerabilities
         run: npm run monitor-vulnerabilities
