@@ -142,4 +142,32 @@ describe('Given add expense controller', () => {
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for amount. It should be greater than 0.')
   })
+
+  it('when valid required fields is provided, then should return created', async () => {
+    const expense = {
+      description: 'Credit card bill',
+      amount: 100
+    }
+
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0)
+
+    const response = await request.agent(app)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .post('/v1/expenses')
+      .send(expense)
+
+    expect(response.status).toEqual(201)
+    expect(response.body).toEqual(expect.objectContaining({
+      id: expect.any(String),
+      description: expense.description,
+      amount: expense.amount,
+      createdAt: expect.any(String),
+      updatedAt: expect.any(String),
+      deletedAt: null
+    }))
+  })
 })
