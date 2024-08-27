@@ -27,4 +27,4 @@ jobs:
       #     CSRF_TOKEN_SECRET: ${{ secrets.CSRF_TOKEN_SECRET }}
         # run: npm run scan-code
       - name: Monitor dependencies for vulnerabilities
-        run: npm run monitor-dependencies
+        run: npm run monitor-vulnerabilities
