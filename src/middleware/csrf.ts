@@ -8,14 +8,8 @@ const getSecret = () => {
   return csrfTokenSecret
 }
 
-const errorConfig = {
-  statusCode: 403,
-  message: 'CSRF token not provided. Please, request a new CSRF token at /csrf-token.'
-}
-
 const { doubleCsrfProtection, generateToken } = doubleCsrf({
-  getSecret,
-  errorConfig
+  getSecret
 })
 
 export { doubleCsrfProtection as csrf, generateToken }
