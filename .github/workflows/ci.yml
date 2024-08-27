@@ -1,0 +1,36 @@
+name: "CI"
+on: [push]
+
+jobs:
+  static-analysis:
+    name: Static Analysis
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up TypeScript
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+      - name: Install dependencies
+        run: npm install
+      - name: Security audit dependencies
+        run: npm audit
+      - name: Lint TypeScript files
+        run: npm run lint
+
+  unit-test:
+    name: Unit test
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up TypeScript
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+      - name: Install dependencies
+        run: npm install
+      - name: Run unit tests
+        run: npm run test:unit
+    needs: static-analysis
