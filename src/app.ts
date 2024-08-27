@@ -1,12 +1,13 @@
 import express from 'express'
 import AddExpenseController from './controller/add-expense-controller'
 import 'dotenv/config'
-import { doubleCsrf } from 'csrf-csrf'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import ExpenseRepository from './repository/expense-repository'
 import { errorHandler } from './middleware/error-handler'
+import { applyCsrfTokenController } from './controller/csrf-token-controller'
+import { csrf } from './middleware/csrf'
 
 const app = express()
 
@@ -21,27 +22,10 @@ app.use(session({
     secure: true
   }
 }))
-const { doubleCsrfProtection, generateToken } = doubleCsrf({
-  getSecret: () => {
-    const csrfTokenSecret = process.env['CSRF_TOKEN_SECRET']
 
-    if (!csrfTokenSecret) throw new Error('CSRF_TOKEN_SECRET not defined')
-
-    return csrfTokenSecret
-  },
-  errorConfig: {
-    statusCode: 403,
-    message: 'CSRF token not provided. Please, request a new CSRF token at /csrf-token.'
-  },
-
-})
 app.use(express.json())
-const myRoute = (req, res) => {
-  const csrfToken = generateToken(req, res)
-  res.json({ csrfToken })
-}
-app.get('/csrf-token', myRoute)
-app.use(doubleCsrfProtection)
+app.get('/csrf-token', applyCsrfTokenController)
+app.use(csrf)
 app.use(helmet())
 app.use(errorHandler)
 
