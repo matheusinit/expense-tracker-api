@@ -28,8 +28,12 @@ export class Expense {
   }
 
   set amount(value: number) {
-    if (!value) {
+    if (value === undefined) {
       throw new Error('Amount is required. It should be greater than 0')
+    }
+
+    if (value === 0) {
+      throw new Error('Invalid value for amount. It should be greater than 0')
     }
 
     if (value < 0) {
