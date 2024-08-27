@@ -29,7 +29,7 @@ describe('CSRF Middleware', () => {
     expect(responseBody.message).toEqual('CSRF token provided is invalid. Please, request a new CSRF token at /csrf-token.')
   })
 
-  it('when CSRF token is not provided in cookies, then should return a message error', async () => {
+  it('when CSRF token is not provided in cookies, then should return forbidden with a message error', async () => {
     const csrfToken = await request(app)
       .get('/csrf-token')
       .then(response => response.body.csrfToken)
