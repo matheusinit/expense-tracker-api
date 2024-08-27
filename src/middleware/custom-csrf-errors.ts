@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction, ErrorRequestHandler } from 'express'
 
-export const errorHandler = (error: ErrorRequestHandler, request: Request, response: Response, _next: NextFunction) => {
+export const applyCustomCsrfErrors = (error: ErrorRequestHandler, request: Request, response: Response, _next: NextFunction) => {
   const errorString = String(error)
   const errorType = errorString.split(':').shift()
   const errorMessage = errorString.split(' ').slice(1).join(' ')

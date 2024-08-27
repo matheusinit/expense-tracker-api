@@ -3,7 +3,7 @@ import 'dotenv/config'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 
-import { errorHandler } from './middleware/error-handler'
+import { applyCustomCsrfErrors } from './middleware/custom-csrf-errors'
 import { applyCsrfTokenController } from './controller/csrf-token-controller'
 import { csrf } from './middleware/csrf'
 import { serverSession } from './middleware/session'
@@ -18,7 +18,7 @@ app.use(express.json())
 app.get('/csrf-token', applyCsrfTokenController)
 app.use(csrf)
 app.use(helmet())
-app.use(errorHandler)
+app.use(applyCustomCsrfErrors)
 
 app.post('/v1/expenses', (request, response) => makeAddExpenseController().handle(request, response))
 
