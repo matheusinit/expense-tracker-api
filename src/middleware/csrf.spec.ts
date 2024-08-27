@@ -20,4 +20,13 @@ describe('CSRF Middleware', () => {
 
     expect(requestBody.message).toEqual('CSRF token not provided. Please, request a new CSRF token at /csrf-token.')
   })
+
+  it('when CSRF token is invalid, then should return forbidden status code', async () => {
+    const response = await request(app)
+      .post('/v1/expenses')
+      .set('x-csrf-token', 'invalid-csrf-token')
+      .send({})
+
+    expect(response.status).toEqual(403)
+  })
 })
