@@ -1,9 +1,10 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
 import app from '../app'
 import { ExpenseDTO } from '../dtos/expense'
+import db from '../database'
 
 type OffsetPaginationDTO = {
   records: ExpenseDTO[],
@@ -16,7 +17,13 @@ type OffsetPaginationDTO = {
 }
 
 describe('Given view expenses controller', () => {
-  it('when is given none parameters, then should return the expenses offset pagination', async () => {
+  beforeEach(async () => {
+    await db.$connect()
+    await db.expense.deleteMany()
+    await db.$disconnect()
+  })
+
+  it('when is given none parameters, then should return the expenses page based pagination', async () => {
     const expenses = new Array(10).fill({
       description: falso.randProductName(),
       amount: falso.randAmount()
@@ -48,7 +55,7 @@ describe('Given view expenses controller', () => {
     expect(responseBody._metadata.total_count).toBeTypeOf('number')
   })
 
-  it('when an expense is added, then should return the expense in the offset pagination', async () => {
+  it('when an expense is added, then should return the expense in the page based pagination', async () => {
     const expense = {
       description: falso.randProductName(),
       amount: falso.randAmount({ fraction: 0 })
@@ -72,5 +79,37 @@ describe('Given view expenses controller', () => {
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(expect.arrayContaining([expect.objectContaining(expense)]))
+  })
+
+  it('when multiple expenses is added, then should return expenses in multiple pages', async () => {
+    const expenses = new Array(10).fill({
+      description: falso.randProductName(),
+      amount: falso.randAmount()
+    })
+
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+
+    for (const expense of expenses) {
+      await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+    }
+
+    const response = await request(app)
+      .get('/v1/expenses')
+
+    const responseBody: OffsetPaginationDTO = response.body
+
+    expect(response.status).toBe(200)
+    expect(responseBody.records.length).toEqual(5)
+    expect(responseBody._metadata.page).toEqual(1)
+    expect(responseBody._metadata.page_count).toEqual(2)
+    expect(responseBody._metadata.per_page).toEqual(5)
+
   })
 })
