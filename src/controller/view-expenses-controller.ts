@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
+import db from '../database'
 
 class ViewExpensesController {
   async handle(request: Request, response: Response) {
-
-    const expenses = [{}]
+    const expenses = await db.expense.findMany()
 
     const metadata = {
       page: 1,
