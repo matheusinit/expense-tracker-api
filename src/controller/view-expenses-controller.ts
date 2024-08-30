@@ -3,13 +3,14 @@ import db from '../database'
 
 class ViewExpensesController {
   async handle(request: Request, response: Response) {
+    const page = Number(request.query['page'] ?? '1')
+
     const expenses = await db.expense.findMany({
       take: 5,
-      skip: 0,
+      skip: (page - 1) * 5,
     })
     const totalCount = await db.expense.count()
 
-    const page = 1
     const perPage = 5
     const pageCount = Math.ceil(totalCount / perPage)
 
