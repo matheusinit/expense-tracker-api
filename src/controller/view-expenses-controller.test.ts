@@ -25,17 +25,17 @@ describe('Given view expenses controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
     for (const expense of expenses) {
-      await request.agent(app)
-        .set('Cookie', cookies)
-        .set('x-csrf-token', csrfToken)
+      await request(app)
         .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
         .send(expense)
     }
 
-    const response = await request.agent(app)
+    const response = await request(app)
       .get('/v1/expenses')
 
     const responseBody: OffsetPaginationDTO = response.body
