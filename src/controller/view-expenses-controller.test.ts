@@ -110,4 +110,35 @@ describe('Given view expenses controller', () => {
     expect(responseBody._metadata.per_page).toEqual(5)
 
   })
+
+  it('when request a specific page, then should return expenses from that page and metadata correctly', async () => {
+    const expenses = generateExpenses(10)
+
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+
+    for (const expense of expenses) {
+      await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+    }
+
+    const page = 2
+
+    const response = await request(app)
+      .get('/v1/expenses')
+      .query({ page })
+
+    const responseBody: OffsetPaginationDTO = response.body
+
+    expect(response.status).toBe(200)
+    expect(responseBody.records.length).toEqual(5)
+    expect(responseBody._metadata.page).toEqual(page)
+    expect(responseBody._metadata.page_count).toEqual(2)
+    expect(responseBody._metadata.per_page).toEqual(5)
+  })
 })
