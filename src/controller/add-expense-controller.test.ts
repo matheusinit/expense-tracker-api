@@ -2,15 +2,7 @@ import { describe, it, expect } from 'vitest'
 import request from 'supertest'
 import app from '../app'
 import { MessageErrorDTO } from '../dtos/error-message'
-
-type ExpenseResponseDTO = {
-  id: string
-  description: string
-  amount: number
-  createdAt: string
-  updatedAt: string
-  deletedAt?: string
-}
+import { ExpenseDTO } from '../dtos/expense'
 
 describe('Given add expense controller', () => {
   it('when required data is provided, then should return the data in response body', async () => {
@@ -30,7 +22,7 @@ describe('Given add expense controller', () => {
       .post('/v1/expenses')
       .send(expense)
 
-    const responseBody: ExpenseResponseDTO = response.body
+    const responseBody: ExpenseDTO = response.body
 
     expect(responseBody.description).toEqual(expense.description)
     expect(responseBody.amount).toEqual(expense.amount)

@@ -1,16 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import request from 'supertest'
-import app from '../app'
 import * as falso from '@ngneat/falso'
 
-type ExpenseDTO = {
-  id: string
-  description: string
-  amount: number
-  createdAt: string
-  updatedAt: string
-  deletedAt?: string
-}
+import app from '../app'
+import { ExpenseDTO } from '../dtos/expense'
 
 type OffsetPaginationDTO = {
   records: ExpenseDTO[],
