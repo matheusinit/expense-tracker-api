@@ -16,6 +16,13 @@ type OffsetPaginationDTO = {
   }
 }
 
+const generateExpenses = (amount: number) => {
+  return new Array(amount).fill({
+    description: falso.randProductName(),
+    amount: falso.randAmount({ fraction: 0 })
+  })
+}
+
 describe('Given view expenses controller', () => {
   beforeEach(async () => {
     await db.$connect()
@@ -24,10 +31,7 @@ describe('Given view expenses controller', () => {
   })
 
   it('when is given none parameters, then should return the expenses page based pagination', async () => {
-    const expenses = new Array(10).fill({
-      description: falso.randProductName(),
-      amount: falso.randAmount()
-    })
+    const expenses = generateExpenses(10)
 
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
@@ -56,10 +60,7 @@ describe('Given view expenses controller', () => {
   })
 
   it('when an expense is added, then should return the expense in the page based pagination', async () => {
-    const expense = {
-      description: falso.randProductName(),
-      amount: falso.randAmount({ fraction: 0 })
-    }
+    const expense = generateExpenses(1).at(0)
 
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
@@ -82,10 +83,7 @@ describe('Given view expenses controller', () => {
   })
 
   it('when multiple expenses is added, then should return expenses in multiple pages', async () => {
-    const expenses = new Array(10).fill({
-      description: falso.randProductName(),
-      amount: falso.randAmount()
-    })
+    const expenses = generateExpenses(10)
 
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
