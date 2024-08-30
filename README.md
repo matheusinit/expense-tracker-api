@@ -52,6 +52,12 @@ To start the PostgreSQL service, it is needed Docker. To start runs:
 docker compose up -d database
 ```
 
+Now, We will generate the types for the application based on the models:
+
+```bash
+pnpm prisma generate
+```
+
 We need to apply migrations to our database using the chosen ORM. For development, you can run the following command:
 
 ```bash

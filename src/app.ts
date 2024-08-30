@@ -8,6 +8,7 @@ import { applyCsrfTokenController } from './controller/csrf-token-controller'
 import { csrf } from './middleware/csrf'
 import { serverSession } from './middleware/session'
 import { makeAddExpenseController } from './factory/add-expense-controller-factory'
+import ViewExpensesController from './controller/view-expenses-controller'
 
 const app = express()
 
@@ -20,6 +21,9 @@ app.use(csrf)
 app.get('/csrf-token', applyCsrfTokenController)
 app.use(applyCustomCsrfErrors)
 
+const viewExpensesController = new ViewExpensesController()
+
+app.get('/v1/expenses', (request, response) => viewExpensesController.handle(request, response))
 app.post('/v1/expenses', (request, response) => makeAddExpenseController().handle(request, response))
 
 export default app
