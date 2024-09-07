@@ -16,11 +16,17 @@ type OffsetPaginationDTO = {
   }
 }
 
-const generateExpenses = (amount: number) => {
-  return new Array(amount).fill({
-    description: falso.randProductName(),
-    amount: falso.randAmount({ fraction: 0 })
-  })
+const generateExpenses = (length: number) => {
+  const expenses = []
+  for (let i = 0; i < length; i++) {
+    const description = falso.randProductName()
+    const amount = falso.randAmount({ fraction: 0 })
+    expenses.push({
+      description,
+      amount,
+    })
+  }
+  return expenses
 }
 
 describe('Given view expenses controller', () => {
