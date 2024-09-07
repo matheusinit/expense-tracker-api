@@ -17,15 +17,14 @@ type OffsetPaginationDTO = {
 }
 
 const generateExpenses = (length: number) => {
-  const expenses = []
-  for (let i = 0; i < length; i++) {
+  const generateExpense = () => {
     const description = falso.randProductName()
     const amount = falso.randAmount({ fraction: 0 })
-    expenses.push({
-      description,
-      amount,
-    })
+    return { description, amount }
   }
+
+  const expenses = Array(length).fill(0).map(generateExpense)
+
   return expenses
 }
 
