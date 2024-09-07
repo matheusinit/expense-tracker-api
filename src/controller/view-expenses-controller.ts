@@ -1,7 +1,13 @@
 import { Request, Response } from 'express'
-import db from '../database'
+import ExpenseRepository from '../repository/expense-repository'
 
 class ViewExpensesController {
+  private readonly repository: ExpenseRepository
+
+  constructor() {
+    this.repository = new ExpenseRepository()
+  }
+
   async handle(request: Request, response: Response) {
     const pageQuery = request.query['page']
     const pageSizeQuery = request.query['pageSize']
@@ -11,12 +17,9 @@ class ViewExpensesController {
 
     const skip = (page - 1) * pageSize
 
-    const expenses = await db.expense.findMany({
-      take: pageSize,
-      skip,
-    })
+    const expenses = await this.repository.getMany(pageSize, skip)
 
-    const totalCount = await db.expense.count()
+    const totalCount = await this.repository.count()
 
     const pageCount = Math.ceil(totalCount / pageSize)
 
@@ -27,7 +30,7 @@ class ViewExpensesController {
       total_count: totalCount,
     }
 
-    return response.json({ records: expenses, _metadata: metadata })
+    return response.send({ records: expenses, _metadata: metadata })
   }
 }
 

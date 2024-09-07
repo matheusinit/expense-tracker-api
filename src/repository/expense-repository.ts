@@ -16,6 +16,17 @@ class ExpenseRepository {
 
     return expense
   }
+
+  async count() {
+    return await db.expense.count()
+  }
+
+  async getMany(take: number, skip: number) {
+    return await db.expense.findMany({
+      take,
+      skip
+    })
+  }
 }
 
 export default ExpenseRepository
