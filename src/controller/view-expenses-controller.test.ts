@@ -6,7 +6,7 @@ import app from '../app'
 import { ExpenseDTO } from '../dtos/expense'
 import db from '../database'
 
-type OffsetPaginationDTO = {
+type PageBasedPaginationDTO = {
   records: ExpenseDTO[],
   _metadata: {
     page: number
@@ -54,7 +54,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses')
 
-    const responseBody: OffsetPaginationDTO = response.body
+    const responseBody: PageBasedPaginationDTO = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toBeInstanceOf(Array)
@@ -81,7 +81,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses')
 
-    const responseBody: OffsetPaginationDTO = response.body
+    const responseBody: PageBasedPaginationDTO = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(expect.arrayContaining([expect.objectContaining(expense)]))
@@ -106,7 +106,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses')
 
-    const responseBody: OffsetPaginationDTO = response.body
+    const responseBody: PageBasedPaginationDTO = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records.length).toEqual(5)
@@ -138,7 +138,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query({ page })
 
-    const responseBody: OffsetPaginationDTO = response.body
+    const responseBody: PageBasedPaginationDTO = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records.length).toEqual(5)
@@ -169,7 +169,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query({ pageSize })
 
-    const responseBody: OffsetPaginationDTO = response.body
+    const responseBody: PageBasedPaginationDTO = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records.length).toEqual(pageSize)
@@ -206,7 +206,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: OffsetPaginationDTO = response.body
+    const responseBody: PageBasedPaginationDTO = response.body
     const pageCount = Math.ceil(expenses.length / pageSize)
 
     const recordsLength = expenses.length - pageSize * (page - 1)
