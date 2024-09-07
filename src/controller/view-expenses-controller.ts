@@ -4,19 +4,19 @@ import db from '../database'
 class ViewExpensesController {
   async handle(request: Request, response: Response) {
     const page = Number(request.query['page'] ?? '1')
+    const pageSize = Number(request.query['pageSize'] ?? '5')
 
     const expenses = await db.expense.findMany({
-      take: 5,
+      take: pageSize,
       skip: (page - 1) * 5,
     })
     const totalCount = await db.expense.count()
 
-    const perPage = 5
-    const pageCount = Math.ceil(totalCount / perPage)
+    const pageCount = Math.ceil(totalCount / pageSize)
 
     const metadata = {
       page: page,
-      per_page: perPage,
+      per_page: pageSize,
       page_count: pageCount,
       total_count: totalCount,
     }
