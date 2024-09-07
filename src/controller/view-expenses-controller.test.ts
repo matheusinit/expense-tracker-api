@@ -172,4 +172,45 @@ describe('Given view expenses controller', () => {
     expect(responseBody._metadata.page_count).toEqual(1)
     expect(responseBody._metadata.per_page).toEqual(pageSize)
   })
+
+  it('when specify the page size and page, then should return the number of expenses specified by page size at specific page', async () => {
+    const expenses = generateExpenses(15)
+
+    const csrfResponse = await request(app).get('/csrf-token')
+    const csrfToken = csrfResponse.body['csrfToken']
+
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+
+    for (const expense of expenses) {
+      await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+    }
+
+    const page = 2
+    const pageSize = 10
+
+    const query = {
+      page,
+      pageSize
+    }
+
+    const response = await request(app)
+      .get('/v1/expenses')
+      .query(query)
+
+    const responseBody: OffsetPaginationDTO = response.body
+    const pageCount = Math.ceil(expenses.length / pageSize)
+
+    const recordsLength = expenses.length - pageSize * (page - 1)
+
+    expect(response.status).toBe(200)
+    expect(responseBody.records.length).toEqual(recordsLength)
+    expect(responseBody._metadata.page).toEqual(page)
+    expect(responseBody._metadata.page_count).toEqual(pageCount)
+    expect(responseBody._metadata.per_page).toEqual(pageSize)
+    expect(responseBody._metadata.total_count).toEqual(expenses.length)
+  })
 })
