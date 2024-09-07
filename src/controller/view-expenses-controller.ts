@@ -9,7 +9,7 @@ class ViewExpensesController {
     const page = Number(pageQuery ?? '1')
     const pageSize = Number(pageSizeQuery ?? '5')
 
-    const skip = (page - 1) * 5
+    const skip = (page - 1) * pageSize
 
     const expenses = await db.expense.findMany({
       take: pageSize,
