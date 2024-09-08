@@ -28,6 +28,20 @@ const generateExpenses = (length: number) => {
   return expenses
 }
 
+const getCSRFResponseBody = async () => {
+  const csrfResponse = await request(app).get('/csrf-token')
+  return csrfResponse
+}
+
+const getCSRFTokenAndCookies = async () => {
+  const response = await getCSRFResponseBody()
+
+  const csrfToken = response.body['csrfToken']
+  const cookies = response.headers['set-cookie'].at(0) ?? ''
+
+  return { csrfToken, cookies }
+}
+
 describe('Given view expenses controller', () => {
   beforeEach(async () => {
     await db.$connect()
@@ -38,10 +52,7 @@ describe('Given view expenses controller', () => {
   it('when is given none parameters, then should return the expenses page based pagination', async () => {
     const expenses = generateExpenses(10)
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     for (const expense of expenses) {
       await request(app)
@@ -67,10 +78,7 @@ describe('Given view expenses controller', () => {
   it('when an expense is added, then should return the expense in the page based pagination', async () => {
     const expense = generateExpenses(1).at(0)
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     await request(app)
       .post('/v1/expenses')
@@ -90,10 +98,7 @@ describe('Given view expenses controller', () => {
   it('when multiple expenses is added, then should return expenses in multiple pages', async () => {
     const expenses = generateExpenses(10)
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     for (const expense of expenses) {
       await request(app)
@@ -119,10 +124,7 @@ describe('Given view expenses controller', () => {
   it('when request a specific page, then should return expenses from that page and metadata correctly', async () => {
     const expenses = generateExpenses(10)
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     for (const expense of expenses) {
       await request(app)
@@ -150,10 +152,7 @@ describe('Given view expenses controller', () => {
   it('when specify the page size, then should return the number of expenses specified by page size', async () => {
     const expenses = generateExpenses(10)
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     for (const expense of expenses) {
       await request(app)
@@ -181,10 +180,7 @@ describe('Given view expenses controller', () => {
   it('when specify the page size and page, then should return the number of expenses specified by page size at specific page', async () => {
     const expenses = generateExpenses(15)
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     for (const expense of expenses) {
       await request(app)
