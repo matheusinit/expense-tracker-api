@@ -22,8 +22,13 @@ app.get('/csrf-token', applyCsrfTokenController)
 app.use(applyCustomCsrfErrors)
 
 const viewExpensesController = new ViewExpensesController()
+// Set a prefix route path like '/v1' to all routes
 
-app.get('/v1/expenses', (request, response) => viewExpensesController.handle(request, response))
-app.post('/v1/expenses', (request, response) => makeAddExpenseController().handle(request, response))
+const router = express.Router()
+
+router.get('/expenses', (request, response) => viewExpensesController.handle(request, response))
+router.post('/expenses', (request, response) => makeAddExpenseController().handle(request, response))
+
+app.use('/v1', router)
 
 export default app
