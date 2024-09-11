@@ -1,41 +1,32 @@
+x-database: &database
+  image: postgres:15.7-bookworm
+  environment:
+    POSTGRES_USER: ${POSTGRES_USER}
+    POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    POSTGRES_DB: ${POSTGRES_DB}
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready"]
+    interval: 5s
+    timeout: 5s
+    retries: 20
+    start_period: 10s
+
 services:
-  database:
-    image: postgres:15.7-bookworm
+  database: 
+    <<: *database
     container_name: expense-tracker-db
     restart: always
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
 
   database-test:
-    image: postgres:15.7-bookworm
+    <<: *database
+    container_name: expense-tracker-db-test
     restart: on-failure:5
-    environment:
-      POSTGRES_USER: dba
-      POSTGRES_PASSWORD: j6sjWPgS7SKAXQEMFKlSeVoSZXTohnW3
-      POSTGRES_DB: expense_tracker_test
     ports:
       - 6000:5432
-    volumes:
-      - pgtest:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 10s
 
 volumes:
   pgdata:
-  pgtest:
