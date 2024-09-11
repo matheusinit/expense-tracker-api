@@ -40,7 +40,7 @@ To generate the secret for `CSRF_TOKEN_SECRET` and `SESSION_SECRET` use the foll
 openssl rand -base64 24 | tr -d '=' | cut -c1-32
 ```
 
-> But remember, the content must no bbe the same!
+> But remember, the content must not be the same!
 
 ## Execution
 
