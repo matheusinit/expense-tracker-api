@@ -25,16 +25,20 @@ POSTGRES_USER=user
 POSTGRES_PASSWORD=password
 POSTGRES_DB=dbname
 
-# Server
+# Application server
 CSRF_TOKEN_SECRET=secret
 SESSION_SECRET=secret
+
+# ORM
+PRISMA_CLIENT_LOG="info, warn"
 ```
+> The available options for `PRISMA_CLIENT_LOG` are info, warn, query and error in the current version of Prisma ORM (5.18)
 
 > Set with your own information for `POSTGRES_USER`, `POSTGRES_DB` and `POSTGRES_PASSWORD`, and just fill in in `DATABASE_URL`.
 
-Copy content of `.env.sameple` to a new file `.env`, then define the values for the environment variables
+Copy content of `.env.sameple` to a new file `.env` (for production, staging or development), then define the values for the environment variables. In case for run testing environemnt, use `.env.test.local`
 
-To generate the secret for `CSRF_TOKEN_SECRET` and `SESSION_SECRET` use the following command:
+To generate the secret for `CSRF_TOKEN_SECRET` and `SESSION_SECRET`, also for **passwords** use the following command:
 
 ```bash
 openssl rand -base64 24 | tr -d '=' | cut -c1-32
