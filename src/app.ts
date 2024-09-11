@@ -1,8 +1,8 @@
 import express from 'express'
-import 'dotenv/config'
 import helmet from 'helmet'
 import cookieParser from 'cookie-parser'
 
+import './config/environment'
 import { applyCustomCsrfErrors } from './middleware/custom-csrf-errors'
 import { applyCsrfTokenController } from './controller/csrf-token-controller'
 import { csrf } from './middleware/csrf'
