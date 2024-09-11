@@ -46,6 +46,44 @@ openssl rand -base64 24 | tr -d '=' | cut -c1-32
 
 > But remember, the content must not be the same!
 
+## Run tests
+
+### Unit tests
+
+To run unit tests, only execute the following command:
+
+```bash
+pnpm test:unit
+```
+
+### Integration tests
+
+To start the PostgreSQL service for integration tests, it is needed Docker. To start runs:
+
+```bash
+docker compose --env-file .env.test.local up -d database-test
+```
+
+Now, We will generate the types for the application based on the models:
+
+```bash
+pnpm prisma generate
+```
+
+We need to apply migrations to our database using the chosen ORM. For development, you can run the following command:
+
+```bash
+pnpm migrate:test
+```
+
+To execute only the integration tests, run:
+
+```
+pnpm test:integration
+```
+
+>> In case of running all tests, included integration and unit, runs `pnpm test`
+
 ## Execution
 
 ### Database
