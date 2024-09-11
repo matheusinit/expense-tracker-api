@@ -64,7 +64,7 @@ To start the PostgreSQL service for integration tests, it is needed Docker. To s
 docker compose --env-file .env.test.local up -d database-test
 ```
 
-Now, We will generate the types for the application based on the models:
+Now, we will generate the types for the application based on the models:
 
 ```bash
 pnpm prisma generate
@@ -82,7 +82,7 @@ To execute only the integration tests, run:
 pnpm test:integration
 ```
 
->> In case of running all tests, included integration and unit, runs `pnpm test`
+> In case of running all tests, included integration and unit, runs `pnpm test`
 
 ## Execution
 
