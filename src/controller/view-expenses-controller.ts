@@ -11,13 +11,16 @@ class ViewExpensesController {
   async handle(request: Request, response: Response) {
     const pageQuery = request.query['page']
     const pageSizeQuery = request.query['pageSize']
+    const fieldsQuery = String(request.query['fields'] ?? '')
 
     const page = Number(pageQuery ?? '1')
     const pageSize = Number(pageSizeQuery ?? '5')
 
     const skip = (page - 1) * pageSize
 
-    const expenses = await this.repository.getMany(pageSize, skip)
+    const fields = fieldsQuery !== '' ? fieldsQuery?.split(',').map(field => field.trim()) : undefined
+
+    const expenses = await this.repository.getMany(pageSize, skip, fields)
 
     const totalCount = await this.repository.count()
 

@@ -21,10 +21,18 @@ class ExpenseRepository {
     return await db.expense.count()
   }
 
-  async getMany(take: number, skip: number) {
+  async getMany(take: number, skip: number, select?: string[]) {
     return await db.expense.findMany({
       take,
-      skip
+      skip,
+      select: {
+        id: select?.includes('id'),
+        amount: select?.includes('amount'),
+        description: select?.includes('description'),
+        createdAt: select?.includes('createdAt'),
+        updatedAt: select?.includes('updated_at'),
+        deletedAt: select?.includes('deleted_at')
+      }
     })
   }
 }
