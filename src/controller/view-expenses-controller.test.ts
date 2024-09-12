@@ -5,6 +5,7 @@ import * as falso from '@ngneat/falso'
 import app from '../app'
 import { ExpenseDTO } from '../dtos/expense'
 import db from '../database'
+import { MessageErrorDTO } from '../dtos/error-message'
 
 type PageBasedPaginationDTO = {
   records: ExpenseDTO[],
@@ -280,5 +281,32 @@ describe('Given view expenses controller', () => {
         updatedAt: expect.any(String)
       }
     ]))
+  })
+
+  it('when specify non-valid field in fields filter, then should return a bad request error', async () => {
+    const expenses = generateExpenses(15)
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    for (const expense of expenses) {
+      await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+    }
+
+    const query = {
+      fields: 'id, description, amount, producedBy'
+    }
+
+    const response = await request(app)
+      .get('/v1/expenses')
+      .query(query)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toBe(400)
+    expect(responseBody.message).toEqual('Invalid fields: producedBy')
   })
 })
