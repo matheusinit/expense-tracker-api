@@ -336,4 +336,40 @@ describe('Given view expenses controller', () => {
     expect(response.status).toBe(400)
     expect(responseBody.message).toEqual('Invalid fields: producedBy, createdBy')
   })
+
+  it('when specify any fields in fields filter, then should return the resource with all fields', async () => {
+    const expenses = generateExpenses(15)
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    for (const expense of expenses) {
+      await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+    }
+
+    const query = {
+      fields: ''
+    }
+
+    const response = await request(app)
+      .get('/v1/expenses')
+      .query(query)
+
+    const responseBody: PageBasedPaginationDTO = response.body
+
+    expect(response.status).toBe(200)
+    expect(responseBody.records).toEqual(expect.arrayContaining([
+      {
+        id: expect.any(String),
+        description: expect.any(String),
+        amount: expect.any(Number),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        deletedAt: null
+      }
+    ]))
+  })
 })
