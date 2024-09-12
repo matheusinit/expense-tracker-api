@@ -19,6 +19,15 @@ class ViewExpensesController {
     const skip = (page - 1) * pageSize
 
     const fields = fieldsQuery !== '' ? fieldsQuery?.split(',').map(field => field.trim()) : undefined
+    const columns = await this.repository.getColumns()
+
+    if (fields) {
+      const invalidFields = fields.filter(field => !columns.includes(field))
+
+      if (invalidFields.length > 0) {
+        return response.status(400).send({ message: `Invalid fields: ${invalidFields.join(', ')}` })
+      }
+    }
 
     const expenses = await this.repository.getMany(pageSize, skip, fields)
 

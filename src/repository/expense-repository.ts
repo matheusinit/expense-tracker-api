@@ -35,6 +35,18 @@ class ExpenseRepository {
       }
     })
   }
+
+  async getColumns() {
+    const columnsQuery = await db.$queryRaw`
+      SELECT column_name
+      FROM information_schema.columns
+      WHERE table_name = 'Expense'
+    ` as Record<string, string>[]
+
+    const columns = columnsQuery.map(column => column.column_name)
+
+    return columns
+  }
 }
 
 export default ExpenseRepository
