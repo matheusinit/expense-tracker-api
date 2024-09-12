@@ -2,15 +2,7 @@ import { describe, it, expect } from 'vitest'
 import request from 'supertest'
 import app from '../app'
 import { MessageErrorDTO } from '../dtos/error-message'
-
-type ExpenseResponseDTO = {
-  id: string
-  description: string
-  amount: number
-  createdAt: string
-  updatedAt: string
-  deletedAt?: string
-}
+import { ExpenseDTO } from '../dtos/expense'
 
 describe('Given add expense controller', () => {
   it('when required data is provided, then should return the data in response body', async () => {
@@ -20,17 +12,17 @@ describe('Given add expense controller', () => {
     }
 
     const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
+    const csrfToken = csrfResponse.body['csrfToken'] ?? ''
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
-    const responseBody: ExpenseResponseDTO = response.body
+    const responseBody: ExpenseDTO = response.body
 
     expect(responseBody.description).toEqual(expense.description)
     expect(responseBody.amount).toEqual(expense.amount)
@@ -44,12 +36,12 @@ describe('Given add expense controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
@@ -66,12 +58,12 @@ describe('Given add expense controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
@@ -86,12 +78,12 @@ describe('Given add expense controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
@@ -106,12 +98,12 @@ describe('Given add expense controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
@@ -129,12 +121,12 @@ describe('Given add expense controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
     const responseBody: MessageErrorDTO = response.body
@@ -152,12 +144,12 @@ describe('Given add expense controller', () => {
     const csrfResponse = await request(app).get('/csrf-token')
     const csrfToken = csrfResponse.body['csrfToken']
 
-    const cookies = csrfResponse.headers['set-cookie'].at(0)
+    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
 
-    const response = await request.agent(app)
+    const response = await request(app)
+      .post('/v1/expenses')
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
-      .post('/v1/expenses')
       .send(expense)
 
     expect(response.status).toEqual(201)
