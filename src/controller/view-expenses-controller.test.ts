@@ -309,4 +309,31 @@ describe('Given view expenses controller', () => {
     expect(response.status).toBe(400)
     expect(responseBody.message).toEqual('Invalid fields: producedBy')
   })
+
+  it('when specify multiple non-valid fields in fields filter, then should return a bad request error', async () => {
+    const expenses = generateExpenses(15)
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    for (const expense of expenses) {
+      await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+    }
+
+    const query = {
+      fields: 'id, description, amount, producedBy, createdBy'
+    }
+
+    const response = await request(app)
+      .get('/v1/expenses')
+      .query(query)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toBe(400)
+    expect(responseBody.message).toEqual('Invalid fields: producedBy, createdBy')
+  })
 })
