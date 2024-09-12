@@ -30,8 +30,8 @@ class ExpenseRepository {
         amount: select?.includes('amount'),
         description: select?.includes('description'),
         createdAt: select?.includes('createdAt'),
-        updatedAt: select?.includes('updated_at'),
-        deletedAt: select?.includes('deleted_at')
+        updatedAt: select?.includes('updatedAt'),
+        deletedAt: select?.includes('deletedAt')
       }
     })
   }
