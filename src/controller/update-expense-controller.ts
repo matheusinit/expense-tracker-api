@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import db from '../database'
+import db from '@/database'
 
 class UpdateExpenseController {
   async handle(request: Request, response: Response) {

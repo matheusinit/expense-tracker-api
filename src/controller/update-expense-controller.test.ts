@@ -2,11 +2,11 @@ import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
-import app from '../app'
-import db from '../database'
-import { MessageErrorDTO } from '../dtos/error-message'
-import { generateExpenses } from '../utils/tests/generate-expenses'
-import { getCSRFTokenAndCookies } from '../utils/tests/get-csrf-token-and-cookies'
+import app from '@/app'
+import db from '@/database'
+import { MessageErrorDTO } from '@/dtos/error-message'
+import { generateExpenses } from '@/utils/tests/generate-expenses'
+import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 describe('Given update expense controller', () => {
   beforeAll(async () => {

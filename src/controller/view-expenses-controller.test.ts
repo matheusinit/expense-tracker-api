@@ -1,12 +1,12 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
 
-import app from '../app'
-import { ExpenseDTO } from '../dtos/expense'
-import db from '../database'
-import { MessageErrorDTO } from '../dtos/error-message'
-import { generateExpenses } from '../utils/tests/generate-expenses'
-import { getCSRFTokenAndCookies } from '../utils/tests/get-csrf-token-and-cookies'
+import app from '@/app'
+import { ExpenseDTO } from '@/dtos/expense'
+import db from '@/database'
+import { MessageErrorDTO } from '@/dtos/error-message'
+import { generateExpenses } from '@/utils/tests/generate-expenses'
+import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 type PageBasedPaginationDTO = {
   records: ExpenseDTO[],

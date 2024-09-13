@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 
-import { generateToken } from './../middleware/csrf'
+import { generateToken } from '@/middleware/csrf'
 
 export const applyCsrfTokenController = (request: Request, response: Response) => {
   const csrfToken = generateToken(request, response)

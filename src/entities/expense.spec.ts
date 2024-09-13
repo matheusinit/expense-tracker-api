@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Expense } from './expense'
+import { Expense } from '@/entities/expense'
 
 describe('Given is needed to create a expense,', () => {
   it('when a empty description is provided, should throw an exception', () => {

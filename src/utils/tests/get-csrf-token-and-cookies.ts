@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../../app'
+import app from '@/app'
 
 const getCSRFResponseBody = async () => {
   const csrfResponse = await request(app).get('/csrf-token')
