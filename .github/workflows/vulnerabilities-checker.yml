@@ -1,8 +1,8 @@
 name: "Vulnerabilities Checker"
 on:
   push:
-    branches:
-      - main
+    branches-ignore:
+      - 'dependabot/**'
 
 jobs:
   scan:
