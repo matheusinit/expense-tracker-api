@@ -8,6 +8,18 @@ declare module 'http' {
 
 type PipeRequest = () => void
 
+const findPatternInCookie = (pattern: string, cookieList: string[]) =>
+  cookieList
+    .find(string => string.trim().startsWith(pattern)) !== undefined
+
+const removePatternFromCookie = (pattern: string, cookieList: string[]) => {
+  const index = cookieList.findIndex(string => string.trim().startsWith(pattern))
+
+  cookieList.splice(index, 1)
+
+  return cookieList
+}
+
 export const parseCookies = (request: IncomingMessage, response: ServerResponse, next: PipeRequest) => {
   const cookie = request.headers['cookie']
 
@@ -20,40 +32,28 @@ export const parseCookies = (request: IncomingMessage, response: ServerResponse,
 
   const cookieSplitted = cookie.split(';')
 
-  if (cookieSplitted.find((cookie) => cookie.trim().startsWith('Path='))) {
-    const index = cookieSplitted.findIndex(cookie => cookie.trim().startsWith('Path='))
-
-    cookieSplitted.splice(index, 1)
+  if (findPatternInCookie('Path=', cookieSplitted)) {
+    removePatternFromCookie('Path=', cookieSplitted)
   }
 
-  if (cookieSplitted.find((cookie) => cookie.trim() == 'Secure')) {
-    const index = cookieSplitted.findIndex(cookie => cookie.trim() == 'Secure')
-
-    cookieSplitted.splice(index, 1)
+  if (findPatternInCookie('Secure', cookieSplitted)) {
+    removePatternFromCookie('Secure', cookieSplitted)
   }
 
-  if (cookieSplitted.find((cookie) => cookie.trim() == 'HttpOnly')) {
-    const index = cookieSplitted.findIndex(cookie => cookie.trim() == 'HttpOnly')
-
-    cookieSplitted.splice(index, 1)
+  if (findPatternInCookie('HttpOnly', cookieSplitted)) {
+    removePatternFromCookie('HttpOnly', cookieSplitted)
   }
 
-  if (cookieSplitted.find((cookie) => cookie.trim().startsWith('SameSite='))) {
-    const index = cookieSplitted.findIndex(cookie => cookie.trim().startsWith('SameSite='))
-
-    cookieSplitted.splice(index, 1)
+  if (findPatternInCookie('SameSite=', cookieSplitted)) {
+    removePatternFromCookie('SameSite=', cookieSplitted)
   }
 
-  if (cookieSplitted.find((cookie) => cookie.trim().startsWith('Domain='))) {
-    const index = cookieSplitted.findIndex(cookie => cookie.trim().startsWith('Domain='))
-
-    cookieSplitted.splice(index, 1)
+  if (findPatternInCookie('Domain=', cookieSplitted)) {
+    removePatternFromCookie('Domain=', cookieSplitted)
   }
 
-  if (cookieSplitted.find((cookie) => cookie.trim().startsWith('Max-Age='))) {
-    const index = cookieSplitted.findIndex(cookie => cookie.trim().startsWith('Max-Age='))
-
-    cookieSplitted.splice(index, 1)
+  if (findPatternInCookie('Max-Age=', cookieSplitted)) {
+    removePatternFromCookie('Max-Age=', cookieSplitted)
   }
 
   cookieSplitted.forEach((cookie) => {
