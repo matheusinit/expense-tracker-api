@@ -12,7 +12,8 @@ export const parseCookies = (request: IncomingMessage, response: ServerResponse,
   const cookie = request.headers['cookie']
 
   if (!cookie) {
-    return response.end()
+    request.cookies = {}
+    return next()
   }
 
   cookie.split(';').forEach((cookie) => {
