@@ -38,7 +38,7 @@
     "tsx": "^4.17.0",
     "typescript": "^5.6.2",
     "typescript-eslint": "^8.5.0",
-    "vitest": "^2.0.5"
+    "vitest": "^2.1.1"
   },
   "dependencies": {
     "@prisma/client": "^5.18.0",
