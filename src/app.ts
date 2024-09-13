@@ -1,6 +1,5 @@
 import express from 'express'
 import helmet from 'helmet'
-import cookieParser from 'cookie-parser'
 
 import './config/environment'
 import { applyCustomCsrfErrors } from './middleware/custom-csrf-errors'
@@ -10,10 +9,11 @@ import { serverSession } from './middleware/session'
 import { makeAddExpenseController } from './factory/add-expense-controller-factory'
 import ViewExpensesController from './controller/view-expenses-controller'
 import UpdateExpenseController from './controller/update-expense-controller'
+import { parseCookies } from './middleware/cookie'
 
 const app = express()
 
-app.use(cookieParser())
+app.use(parseCookies)
 app.use(serverSession)
 
 app.use(express.json())
