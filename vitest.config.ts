@@ -8,6 +8,9 @@ export default defineConfig(({ mode }) => ({
       '**/__tests__/**/*.?(c|m)[jt]s?(x)',
       '**/?(*.){test,spec}.?(c|m)[jt]s?(x)'
     ],
+    coverage: {
+      provider: 'v8'
+    },
     poolOptions: {
       forks: {
         singleFork: true
