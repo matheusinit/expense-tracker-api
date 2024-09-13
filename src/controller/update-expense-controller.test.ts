@@ -6,18 +6,7 @@ import app from '../app'
 
 import db from '../database'
 import { MessageErrorDTO } from '../dtos/error-message'
-
-const generateExpenses = (length: number) => {
-  const generateExpense = () => {
-    const description = falso.randProductName()
-    const amount = falso.randAmount({ fraction: 0 })
-    return { description, amount }
-  }
-
-  const expenses = Array(length).fill(0).map(generateExpense)
-
-  return expenses
-}
+import { generateExpenses } from '../utils/tests/generate-expenses'
 
 const getCSRFResponseBody = async () => {
   const csrfResponse = await request(app).get('/csrf-token')

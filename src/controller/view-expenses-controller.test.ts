@@ -1,11 +1,11 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
-import * as falso from '@ngneat/falso'
 
 import app from '../app'
 import { ExpenseDTO } from '../dtos/expense'
 import db from '../database'
 import { MessageErrorDTO } from '../dtos/error-message'
+import { generateExpenses } from '../utils/tests/generate-expenses'
 
 type PageBasedPaginationDTO = {
   records: ExpenseDTO[],
@@ -15,18 +15,6 @@ type PageBasedPaginationDTO = {
     page_count: number
     total_count: number
   }
-}
-
-const generateExpenses = (length: number) => {
-  const generateExpense = () => {
-    const description = falso.randProductName()
-    const amount = falso.randAmount({ fraction: 0 })
-    return { description, amount }
-  }
-
-  const expenses = Array(length).fill(0).map(generateExpense)
-
-  return expenses
 }
 
 const getCSRFResponseBody = async () => {
