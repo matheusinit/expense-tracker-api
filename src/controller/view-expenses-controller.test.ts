@@ -6,6 +6,7 @@ import { ExpenseDTO } from '../dtos/expense'
 import db from '../database'
 import { MessageErrorDTO } from '../dtos/error-message'
 import { generateExpenses } from '../utils/tests/generate-expenses'
+import { getCSRFTokenAndCookies } from '../utils/tests/get-csrf-token-and-cookies'
 
 type PageBasedPaginationDTO = {
   records: ExpenseDTO[],
@@ -15,20 +16,6 @@ type PageBasedPaginationDTO = {
     page_count: number
     total_count: number
   }
-}
-
-const getCSRFResponseBody = async () => {
-  const csrfResponse = await request(app).get('/csrf-token')
-  return csrfResponse
-}
-
-const getCSRFTokenAndCookies = async () => {
-  const response = await getCSRFResponseBody()
-
-  const csrfToken = response.body['csrfToken']
-  const cookies = response.headers['set-cookie'].at(0) ?? ''
-
-  return { csrfToken, cookies }
 }
 
 describe('Given view expenses controller', () => {

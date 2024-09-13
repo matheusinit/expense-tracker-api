@@ -3,24 +3,10 @@ import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
 import app from '../app'
-
 import db from '../database'
 import { MessageErrorDTO } from '../dtos/error-message'
 import { generateExpenses } from '../utils/tests/generate-expenses'
-
-const getCSRFResponseBody = async () => {
-  const csrfResponse = await request(app).get('/csrf-token')
-  return csrfResponse
-}
-
-const getCSRFTokenAndCookies = async () => {
-  const response = await getCSRFResponseBody()
-
-  const csrfToken = response.body['csrfToken']
-  const cookies = response.headers['set-cookie'].at(0) ?? ''
-
-  return { csrfToken, cookies }
-}
+import { getCSRFTokenAndCookies } from '../utils/tests/get-csrf-token-and-cookies'
 
 describe('Given update expense controller', () => {
   beforeAll(async () => {
