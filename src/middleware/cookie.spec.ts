@@ -5,11 +5,19 @@ import { parseCookies } from './cookie'
 
 const server = http.createServer((request: http.IncomingMessage, response) => {
   parseCookies(request, response, () => {
-    const json = JSON.stringify(request.cookies)
-    console.log(json)
+    let responseBody = ''
 
-    response.setHeader('Content-Type', 'application/json')
-    response.end(json)
+    const contentType = request.headers['accept'] || ''
+    if (contentType.includes('application/json')) {
+      response.setHeader('Content-Type', 'application/json')
+
+      responseBody = JSON.stringify(request.cookies)
+    } else {
+      response.setHeader('Content-Type', 'text/plain')
+      responseBody = JSON.stringify(request.cookies)
+    }
+
+    response.end(responseBody)
   })
 })
 
@@ -28,11 +36,24 @@ describe('Given cookie middleware', () => {
 
     const response = await request(server)
       .get('/')
+      .accept('application/json')
       .set('Cookie', 'name=Matheus')
       .send()
 
     const cookies = response.body
     expect(cookies).toBeDefined()
     expect(cookies['name']).toBe('Matheus')
+  })
+
+  it('when cookie value is url enconded, should parse cookies from header to request.cookies', async () => {
+    const response = await request(server)
+      .get('/')
+      .accept('text/plain')
+      .set('Cookie', 'token=aae%7Caa')
+      .send()
+
+    const cookies = response.text
+    expect(cookies).toBeDefined()
+    expect(cookies).toBe('{"token":"aae|aa"}')
   })
 })

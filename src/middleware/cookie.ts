@@ -21,7 +21,9 @@ export const parseCookies = (request: IncomingMessage, response: ServerResponse,
   cookie.split(';').forEach((cookie) => {
     const [key, value] = cookie.split('=')
     request.cookies = defaultCookies
-    request.cookies[key.trim()] = value.trim()
+    request.cookies[key.trim()] = String(value.trim())
+    const decodedValue = decodeURIComponent(value.trim())
+    request.cookies[key.trim()] = decodedValue
   })
 
   next()
