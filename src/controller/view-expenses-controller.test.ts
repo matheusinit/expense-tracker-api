@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
@@ -44,9 +44,15 @@ const getCSRFTokenAndCookies = async () => {
 }
 
 describe('Given view expenses controller', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db.$connect()
-    await db.expense.deleteMany()
+  })
+
+  beforeEach(async () => {
+    await db.expense.deleteMany({})
+  })
+
+  afterAll(async () => {
     await db.$disconnect()
   })
 
@@ -77,7 +83,7 @@ describe('Given view expenses controller', () => {
   })
 
   it('when an expense is added, then should return the expense in the page based pagination', async () => {
-    const expense = generateExpenses(1).at(0)
+    const expense = generateExpenses(1)[0]
 
     const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 

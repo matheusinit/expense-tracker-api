@@ -5,6 +5,10 @@ export default defineConfig({
     include: [
       '**/__tests__/**/*.?(c|m)[jt]s?(x)',
       '**/?(*.){test,spec}.?(c|m)[jt]s?(x)'
-    ]
+    ],
+    isolate: true,
+    sequence: {
+      shuffle: false
+    }
   }
 })
