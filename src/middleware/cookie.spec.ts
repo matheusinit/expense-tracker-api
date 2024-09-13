@@ -56,4 +56,16 @@ describe('Given cookie middleware', () => {
     expect(cookies).toBeDefined()
     expect(cookies).toBe('{"token":"aae|aa"}')
   })
+
+  it('when cookie options is passed, should parse cookies from header to request.cookies', async () => {
+    const response = await request(server)
+      .get('/')
+      .accept('application/json')
+      .set('Cookie', 'username=matheusinit; Path=/; HttpOnly; Secure; SameSite=Lax')
+      .send()
+
+    const cookies = response.body
+    expect(cookies).toBeDefined()
+    expect(cookies['username']).toBe('matheusinit')
+  })
 })
