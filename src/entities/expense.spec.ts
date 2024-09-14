@@ -90,4 +90,14 @@ describe('Given is needed to update a expense,', () => {
 
     expect(updateExpense).toThrowError('Amount is required. It should be greater than 0')
   })
+
+  it('when amount less than 0 is provided, should throw an exception', () => {
+    const expense = new Expense('Credit card bill', 100)
+
+    const updateExpense = () => expense.update({
+      amount: -100
+    })
+
+    expect(updateExpense).toThrowError('Amount cannot be a negative value. It should be greater than 0')
+  })
 })
