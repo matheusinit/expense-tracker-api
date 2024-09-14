@@ -211,4 +211,37 @@ describe('Given update expense controller', () => {
     expect(responseBody.message).toBe('Invalid value for amount. It should be greater than 0.')
 
   })
+
+  it('when description is provided with invalid value, then should return bad request', async () => {
+    const defaultExpense = {
+      amount: 0,
+      description: 'Description'
+    }
+
+    const expense = generateExpenses(1).at(0) ?? defaultExpense
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    const expenseResponse = await request(app)
+      .post('/v1/expenses/')
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(expense)
+
+    const id = expenseResponse.body.id
+    const payload = {
+      description: ''
+    }
+
+    const response = await request(app)
+      .put(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(payload)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toBe(400)
+    expect(responseBody.message).toBe('Description is required')
+  })
 })
