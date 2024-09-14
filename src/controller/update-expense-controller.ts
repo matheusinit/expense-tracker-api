@@ -25,7 +25,8 @@ class UpdateExpenseController {
         id: expenseFound.id
       },
       data: {
-        amount: Number(amount)
+        amount: Number(amount),
+        description: description
       }
     })
 
