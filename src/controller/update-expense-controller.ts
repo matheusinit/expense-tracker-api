@@ -13,7 +13,10 @@ class UpdateExpenseController {
       return response.status(404).send({ message: 'Expense not found' })
     }
 
-    if (request.body['description'] === undefined && request.body['amount'] === undefined) {
+    const description: string = request.body['description']
+    const amount: string = request.body['amount']
+
+    if (description === undefined && amount === undefined) {
       return response.status(400).send({ message: 'At least one field must be provided' })
     }
 
@@ -22,7 +25,7 @@ class UpdateExpenseController {
         id: expenseFound.id
       },
       data: {
-        amount: Number(request.body.amount)
+        amount: Number(amount)
       }
     })
 
