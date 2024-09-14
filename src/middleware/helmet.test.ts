@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
-import app from '../app'
+import app from '@/app'
 
 describe('Helmet Middleware', () => {
   it('when request to get csrf token, then should have secure HTTP response headers', async () => {

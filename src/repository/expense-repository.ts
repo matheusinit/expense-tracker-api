@@ -1,8 +1,14 @@
-import db from '../database'
+import db from '@/database'
 
 type AddExpenseRepositoryDTO = {
   description: string
   amount: number
+}
+
+type UpdateExpenseRepositoryDTO = {
+  id: string
+  description?: string
+  amount?: number
 }
 
 class ExpenseRepository {
@@ -21,6 +27,14 @@ class ExpenseRepository {
     return await db.expense.count()
   }
 
+  async get(id: string) {
+    return await db.expense.findUnique({
+      where: {
+        id
+      }
+    })
+  }
+
   async getMany(take: number, skip: number, select?: string[]) {
     return await db.expense.findMany({
       take,
@@ -34,6 +48,17 @@ class ExpenseRepository {
         deletedAt: select?.includes('deletedAt')
       }
     })
+  }
+
+  async update({ id, ...data }: UpdateExpenseRepositoryDTO) {
+    const updated = await db.expense.update({
+      where: {
+        id
+      },
+      data
+    })
+
+    return updated
   }
 
   async getColumns() {

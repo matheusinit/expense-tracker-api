@@ -1,8 +1,13 @@
+type UpdateExpense = {
+  description?: string
+  amount?: number | null
+}
+
 export class Expense {
   private _description!: string
   private _amount!: number
 
-  constructor(description: string, amount: number) {
+  constructor(description: string, amount: number | null) {
     this.description = description
     this.amount = amount
   }
@@ -27,8 +32,8 @@ export class Expense {
     return this._amount
   }
 
-  set amount(value: number) {
-    if (value === undefined) {
+  set amount(value: number | null) {
+    if (value === null) {
       throw new Error('Amount is required. It should be greater than 0')
     }
 
@@ -41,5 +46,15 @@ export class Expense {
     }
 
     this._amount = value
+  }
+
+  update({ description, amount }: UpdateExpense): void {
+    if (description !== undefined) {
+      this.description = description
+    }
+
+    if (amount !== undefined) {
+      this.amount = amount
+    }
   }
 }

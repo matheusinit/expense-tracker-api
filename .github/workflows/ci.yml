@@ -38,3 +38,50 @@ jobs:
       - name: Run unit tests
         run: npm run test:unit
     needs: static-analysis
+
+  integration-test:
+    name: Integration test
+    runs-on: ubuntu-20.04
+    services:
+      postgres:
+        image: postgres:15.7-bookworm
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: tester
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: expenses
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up TypeScript
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+      - name: Install dependencies
+        run: npm install
+
+      - name: Load .env variables
+        run: |
+          echo "DATABASE_URL=postgresql://tester:password@localhost:5432/expenses" >> .env.test.local
+          echo "POSTGRES_USER=tester" >> .env.test.local
+          echo "POSTGRES_PASSWORD=password" >> .env.test.local
+          echo "POSTGRES_DB=expenses" >> .env.test.local
+
+          echo "CSRF_TOKEN_SECRET=$(openssl rand -base64 24 | tr -d '=' | cut -c1-32)" >> .env.test.local
+          echo "SESSION_SECRET=$(openssl rand -base64 24 | tr -d '=' | cut -c1-32)" >> .env.test.local
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Run migrations
+        run: npm run migrate:test
+
+      - name: Run tests
+        run: npm run test:integration
+    needs: static-analysis

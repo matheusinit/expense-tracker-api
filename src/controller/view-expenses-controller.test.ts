@@ -1,11 +1,12 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
-import * as falso from '@ngneat/falso'
 
-import app from '../app'
-import { ExpenseDTO } from '../dtos/expense'
-import db from '../database'
-import { MessageErrorDTO } from '../dtos/error-message'
+import app from '@/app'
+import { ExpenseDTO } from '@/dtos/expense'
+import db from '@/database'
+import { MessageErrorDTO } from '@/dtos/error-message'
+import { generateExpenses } from '@/utils/tests/generate-expenses'
+import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 type PageBasedPaginationDTO = {
   records: ExpenseDTO[],
@@ -17,36 +18,16 @@ type PageBasedPaginationDTO = {
   }
 }
 
-const generateExpenses = (length: number) => {
-  const generateExpense = () => {
-    const description = falso.randProductName()
-    const amount = falso.randAmount({ fraction: 0 })
-    return { description, amount }
-  }
-
-  const expenses = Array(length).fill(0).map(generateExpense)
-
-  return expenses
-}
-
-const getCSRFResponseBody = async () => {
-  const csrfResponse = await request(app).get('/csrf-token')
-  return csrfResponse
-}
-
-const getCSRFTokenAndCookies = async () => {
-  const response = await getCSRFResponseBody()
-
-  const csrfToken = response.body['csrfToken']
-  const cookies = response.headers['set-cookie'].at(0) ?? ''
-
-  return { csrfToken, cookies }
-}
-
 describe('Given view expenses controller', () => {
-  beforeEach(async () => {
+  beforeAll(async () => {
     await db.$connect()
-    await db.expense.deleteMany()
+  })
+
+  beforeEach(async () => {
+    await db.expense.deleteMany({})
+  })
+
+  afterAll(async () => {
     await db.$disconnect()
   })
 
@@ -77,7 +58,7 @@ describe('Given view expenses controller', () => {
   })
 
   it('when an expense is added, then should return the expense in the page based pagination', async () => {
-    const expense = generateExpenses(1).at(0)
+    const expense = generateExpenses(1)[0]
 
     const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 

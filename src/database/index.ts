@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { environment } from '../config/environment'
+import { environment } from '@/config/environment'
 
 type LogLevel = 'info' | 'query' | 'warn' | 'error'
 

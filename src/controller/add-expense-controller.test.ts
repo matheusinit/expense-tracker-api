@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
-import app from '../app'
-import { MessageErrorDTO } from '../dtos/error-message'
-import { ExpenseDTO } from '../dtos/expense'
+import app from '@/app'
+import { MessageErrorDTO } from '@/dtos/error-message'
+import { ExpenseDTO } from '@/dtos/expense'
 
 describe('Given add expense controller', () => {
   it('when required data is provided, then should return the data in response body', async () => {

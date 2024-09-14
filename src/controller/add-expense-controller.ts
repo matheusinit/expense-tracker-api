@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import ExpenseRepository from '../repository/expense-repository'
-import { Expense } from '../entities/expense'
+import ExpenseRepository from '@/repository/expense-repository'
+import { Expense } from '@/entities/expense'
 
 class AddExpenseController {
   private readonly repository: ExpenseRepository
