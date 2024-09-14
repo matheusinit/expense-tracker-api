@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import request from 'supertest'
 import * as falso from '@ngneat/falso'
+import dayjs from 'dayjs'
 
 import app from '@/app'
 import db from '@/database'
@@ -140,5 +141,40 @@ describe('Given update expense controller', () => {
     expect(response.status).toBe(200)
     expect(responseBody.amount).toBe(payload.amount)
     expect(responseBody.description).toBe(payload.description)
+  })
+
+  it('when update successfully, then should set update timestamp', async () => {
+    const defaultExpense = {
+      amount: 0,
+      description: 'Description'
+    }
+
+    const expense = generateExpenses(1).at(0) ?? defaultExpense
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    const expenseResponse = await request(app)
+      .post('/v1/expenses/')
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(expense)
+
+    const id = expenseResponse.body.id
+    const payload = {
+      description: falso.randProductName(),
+      amount: expense.amount + falso.randAmount({ fraction: 0 })
+    }
+
+    const response = await request(app)
+      .put(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(payload)
+
+    const responseBody: ExpenseDTO = response.body
+
+    const updatedAtIsAfterCreatedAt = dayjs(responseBody.updatedAt).isAfter(dayjs(responseBody.createdAt))
+
+    expect(updatedAtIsAfterCreatedAt).toBeTruthy()
   })
 })
