@@ -1,3 +1,8 @@
+type UpdateExpense = {
+  description?: string
+  amount?: number
+}
+
 export class Expense {
   private _description!: string
   private _amount!: number
@@ -43,7 +48,7 @@ export class Expense {
     this._amount = value
   }
 
-  update(description: string, amount: number): void {
+  update({ description, amount }: UpdateExpense): void {
     if (description !== undefined) {
       this.description = description
     }

@@ -29,7 +29,10 @@ class UpdateExpenseController {
         return response.status(400).send({ message: 'At least one field must be provided' })
       }
 
-      expense.update(description, Number(amount))
+      expense.update({
+        description,
+        amount: Number(amount)
+      })
 
       const expenseUpdated = await this.repository.update({
         id: expenseFound.id,

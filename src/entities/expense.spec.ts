@@ -50,7 +50,9 @@ describe('Given is needed to update a expense,', () => {
   it('when a empty description is provided, should throw an exception', () => {
     const expense = new Expense('Credit card bill', 100)
 
-    const updateExpense = () => expense.update('', 100)
+    const updateExpense = () => expense.update({
+      description: ''
+    })
 
     expect(updateExpense).toThrowError('Description is required')
   })
