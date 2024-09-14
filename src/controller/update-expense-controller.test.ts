@@ -7,6 +7,7 @@ import db from '@/database'
 import { MessageErrorDTO } from '@/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
+import { ExpenseDTO } from '@/dtos/expense'
 
 describe('Given update expense controller', () => {
   beforeAll(async () => {
@@ -71,5 +72,38 @@ describe('Given update expense controller', () => {
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('At least one field must be provided')
+  })
+
+  it('when is given a single field to update, then should return the resource with updated field', async () => {
+    const defaultExpense = {
+      amount: 0,
+      description: 'Description'
+    }
+
+    const expense = generateExpenses(1).at(0) ?? defaultExpense
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    const expenseResponse = await request(app)
+      .post('/v1/expenses/')
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(expense)
+
+    const id = expenseResponse.body.id
+    const payload = {
+      amount: expense.amount + 50
+    }
+
+    const response = await request(app)
+      .put(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(payload)
+
+    const responseBody: ExpenseDTO = response.body
+
+    expect(response.status).toBe(200)
+    expect(responseBody.amount).toBe(payload.amount)
   })
 })
