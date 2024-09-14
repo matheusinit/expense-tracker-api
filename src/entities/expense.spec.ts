@@ -71,4 +71,14 @@ describe('Given is needed to update a expense,', () => {
 
     expect(updateExpense).toThrowError('Description length cannot be greather than 255')
   })
+
+  it('when amount equals 0 is provided, should throw an exception', () => {
+    const expense = new Expense('Credit card bill', 100)
+
+    const updateExpense = () => expense.update({
+      amount: 0
+    })
+
+    expect(updateExpense).toThrowError('Invalid value for amount. It should be greater than 0.')
+  })
 })
