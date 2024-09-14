@@ -5,6 +5,12 @@ type AddExpenseRepositoryDTO = {
   amount: number
 }
 
+type UpdateExpenseRepositoryDTO = {
+  id: string
+  description?: string
+  amount?: number
+}
+
 class ExpenseRepository {
   async add(input: AddExpenseRepositoryDTO) {
     const expense = await db.expense.create({
@@ -42,6 +48,17 @@ class ExpenseRepository {
         deletedAt: select?.includes('deletedAt')
       }
     })
+  }
+
+  async update({ id, ...data }: UpdateExpenseRepositoryDTO) {
+    const updated = await db.expense.update({
+      where: {
+        id
+      },
+      data
+    })
+
+    return updated
   }
 
   async getColumns() {

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import db from '@/database'
 import ExpenseRepository from '@/repository/expense-repository'
 
 class UpdateExpenseController {
@@ -25,14 +24,10 @@ class UpdateExpenseController {
       return response.status(400).send({ message: 'At least one field must be provided' })
     }
 
-    const expenseUpdated = await db.expense.update({
-      where: {
-        id: expenseFound.id
-      },
-      data: {
-        amount: Number(amount),
-        description: description
-      }
+    const expenseUpdated = await this.repository.update({
+      id: expenseFound.id,
+      amount: Number(amount),
+      description
     })
 
     return response.status(200).send(expenseUpdated)
