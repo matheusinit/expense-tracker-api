@@ -1,5 +1,6 @@
 import express from 'express'
 import helmet from 'helmet'
+import pino from 'pino-http'
 
 import '@/config/environment'
 import { applyCustomCsrfErrors } from '@/middleware/custom-csrf-errors'
@@ -14,6 +15,15 @@ import ExpenseRepository from './repository/expense-repository'
 
 const app = express()
 
+app.use(pino({
+  transport: {
+    target: 'pino-pretty',
+    options: {
+      colorize: true
+    }
+  },
+  level: 'debug'
+}))
 app.use(parseCookies)
 app.use(serverSession)
 
