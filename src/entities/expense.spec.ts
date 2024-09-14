@@ -56,4 +56,19 @@ describe('Given is needed to update a expense,', () => {
 
     expect(updateExpense).toThrowError('Description is required')
   })
+
+  it('when a description greater than 255 of length is provided, should throw an exception', () => {
+    const expense = new Expense('Credit card bill', 100)
+
+    const description = 'Eos laborum labore consequuntur voluptatem beatae in eos, \
+    repellat possimus voluptate quos cupiditate dicta vel. Ipsum esse occaecati \
+    magnam. Dolores labore qui deserunt unde qui, sequi at sequi doloribus beatae \
+    facilis tenetur. Est repellat deserunt ducb.'
+
+    const updateExpense = () => expense.update({
+      description
+    })
+
+    expect(updateExpense).toThrowError('Description length cannot be greather than 255')
+  })
 })
