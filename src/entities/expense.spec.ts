@@ -26,8 +26,8 @@ describe('Given is needed to create a expense,', () => {
     expect(classInstantiation).toThrowError('Invalid value for amount. It should be greater than 0.')
   })
 
-  it('when amount equals undefined is provided, should throw an exception', () => {
-    const classInstantiation = () => new Expense('Credit card bill', undefined)
+  it('when amount equals null is provided, should throw an exception', () => {
+    const classInstantiation = () => new Expense('Credit card bill', null)
 
     expect(classInstantiation).toThrowError('Amount is required. It should be greater than 0')
   })
@@ -80,5 +80,14 @@ describe('Given is needed to update a expense,', () => {
     })
 
     expect(updateExpense).toThrowError('Invalid value for amount. It should be greater than 0.')
+  })
+
+  it('when amount equals null is provided, should throw an exception', () => {
+    const expense = new Expense('Credit card bill', 100)
+    const updateExpense = () => expense.update({
+      amount: null
+    })
+
+    expect(updateExpense).toThrowError('Amount is required. It should be greater than 0')
   })
 })
