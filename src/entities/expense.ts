@@ -42,4 +42,14 @@ export class Expense {
 
     this._amount = value
   }
+
+  update(description: string, amount: number): void {
+    if (description !== undefined) {
+      this.description = description
+    }
+
+    if (amount !== undefined) {
+      this.amount = amount
+    }
+  }
 }
