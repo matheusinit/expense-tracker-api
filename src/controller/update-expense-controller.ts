@@ -1,13 +1,16 @@
 import { Request, Response } from 'express'
 import db from '@/database'
+import ExpenseRepository from '@/repository/expense-repository'
 
 class UpdateExpenseController {
+  private readonly repository: ExpenseRepository
+
+  constructor(repository: ExpenseRepository) {
+    this.repository = repository
+  }
+
   async handle(request: Request, response: Response) {
-    const expenseFound = await db.expense.findUnique({
-      where: {
-        id: request.params.id
-      }
-    })
+    const expenseFound = await this.repository.get(request.params.id)
 
     if (!expenseFound) {
       return response.status(404).send({ message: 'Expense not found' })

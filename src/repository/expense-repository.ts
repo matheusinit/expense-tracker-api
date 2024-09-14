@@ -21,6 +21,14 @@ class ExpenseRepository {
     return await db.expense.count()
   }
 
+  async get(id: string) {
+    return await db.expense.findUnique({
+      where: {
+        id
+      }
+    })
+  }
+
   async getMany(take: number, skip: number, select?: string[]) {
     return await db.expense.findMany({
       take,

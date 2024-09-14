@@ -10,6 +10,7 @@ import { makeAddExpenseController } from '@/factory/add-expense-controller-facto
 import ViewExpensesController from '@/controller/view-expenses-controller'
 import UpdateExpenseController from '@/controller/update-expense-controller'
 import { parseCookies } from '@/middleware/cookie'
+import ExpenseRepository from './repository/expense-repository'
 
 const app = express()
 
@@ -23,7 +24,8 @@ app.get('/csrf-token', applyCsrfTokenController)
 app.use(applyCustomCsrfErrors)
 
 const viewExpensesController = new ViewExpensesController()
-const updateExpenseController = new UpdateExpenseController()
+const expenseRepository = new ExpenseRepository()
+const updateExpenseController = new UpdateExpenseController(expenseRepository)
 
 const router = express.Router()
 
