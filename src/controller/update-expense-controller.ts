@@ -16,7 +16,9 @@ class UpdateExpenseController {
     const description: string = request.body['description']
     const amount: string = request.body['amount']
 
-    if (description === undefined && amount === undefined) {
+    const noneFieldsIsDefined = !description && !amount
+
+    if (noneFieldsIsDefined) {
       return response.status(400).send({ message: 'At least one field must be provided' })
     }
 
