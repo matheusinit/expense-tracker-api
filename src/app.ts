@@ -6,6 +6,7 @@ import { applyCustomCsrfErrors } from '@/middleware/custom-csrf-errors'
 import { applyCsrfTokenController } from '@/controller/csrf-token-controller'
 import { csrf } from '@/middleware/csrf'
 import { serverSession } from '@/middleware/session'
+import { logger } from '@/middleware/logger'
 import { makeAddExpenseController } from '@/factory/add-expense-controller-factory'
 import ViewExpensesController from '@/controller/view-expenses-controller'
 import UpdateExpenseController from '@/controller/update-expense-controller'
@@ -14,6 +15,7 @@ import ExpenseRepository from './repository/expense-repository'
 
 const app = express()
 
+app.use(logger)
 app.use(parseCookies)
 app.use(serverSession)
 
