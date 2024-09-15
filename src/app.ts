@@ -12,6 +12,7 @@ import ViewExpensesController from '@/controller/view-expenses-controller'
 import UpdateExpenseController from '@/controller/update-expense-controller'
 import { parseCookies } from '@/middleware/cookie'
 import ExpenseRepository from './repository/expense-repository'
+import { environment } from '@/config/environment'
 
 const app = express()
 
@@ -22,7 +23,7 @@ app.use(pino({
       colorize: true
     }
   },
-  level: 'debug'
+  level: environment.LOG_LEVEL
 }))
 app.use(parseCookies)
 app.use(serverSession)

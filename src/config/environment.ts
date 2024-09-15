@@ -22,7 +22,10 @@ export const environment = {
   // Application server
   CSRF_TOKEN_SECRET: process.env.CSRF_TOKEN_SECRET,
   SESSION_SECRET: process.env.SESSION_SECRET,
+  NODE_ENV: process.env.NODE_ENV ?? 'development',
 
   // ORM
   PRISMA_CLIENT_LOG: prismaLogLevels ?? ['query', 'info', 'warn'],
+
+  LOG_LEVEL: process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development' ? 'info' : 'warn'
 }
