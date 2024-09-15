@@ -1,6 +1,7 @@
 import express from 'express'
 import helmet from 'helmet'
 import pino from 'pino-http'
+import { v4 as uuidv4 } from 'uuid'
 
 import '@/config/environment'
 import { applyCustomCsrfErrors } from '@/middleware/custom-csrf-errors'
@@ -16,15 +17,20 @@ import { environment } from '@/config/environment'
 
 const app = express()
 
-app.use(pino({
+const logger = pino({
   transport: {
     target: 'pino-pretty',
     options: {
       colorize: true
     }
   },
-  level: environment.LOG_LEVEL
-}))
+  level: environment.LOG_LEVEL,
+  genReqId: () => {
+    return uuidv4()
+  }
+})
+
+app.use(logger)
 app.use(parseCookies)
 app.use(serverSession)
 
