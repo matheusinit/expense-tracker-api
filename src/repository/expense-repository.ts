@@ -68,6 +68,17 @@ class ExpenseRepository {
     return updated
   }
 
+  async delete(id: string) {
+    await db.expense.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date()
+      }
+    })
+  }
+
   async getColumns() {
     const columnsQuery = await db.$queryRaw`
       SELECT column_name

@@ -29,7 +29,7 @@ app.use(applyCustomCsrfErrors)
 const viewExpensesController = new ViewExpensesController()
 const expenseRepository = new ExpenseRepository()
 const updateExpenseController = new UpdateExpenseController(expenseRepository)
-const deleteExpenseController = new DeleteExpenseController()
+const deleteExpenseController = new DeleteExpenseController(expenseRepository)
 
 const router = express.Router()
 

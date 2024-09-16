@@ -1,15 +1,17 @@
-import db from '@/database'
+import ExpenseRepository from '@/repository/expense-repository'
 import { Request, Response } from 'express'
 
 class DeleteExpenseController {
+  private readonly repository: ExpenseRepository
+
+  constructor(repository: ExpenseRepository) {
+    this.repository = repository
+  }
+
   async handle(request: Request, response: Response) {
     const { id } = request.params
 
-    const expense = await db.expense.findUnique({
-      where: {
-        id
-      }
-    })
+    const expense = await this.repository.get(id)
 
     if (!expense) {
       return response.status(404).send({
@@ -17,14 +19,7 @@ class DeleteExpenseController {
       })
     }
 
-    await db.expense.update({
-      where: {
-        id
-      },
-      data: {
-        deletedAt: new Date()
-      }
-    })
+    await this.repository.delete(id)
 
     if (expense.deletedAt) {
       return response.status(404).send({
