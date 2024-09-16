@@ -7,6 +7,7 @@ import db from '@/database'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { MessageErrorDTO } from '@/dtos/error-message'
+import { ExpenseDTO } from '@/dtos/expense'
 
 describe('Given remove expense controller', () => {
   beforeAll(async () => {
@@ -48,4 +49,38 @@ describe('Given remove expense controller', () => {
     expect(responseBody.message).toBe('Expense not found')
   })
 
+  it('when is given an id of resource already deleted, then should return not found error ', async () => {
+    const expenses = generateExpenses(10)
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    const expensesResponse: ExpenseDTO[] = []
+
+    for (const expense of expenses) {
+      const response = await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+
+      expensesResponse.push(response.body)
+    }
+
+    const index = falso.randNumber({ min: 1, max: 10 })
+
+    const expense = expensesResponse[index]
+
+    const id = expense.id
+
+    const response = await request(app)
+      .delete(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send()
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toBe(404)
+    expect(responseBody.message).toBe('Resource already deleted')
+  })
 })
