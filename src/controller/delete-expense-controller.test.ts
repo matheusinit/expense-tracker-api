@@ -66,7 +66,7 @@ describe('Given remove expense controller', () => {
       expensesResponse.push(response.body)
     }
 
-    const index = falso.randNumber({ min: 1, max: 10 })
+    const index = falso.randNumber({ min: 0, max: 9 })
 
     const expense = expensesResponse[index]
 
@@ -107,7 +107,7 @@ describe('Given remove expense controller', () => {
       expensesResponse.push(response.body)
     }
 
-    const index = falso.randNumber({ min: 1, max: 10 })
+    const index = falso.randNumber({ min: 0, max: 9 })
 
     const expense = expensesResponse[index]
 
