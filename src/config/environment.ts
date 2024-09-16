@@ -12,6 +12,13 @@ const getLogLevels = () => {
 
 const prismaLogLevels = getLogLevels()
 
+let LOG_LEVEL = process.env.LOG_LEVEL
+
+if (!LOG_LEVEL) {
+  LOG_LEVEL = process.env.NODE_ENV === 'development' ? 'info' : 'warn'
+}
+
+
 export const environment = {
   // Database
   DATABASE_URL: process.env.DATABASE_URL,
@@ -27,5 +34,5 @@ export const environment = {
   // ORM
   PRISMA_CLIENT_LOG: prismaLogLevels ?? ['query', 'info', 'warn'],
 
-  LOG_LEVEL: process.env.LOG_LEVEL ?? process.env.NODE_ENV === 'development' ? 'info' : 'warn'
+  LOG_LEVEL
 }
