@@ -18,6 +18,10 @@ class UpdateExpenseController {
         return response.status(404).send({ message: 'Expense not found' })
       }
 
+      if (expenseFound.deletedAt) {
+        return response.status(404).send({ message: 'Cannot update a deleted resource' })
+      }
+
       const expense = new Expense(expenseFound.description, expenseFound.amount)
 
       const description: string = request.body['description']
