@@ -17,9 +17,22 @@ class DeleteExpenseController {
       })
     }
 
-    return response.status(404).send({
-      message: 'Resource already deleted'
+    await db.expense.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date()
+      }
     })
+
+    if (expense.deletedAt) {
+      return response.status(404).send({
+        message: 'Resource already deleted'
+      })
+    }
+
+    return response.status(204).send()
   }
 }
 
