@@ -1,5 +1,6 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import request from 'supertest'
+import * as falso from '@ngneat/falso'
 
 import app from '@/app'
 import { ExpenseDTO } from '@/dtos/expense'
@@ -352,5 +353,44 @@ describe('Given view expenses controller', () => {
         deletedAt: null
       }
     ]))
+  })
+
+  it('when specify valid parameters, then should not return the deleted expenses', async () => {
+    const expenses = generateExpenses(10)
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    const expensesResponse: ExpenseDTO[] = []
+
+    for (const expense of expenses) {
+      const response = await request(app)
+        .post('/v1/expenses')
+        .set('x-csrf-token', csrfToken)
+        .set('Cookie', cookies)
+        .send(expense)
+
+      expensesResponse.push(response.body)
+    }
+
+    const index = falso.randNumber({ min: 1, max: 10 })
+
+    const expense = expensesResponse[index]
+
+    const id = expense.id
+
+    await request(app)
+      .delete(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send()
+
+    const response = await request(app)
+      .get('/v1/expenses?pageSize=10')
+
+    const responseBody: PageBasedPaginationDTO = response.body
+
+    expect(response.status).toBe(200)
+    expect(responseBody._metadata.total_count).toEqual(9)
+    expect(responseBody.records.length).toEqual(9)
   })
 })
