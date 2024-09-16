@@ -244,4 +244,44 @@ describe('Given update expense controller', () => {
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('Description is required')
   })
+
+  it('when try to update a deleted resource, then should return not found error', async () => {
+    const defaultExpense = {
+      amount: 0,
+      description: 'Description'
+    }
+
+    const expense = generateExpenses(1).at(0) ?? defaultExpense
+
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
+
+    const expenseResponse = await request(app)
+      .post('/v1/expenses/')
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(expense)
+
+    const id = expenseResponse.body.id
+
+    await request(app)
+      .delete(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send()
+
+    const payload = {
+      description: falso.randProductName(),
+    }
+
+    const response = await request(app)
+      .put(`/v1/expenses/${id}`)
+      .set('x-csrf-token', csrfToken)
+      .set('Cookie', cookies)
+      .send(payload)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toBe(404)
+    expect(responseBody.message).toBe('Cannot update a deleted resource')
+  })
 })
