@@ -34,7 +34,7 @@ class AddExpenseController {
         }
       }
 
-      const schema = z.number()
+      const schema = z.number().positive()
 
       const dueDateIsValid = schema.safeParse(dueDate).success
 
