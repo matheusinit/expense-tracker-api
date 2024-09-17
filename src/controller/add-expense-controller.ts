@@ -33,6 +33,12 @@ class AddExpenseController {
         }
       }
 
+      if (typeof dueDate !== 'number') {
+        return response.status(400).send({
+          message: 'Invalid value for dueDate. It should be in interval of days of a month.'
+        })
+      }
+
       const expenseData = new Expense(description, amount, dueDate)
 
       const expense = await this.repository.add(expenseData)
