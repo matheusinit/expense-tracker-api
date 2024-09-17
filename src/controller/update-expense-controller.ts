@@ -32,19 +32,22 @@ class UpdateExpenseController {
         return response.status(400).send({ message: 'At least one field must be provided' })
       }
 
-      const { description, amount, dueDate } = request.body
+      const { description, amount: amountField, dueDate: dueDateField } = request.body
+
+      const amount = amountField !== undefined ? Number(amountField) : amountField
+      const dueDate = dueDateField !== undefined ? Number(dueDateField) : dueDateField
 
       expense.update({
         description,
-        amount: Number(amount),
-        dueDate: Number(dueDate)
+        amount: amount,
+        dueDate: dueDate
       })
 
       const expenseUpdated = await this.repository.update({
         id: expenseFound.id,
-        amount: amount !== undefined ? Number(amount) : amount,
+        amount: amount,
         description,
-        dueDate: dueDate !== undefined ? Number(dueDate) : dueDate,
+        dueDate: dueDate
       })
 
       return response.status(200).send(expenseUpdated)

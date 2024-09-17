@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import ExpenseRepository from '@/repository/expense-repository'
 import { Expense } from '@/entities/expense'
-import { z } from 'zod'
 
 class AddExpenseController {
   private readonly repository: ExpenseRepository
@@ -32,16 +31,6 @@ class AddExpenseController {
             message: `Missing required fields: ${field}`
           })
         }
-      }
-
-      const schema = z.number().min(1).max(31)
-
-      const dueDateIsValid = schema.safeParse(dueDate).success
-
-      if (!dueDateIsValid) {
-        return response.status(400).send({
-          message: 'Invalid value for dueDate. It should be in interval of days of a month.'
-        })
       }
 
       const expenseData = new Expense(description, amount, dueDate)

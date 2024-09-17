@@ -1,3 +1,5 @@
+import { z } from 'zod'
+
 type UpdateExpense = {
   description?: string
   amount?: number | null
@@ -12,7 +14,7 @@ export class Expense {
   constructor(description: string, amount: number | null, dueDate: number) {
     this.description = description
     this.amount = amount
-    this._dueDate = dueDate
+    this.dueDate = dueDate
   }
 
   get description(): string {
@@ -56,7 +58,11 @@ export class Expense {
   }
 
   set dueDate(value: number) {
-    if (value < 1 || value > 31) {
+    const schema = z.number().min(1).max(31)
+
+    const dueDateIsValid = schema.safeParse(value).success
+
+    if (!dueDateIsValid) {
       throw new Error('Invalid value for dueDate. It should be in interval of days of a month.')
     }
 
