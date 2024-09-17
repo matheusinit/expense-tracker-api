@@ -3,6 +3,7 @@ import db from '@/database'
 type AddExpenseRepositoryDTO = {
   description: string
   amount: number
+  dueDate: number
 }
 
 type UpdateExpenseRepositoryDTO = {
@@ -16,7 +17,8 @@ class ExpenseRepository {
     const expense = await db.expense.create({
       data: {
         description: input.description,
-        amount: input.amount
+        amount: input.amount,
+        dueDate: input.dueDate
       }
     })
 
@@ -50,6 +52,7 @@ class ExpenseRepository {
         id: select?.includes('id'),
         amount: select?.includes('amount'),
         description: select?.includes('description'),
+        dueDate: select?.includes('dueDate'),
         createdAt: select?.includes('createdAt'),
         updatedAt: select?.includes('updatedAt'),
         deletedAt: select?.includes('deletedAt')

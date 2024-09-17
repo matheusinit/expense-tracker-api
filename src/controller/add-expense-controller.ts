@@ -12,9 +12,9 @@ class AddExpenseController {
   async handle(request: Request, response: Response) {
     try {
 
-      const { description, amount } = request.body
+      const { description, amount, dueDate } = request.body
 
-      const required_fields = ['description', 'amount']
+      const required_fields = ['description', 'amount', 'dueDate']
 
       if (required_fields.every(field => !request.body[field])) {
         const required_fields_sorted = required_fields.sort()
@@ -33,7 +33,7 @@ class AddExpenseController {
         }
       }
 
-      const expenseData = new Expense(description, amount)
+      const expenseData = new Expense(description, amount, dueDate)
 
       const expense = await this.repository.add(expenseData)
 

@@ -6,10 +6,12 @@ type UpdateExpense = {
 export class Expense {
   private _description!: string
   private _amount!: number
+  private _dueDate!: number
 
-  constructor(description: string, amount: number | null) {
+  constructor(description: string, amount: number | null, dueDate: number) {
     this.description = description
     this.amount = amount
+    this._dueDate = dueDate
   }
 
   get description(): string {
@@ -46,6 +48,10 @@ export class Expense {
     }
 
     this._amount = value
+  }
+
+  get dueDate(): number {
+    return this._dueDate
   }
 
   update({ description, amount }: UpdateExpense): void {
