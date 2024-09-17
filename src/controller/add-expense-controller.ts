@@ -34,7 +34,7 @@ class AddExpenseController {
         }
       }
 
-      const schema = z.number().positive()
+      const schema = z.number().min(1).max(31)
 
       const dueDateIsValid = schema.safeParse(dueDate).success
 
