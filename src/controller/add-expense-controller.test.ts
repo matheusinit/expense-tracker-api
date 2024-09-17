@@ -1,14 +1,18 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
 import app from '@/app'
+import * as falso from '@ngneat/falso'
+
 import { MessageErrorDTO } from '@/dtos/error-message'
 import { ExpenseDTO } from '@/dtos/expense'
+import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 describe('Given add expense controller', () => {
   it('when required data is provided, then should return the data in response body', async () => {
     const expense = {
       description: 'Credit card bill',
-      amount: 100
+      amount: 100,
+      dueDate: 10
     }
 
     const csrfResponse = await request(app).get('/csrf-token')
@@ -89,7 +93,7 @@ describe('Given add expense controller', () => {
     const responseBody: MessageErrorDTO = response.body
 
     expect(response.status).toEqual(400)
-    expect(responseBody.message).toEqual('Missing required fields: amount, description')
+    expect(responseBody.message).toEqual('Missing required fields: amount, description, dueDate')
   })
 
   it('when all required fields is missing, then should return bad request status code', async () => {
@@ -109,13 +113,14 @@ describe('Given add expense controller', () => {
     const responseBody: MessageErrorDTO = response.body
 
     expect(response.status).toEqual(400)
-    expect(responseBody.message).toEqual('Missing required fields: amount, description')
+    expect(responseBody.message).toEqual('Missing required fields: amount, description, dueDate')
   })
 
   it('when a required field is invalid, then should return bad request', async () => {
     const expense = {
       description: 'Credit card bill',
-      amount: 0
+      amount: 0,
+      dueDate: 10
     }
 
     const csrfResponse = await request(app).get('/csrf-token')
@@ -138,7 +143,8 @@ describe('Given add expense controller', () => {
   it('when valid required fields is provided, then should return created', async () => {
     const expense = {
       description: 'Credit card bill',
-      amount: 100
+      amount: 100,
+      dueDate: 10
     }
 
     const csrfResponse = await request(app).get('/csrf-token')
@@ -161,5 +167,25 @@ describe('Given add expense controller', () => {
       updatedAt: expect.any(String),
       deletedAt: null
     }))
+  })
+
+  it('when due date is not provided, then should return bad request error', async () => {
+    const expense = {
+      amount: 100,
+      description: falso.randProductName()
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const response = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toEqual(400)
+    expect(responseBody.message).toEqual('Missing required fields: dueDate')
   })
 })

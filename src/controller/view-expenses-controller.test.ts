@@ -348,6 +348,7 @@ describe('Given view expenses controller', () => {
         id: expect.any(String),
         description: expect.any(String),
         amount: expect.any(Number),
+        dueDate: expect.any(Number),
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         deletedAt: null
