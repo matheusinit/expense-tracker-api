@@ -1,6 +1,7 @@
 type UpdateExpense = {
   description?: string
   amount?: number | null
+  dueDate?: number
 }
 
 export class Expense {
@@ -54,13 +55,25 @@ export class Expense {
     return this._dueDate
   }
 
-  update({ description, amount }: UpdateExpense): void {
+  set dueDate(value: number) {
+    if (value < 1 || value > 31) {
+      throw new Error('Invalid value for dueDate. It should be in interval of days of a month.')
+    }
+
+    this._dueDate = value
+  }
+
+  update({ description, amount, dueDate }: UpdateExpense): void {
     if (description !== undefined) {
       this.description = description
     }
 
     if (amount !== undefined) {
       this.amount = amount
+    }
+
+    if (dueDate !== undefined) {
+      this.dueDate = dueDate
     }
   }
 }

@@ -10,6 +10,7 @@ type UpdateExpenseRepositoryDTO = {
   id: string
   description?: string
   amount?: number
+  dueDate?: number
 }
 
 class ExpenseRepository {
