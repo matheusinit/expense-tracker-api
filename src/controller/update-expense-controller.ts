@@ -24,15 +24,15 @@ class UpdateExpenseController {
 
       const expense = new Expense(expenseFound.description, expenseFound.amount, expenseFound.dueDate)
 
-      const description: string = request.body['description']
-      const amount: string = request.body['amount']
-      const dueDate: string = request.body['dueDate']
+      const fieldsToCheck = ['description', 'amount', 'dueDate']
 
-      const noneFieldsIsDefined = description === undefined && amount === undefined && dueDate === undefined
+      const noneFieldsIsProvided = fieldsToCheck.every(field => request.body[field] === undefined)
 
-      if (noneFieldsIsDefined) {
+      if (noneFieldsIsProvided) {
         return response.status(400).send({ message: 'At least one field must be provided' })
       }
+
+      const { description, amount, dueDate } = request.body
 
       expense.update({
         description,
