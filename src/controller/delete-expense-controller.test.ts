@@ -10,6 +10,7 @@ import { MessageErrorDTO } from '@/dtos/error-message'
 import { ExpenseDTO } from '@/dtos/expense'
 import DeleteExpenseController from './delete-expense-controller'
 import ExpenseRepository from '@/repository/expense-repository'
+import { Request, Response } from 'express'
 
 describe('Given remove expense controller', () => {
   beforeAll(async () => {
@@ -139,14 +140,14 @@ describe('Given remove expense controller', () => {
       params: {
         id: '123'
       }
-    }
+    } as unknown as Request
 
     const responseParams = {
       status: vitest.fn().mockReturnThis(),
       send: vitest.fn()
-    }
+    } as unknown as Response
 
-    await controller.handle(requestParams as any, responseParams as any)
+    await controller.handle(requestParams, responseParams)
 
     expect(responseParams.status).toBeCalledWith(500)
     expect(responseParams.send).toBeCalledWith({

@@ -18,7 +18,6 @@ if (!LOG_LEVEL) {
   LOG_LEVEL = process.env.NODE_ENV === 'development' ? 'info' : 'warn'
 }
 
-
 export const environment = {
   // Database
   DATABASE_URL: process.env.DATABASE_URL,
