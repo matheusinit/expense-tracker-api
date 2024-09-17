@@ -24,7 +24,11 @@ class ExpenseRepository {
   }
 
   async count() {
-    return await db.expense.count()
+    return await db.expense.count({
+      where: {
+        deletedAt: null
+      }
+    })
   }
 
   async get(id: string) {
@@ -39,6 +43,9 @@ class ExpenseRepository {
     return await db.expense.findMany({
       take,
       skip,
+      where: {
+        deletedAt: null
+      },
       select: {
         id: select?.includes('id'),
         amount: select?.includes('amount'),
@@ -59,6 +66,17 @@ class ExpenseRepository {
     })
 
     return updated
+  }
+
+  async delete(id: string) {
+    await db.expense.update({
+      where: {
+        id
+      },
+      data: {
+        deletedAt: new Date()
+      }
+    })
   }
 
   async getColumns() {
