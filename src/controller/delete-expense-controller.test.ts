@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vitest } from 'vitest'
 import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
@@ -8,6 +8,8 @@ import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { MessageErrorDTO } from '@/dtos/error-message'
 import { ExpenseDTO } from '@/dtos/expense'
+import DeleteExpenseController from './delete-expense-controller'
+import ExpenseRepository from '@/repository/expense-repository'
 
 describe('Given remove expense controller', () => {
   beforeAll(async () => {
@@ -123,5 +125,32 @@ describe('Given remove expense controller', () => {
 
     expect(response.status).toBe(204)
     expect(responseBody).toEqual({})
+  })
+
+  it('when a error is thrown, then should return internal server error', async () => {
+
+    const expenseRepository = new ExpenseRepository()
+
+    vitest.spyOn(expenseRepository, 'get').mockReturnValueOnce(Promise.reject(new Error('Internal server error')))
+
+    const controller = new DeleteExpenseController(expenseRepository)
+
+    const requestParams = {
+      params: {
+        id: '123'
+      }
+    }
+
+    const responseParams = {
+      status: vitest.fn().mockReturnThis(),
+      send: vitest.fn()
+    }
+
+    const response = await controller.handle(requestParams as any, responseParams as any)
+
+    expect(responseParams.status).toBeCalledWith(500)
+    expect(responseParams.send).toBeCalledWith({
+      message: 'Internal server error'
+    })
   })
 })
