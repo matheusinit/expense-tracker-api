@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import ExpenseRepository from '@/repository/expense-repository'
 import { Expense } from '@/entities/expense'
+import { z } from 'zod'
 
 class AddExpenseController {
   private readonly repository: ExpenseRepository
@@ -33,7 +34,11 @@ class AddExpenseController {
         }
       }
 
-      if (typeof dueDate !== 'number') {
+      const schema = z.number()
+
+      const dueDateIsValid = schema.safeParse(dueDate).success
+
+      if (!dueDateIsValid) {
         return response.status(400).send({
           message: 'Invalid value for dueDate. It should be in interval of days of a month.'
         })
