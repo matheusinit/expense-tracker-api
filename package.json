@@ -13,6 +13,7 @@
     "migrate:dev": "prisma migrate dev",
     "migrate:prod": "prisma migrate deploy",
     "migrate:test": "dotenv -e .env.test.local prisma migrate dev",
+    "db:reset:test": "dotenv -e .env.test.local prisma migrate reset --force",
     "lint": "eslint src/"
   },
   "keywords": [],
