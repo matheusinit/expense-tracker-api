@@ -146,7 +146,7 @@ describe('Given remove expense controller', () => {
       send: vitest.fn()
     }
 
-    const response = await controller.handle(requestParams as any, responseParams as any)
+    await controller.handle(requestParams as any, responseParams as any)
 
     expect(responseParams.status).toBeCalledWith(500)
     expect(responseParams.send).toBeCalledWith({
