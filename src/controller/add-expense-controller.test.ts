@@ -230,4 +230,25 @@ describe('Given add expense controller', () => {
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')
   })
+
+  it('when due date is not in range of 31-day months, then should return bad request error', async () => {
+    const expense = {
+      amount: '100',
+      description: falso.randProductName(),
+      dueDate: falso.randNumber({ min: 32, max: 999 })
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const response = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.status).toEqual(400)
+    expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')
+  })
 })
