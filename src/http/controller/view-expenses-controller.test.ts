@@ -3,14 +3,14 @@ import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
 import app from '@/http/app'
-import { ExpenseDTO } from '@/data/dtos/expense'
 import db from '@/infra/database'
 import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
+import { ExpenseModel } from '@/data/models/expense-model'
 
 type PageBasedPaginationDTO = {
-  records: ExpenseDTO[],
+  records: ExpenseModel[],
   _metadata: {
     page: number
     per_page: number
@@ -361,7 +361,7 @@ describe('Given view expenses controller', () => {
 
     const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
-    const expensesResponse: ExpenseDTO[] = []
+    const expensesResponse: ExpenseModel[] = []
 
     for (const expense of expenses) {
       const response = await request(app)

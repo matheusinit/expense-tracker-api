@@ -4,7 +4,7 @@ import app from '@/http/app'
 import * as falso from '@ngneat/falso'
 
 import { MessageErrorDTO } from '@/data/dtos/error-message'
-import { ExpenseDTO } from '@/data/dtos/expense'
+import { ExpenseModel } from '@/data/models/expense-model'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 describe('Given add expense controller', () => {
@@ -26,7 +26,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: ExpenseDTO = response.body
+    const responseBody: ExpenseModel = response.body
 
     expect(responseBody.description).toEqual(expense.description)
     expect(responseBody.amount).toEqual(expense.amount)

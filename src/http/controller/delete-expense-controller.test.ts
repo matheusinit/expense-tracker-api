@@ -7,10 +7,10 @@ import db from '@/infra/database'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { MessageErrorDTO } from '@/data/dtos/error-message'
-import { ExpenseDTO } from '@/data/dtos/expense'
 import DeleteExpenseController from './delete-expense-controller'
 import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 import { Request, Response } from 'express'
+import { ExpenseModel } from '@/data/models/expense-model'
 
 describe('Given remove expense controller', () => {
   beforeAll(async () => {
@@ -57,7 +57,7 @@ describe('Given remove expense controller', () => {
 
     const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
-    const expensesResponse: ExpenseDTO[] = []
+    const expensesResponse: ExpenseModel[] = []
 
     for (const expense of expenses) {
       const response = await request(app)
@@ -98,7 +98,7 @@ describe('Given remove expense controller', () => {
 
     const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
-    const expensesResponse: ExpenseDTO[] = []
+    const expensesResponse: ExpenseModel[] = []
 
     for (const expense of expenses) {
       const response = await request(app)

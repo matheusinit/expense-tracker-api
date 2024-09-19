@@ -8,7 +8,7 @@ import db from '@/infra/database'
 import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
-import { ExpenseDTO } from '@/data/dtos/expense'
+import { ExpenseModel } from '@/data/models/expense-model'
 
 describe('Given update expense controller', () => {
   beforeAll(async () => {
@@ -102,7 +102,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: ExpenseDTO = response.body
+    const responseBody: ExpenseModel = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.amount).toBe(payload.amount)
@@ -136,7 +136,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: ExpenseDTO = response.body
+    const responseBody: ExpenseModel = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.amount).toBe(payload.amount)
@@ -171,7 +171,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: ExpenseDTO = response.body
+    const responseBody: ExpenseModel = response.body
 
     const updatedAtIsAfterCreatedAt = dayjs(responseBody.updatedAt).isAfter(dayjs(responseBody.createdAt))
 
