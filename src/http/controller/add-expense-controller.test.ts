@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
-import app from '@/app'
+import app from '@/http/app'
 import * as falso from '@ngneat/falso'
 
-import { MessageErrorDTO } from '@/dtos/error-message'
-import { ExpenseDTO } from '@/dtos/expense'
+import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ExpenseDTO } from '@/data/dtos/expense'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 describe('Given add expense controller', () => {

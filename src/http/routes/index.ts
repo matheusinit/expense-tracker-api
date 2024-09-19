@@ -1,9 +1,9 @@
 import { Router } from 'express'
 
-import { makeAddExpenseController } from '@/factory/add-expense-controller-factory'
-import { makeDeleteExpenseController } from '@/factory/delete-expense-controller-factory'
-import { makeUpdateExpenseController } from '@/factory/update-expense-controller-factory'
-import { makeViewExpensesController } from '@/factory/view-expense-controller-factory'
+import { makeAddExpenseController } from '@/http/factory/add-expense-controller-factory'
+import { makeDeleteExpenseController } from '@/http/factory/delete-expense-controller-factory'
+import { makeUpdateExpenseController } from '@/http/factory/update-expense-controller-factory'
+import { makeViewExpensesController } from '@/http/factory/view-expense-controller-factory'
 
 const router = Router()
 

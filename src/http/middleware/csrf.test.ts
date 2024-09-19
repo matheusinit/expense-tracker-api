@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import request from 'supertest'
-import app from '@/app'
-import { MessageErrorDTO } from '@/dtos/error-message'
+import app from '@/http/app'
+import { MessageErrorDTO } from '@/data/dtos/error-message'
 
 describe('CSRF Middleware', () => {
   it('when CSRF token is not provided in HTTP headers, then should return forbidden with a message error', async () => {

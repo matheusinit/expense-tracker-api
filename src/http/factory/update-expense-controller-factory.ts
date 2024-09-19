@@ -1,5 +1,5 @@
-import UpdateExpenseController from '@/controller/update-expense-controller'
-import ExpenseRepository from '@/repository/expense-repository'
+import UpdateExpenseController from '@/http/controller/update-expense-controller'
+import ExpenseRepository from '@/infra/database/repository/expense-repository'
 
 export const makeUpdateExpenseController = () => {
   const expenseRepository = new ExpenseRepository()

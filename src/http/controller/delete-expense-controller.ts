@@ -1,4 +1,4 @@
-import ExpenseRepository from '@/repository/expense-repository'
+import ExpenseRepository from '@/infra/database/repository/expense-repository'
 import { Request, Response } from 'express'
 
 class DeleteExpenseController {

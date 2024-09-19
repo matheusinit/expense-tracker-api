@@ -1,5 +1,5 @@
-import DeleteExpenseController from '@/controller/delete-expense-controller'
-import ExpenseRepository from '@/repository/expense-repository'
+import DeleteExpenseController from '@/http/controller/delete-expense-controller'
+import ExpenseRepository from '@/infra/database/repository/expense-repository'
 
 export const makeDeleteExpenseController = () => {
   const expenseRepository = new ExpenseRepository()

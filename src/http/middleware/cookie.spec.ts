@@ -1,7 +1,7 @@
 import request from 'supertest'
 import { describe, expect, it } from 'vitest'
 import http from 'http'
-import { parseCookies } from '@/middleware/cookie'
+import { parseCookies } from '@/http/middleware/cookie'
 
 const server = http.createServer((request: http.IncomingMessage, response) => {
   parseCookies(request, response, () => {

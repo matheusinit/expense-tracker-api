@@ -2,14 +2,14 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vitest } from 'vi
 import request from 'supertest'
 import * as falso from '@ngneat/falso'
 
-import app from '@/app'
-import db from '@/database'
+import app from '@/http/app'
+import db from '@/infra/database'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
-import { MessageErrorDTO } from '@/dtos/error-message'
-import { ExpenseDTO } from '@/dtos/expense'
+import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ExpenseDTO } from '@/data/dtos/expense'
 import DeleteExpenseController from './delete-expense-controller'
-import ExpenseRepository from '@/repository/expense-repository'
+import ExpenseRepository from '@/infra/database/repository/expense-repository'
 import { Request, Response } from 'express'
 
 describe('Given remove expense controller', () => {

@@ -3,12 +3,12 @@ import request from 'supertest'
 import * as falso from '@ngneat/falso'
 import dayjs from 'dayjs'
 
-import app from '@/app'
-import db from '@/database'
-import { MessageErrorDTO } from '@/dtos/error-message'
+import app from '@/http/app'
+import db from '@/infra/database'
+import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
-import { ExpenseDTO } from '@/dtos/expense'
+import { ExpenseDTO } from '@/data/dtos/expense'
 
 describe('Given update expense controller', () => {
   beforeAll(async () => {

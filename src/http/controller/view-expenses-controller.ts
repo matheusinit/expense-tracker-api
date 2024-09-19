@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import ExpenseRepository from '@/repository/expense-repository'
+import ExpenseRepository from '@/infra/database/repository/expense-repository'
 
 class ViewExpensesController {
   private readonly repository: ExpenseRepository
