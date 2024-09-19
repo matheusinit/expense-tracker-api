@@ -44,6 +44,12 @@ describe('Given is needed to create a expense,', () => {
     expect(expense.description).toBe('Credit card bill')
     expect(expense.amount).toBe(100)
   })
+
+  it('when due date is not provided, should set default value as 10', () => {
+    const expense = new Expense('Credit card bill', 100)
+
+    expect(expense.dueDate).toBe(10)
+  })
 })
 
 describe('Given is needed to update a expense,', () => {
