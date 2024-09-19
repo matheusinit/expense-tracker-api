@@ -1,28 +1,16 @@
-import { Expense } from '@prisma/client'
-
-type AddExpenseRepositoryDTO = {
-  description: string
-  amount: number
-  dueDate: number
-}
-
-type UpdateExpenseRepositoryDTO = {
-  id: string
-  description?: string
-  amount?: number
-  dueDate?: number
-}
+import { Expense as ExpensePrisma } from '@prisma/client'
+import { Expense } from '../entities/expense'
 
 export abstract class ExpenseRepository {
-  abstract add: (expense: AddExpenseRepositoryDTO) => Promise<Expense>
+  abstract add: (data: Expense) => Promise<ExpensePrisma>
 
   abstract count: () => Promise<number>
 
-  abstract get: (id: string) => Promise<Expense | null>
+  abstract get: (id: string) => Promise<ExpensePrisma | null>
 
-  abstract getMany: (take: number, skip: number, select?: string[]) => Promise<Expense[]>
+  abstract getMany: (take: number, skip: number, select?: string[]) => Promise<ExpensePrisma[]>
 
-  abstract update: (expense: UpdateExpenseRepositoryDTO) => Promise<Expense>
+  abstract update: (id: string, data: Partial<Expense>) => Promise<ExpensePrisma>
 
   abstract delete: (id: string) => Promise<void>
 

@@ -1,26 +1,14 @@
+import { Expense } from '@/data/entities/expense'
 import { ExpenseRepository } from '@/data/protocols/expense-repository'
 import db from '@/infra/database'
 
-type AddExpenseRepositoryDTO = {
-  description: string
-  amount: number
-  dueDate: number
-}
-
-type UpdateExpenseRepositoryDTO = {
-  id: string
-  description?: string
-  amount?: number
-  dueDate?: number
-}
-
 class ExpenseRepositoryRelationalDatabase implements ExpenseRepository {
-  async add(input: AddExpenseRepositoryDTO) {
+  async add(data: Expense) {
     const expense = await db.expense.create({
       data: {
-        description: input.description,
-        amount: input.amount,
-        dueDate: input.dueDate
+        description: data.description,
+        amount: data.amount,
+        dueDate: data.dueDate
       }
     })
 
@@ -62,12 +50,16 @@ class ExpenseRepositoryRelationalDatabase implements ExpenseRepository {
     })
   }
 
-  async update({ id, ...data }: UpdateExpenseRepositoryDTO) {
+  async update(id: string, data: Partial<Expense>) {
     const updated = await db.expense.update({
       where: {
         id
       },
-      data
+      data: {
+        amount: data.amount,
+        description: data.description,
+        dueDate: data.dueDate
+      }
     })
 
     return updated

@@ -43,12 +43,10 @@ class UpdateExpenseController {
         dueDate: dueDate
       })
 
-      const expenseUpdated = await this.repository.update({
-        id: expenseFound.id,
-        amount: amount,
-        description,
-        dueDate: dueDate
-      })
+      const expenseUpdated = await this.repository.update(
+        expenseFound.id,
+        expense
+      )
 
       return response.status(200).send(expenseUpdated)
     } catch (err) {
