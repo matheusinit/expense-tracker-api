@@ -17,6 +17,7 @@ model Expense {
   id          String    @id @default(cuid())
   amount      Int
   description String
+  dueDate     Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
