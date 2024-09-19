@@ -39,7 +39,7 @@ describe('Given is needed to create a expense,', () => {
   })
 
   it('when a valid description and amount is provided, should create a new expense', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
 
     expect(expense.description).toBe('Credit card bill')
     expect(expense.amount).toBe(100)
@@ -48,7 +48,7 @@ describe('Given is needed to create a expense,', () => {
 
 describe('Given is needed to update a expense,', () => {
   it('when a empty description is provided, should throw an exception', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
 
     const updateExpense = () => expense.update({
       description: ''
@@ -58,7 +58,7 @@ describe('Given is needed to update a expense,', () => {
   })
 
   it('when a description greater than 255 of length is provided, should throw an exception', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
 
     const description = 'Eos laborum labore consequuntur voluptatem beatae in eos, \
     repellat possimus voluptate quos cupiditate dicta vel. Ipsum esse occaecati \
@@ -73,7 +73,7 @@ describe('Given is needed to update a expense,', () => {
   })
 
   it('when amount equals 0 is provided, should throw an exception', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
 
     const updateExpense = () => expense.update({
       amount: 0
@@ -83,7 +83,7 @@ describe('Given is needed to update a expense,', () => {
   })
 
   it('when amount equals null is provided, should throw an exception', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
     const updateExpense = () => expense.update({
       amount: null
     })
@@ -92,7 +92,7 @@ describe('Given is needed to update a expense,', () => {
   })
 
   it('when amount less than 0 is provided, should throw an exception', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
 
     const updateExpense = () => expense.update({
       amount: -100
@@ -102,7 +102,7 @@ describe('Given is needed to update a expense,', () => {
   })
 
   it('when a valid description and amount is provided, should update expense', () => {
-    const expense = new Expense('Credit card bill', 100)
+    const expense = new Expense('Credit card bill', 100, 10)
 
     expense.update({
       description: 'Credit card bill updated',
