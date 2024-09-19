@@ -1,8 +1,8 @@
 import ViewExpensesController from '@/http/controller/view-expenses-controller'
-import ExpenseRepository from '@/infra/database/repository/expense-repository'
+import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 
 export const makeViewExpensesController = () => {
-  const expenseRepository = new ExpenseRepository()
+  const expenseRepository = new ExpenseRepositoryRelationalDatabase()
   const viewExpensesController = new ViewExpensesController(expenseRepository)
 
   return viewExpensesController

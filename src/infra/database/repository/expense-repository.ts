@@ -1,3 +1,4 @@
+import { ExpenseRepository } from '@/data/protocols/expense-repository'
 import db from '@/infra/database'
 
 type AddExpenseRepositoryDTO = {
@@ -13,7 +14,7 @@ type UpdateExpenseRepositoryDTO = {
   dueDate?: number
 }
 
-class ExpenseRepository {
+class ExpenseRepositoryRelationalDatabase implements ExpenseRepository {
   async add(input: AddExpenseRepositoryDTO) {
     const expense = await db.expense.create({
       data: {
@@ -96,4 +97,4 @@ class ExpenseRepository {
   }
 }
 
-export default ExpenseRepository
+export default ExpenseRepositoryRelationalDatabase

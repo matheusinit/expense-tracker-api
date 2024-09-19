@@ -9,7 +9,7 @@ import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies
 import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { ExpenseDTO } from '@/data/dtos/expense'
 import DeleteExpenseController from './delete-expense-controller'
-import ExpenseRepository from '@/infra/database/repository/expense-repository'
+import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 import { Request, Response } from 'express'
 
 describe('Given remove expense controller', () => {
@@ -130,7 +130,7 @@ describe('Given remove expense controller', () => {
 
   it('when a error is thrown, then should return internal server error', async () => {
 
-    const expenseRepository = new ExpenseRepository()
+    const expenseRepository = new ExpenseRepositoryRelationalDatabase()
 
     vitest.spyOn(expenseRepository, 'get').mockReturnValueOnce(Promise.reject(new Error('Internal server error')))
 

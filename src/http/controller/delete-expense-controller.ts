@@ -1,10 +1,10 @@
-import ExpenseRepository from '@/infra/database/repository/expense-repository'
+import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 import { Request, Response } from 'express'
 
 class DeleteExpenseController {
-  private readonly repository: ExpenseRepository
+  private readonly repository: ExpenseRepositoryRelationalDatabase
 
-  constructor(repository: ExpenseRepository) {
+  constructor(repository: ExpenseRepositoryRelationalDatabase) {
     this.repository = repository
   }
 
