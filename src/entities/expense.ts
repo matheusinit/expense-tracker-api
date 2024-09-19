@@ -11,10 +11,10 @@ export class Expense {
   private _amount!: number
   private _dueDate!: number
 
-  constructor(description: string, amount: number | null, dueDate: number) {
+  constructor(description: string, amount: number | null, dueDate?: number) {
     this.description = description
     this.amount = amount
-    this.dueDate = dueDate
+    this.dueDate = dueDate ?? 10
   }
 
   get description(): string {
