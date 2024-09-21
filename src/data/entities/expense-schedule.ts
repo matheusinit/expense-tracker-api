@@ -1,7 +1,23 @@
 import { ExpenseScheduleStatus } from '@/data/value-objects/expense-schedule-status'
 import { Expense } from './expense'
 
-export interface ExpenseSchedule {
+export class ExpenseSchedule {
+  private readonly _expenses: Expense[]
+
+  constructor() {
+    this._expenses = []
+  }
+
+  include(expense: Expense) {
+    this._expenses.push(expense)
+  }
+
+  get expenses(): Expense[] {
+    return this._expenses
+  }
+}
+
+export interface IExpenseSchedule {
   // January - December
 
   // Based on the billings month of payment
