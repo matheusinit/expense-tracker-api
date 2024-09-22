@@ -20,20 +20,6 @@ export class ExpenseSchedule {
     const currentMonth = date.getMonth()
     const currentDate = date.getDate()
 
-    let month = undefined
-
-    this.expenses.forEach(e => {
-      if (e.dueDate < currentDate) {
-        const currentYear = date.getFullYear()
-        const nextMonthIndex = currentMonth + 1
-        month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
-      }
-
-      if (e.dueDate >= currentDate) {
-        month = new Date().toLocaleString('default', { month: 'long' })
-      }
-    })
-
     const dueDates = this.expenses.map(e => e.dueDate)
 
     const existDueDateLessThanCurrentDate = dueDates.some(d => d < currentDate)
@@ -41,8 +27,11 @@ export class ExpenseSchedule {
     if (existDueDateLessThanCurrentDate) {
       const currentYear = date.getFullYear()
       const nextMonthIndex = currentMonth + 1
-      month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
+      const month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
+      return month
     }
+
+    const month = new Date().toLocaleDateString('default', { month: 'long' })
 
     return month
   }
