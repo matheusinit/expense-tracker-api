@@ -72,4 +72,19 @@ describe('Given is needed to schedule expenses', () => {
       expect(expenseSchedule.month).toEqual('September')
     })
   })
+
+  describe('Given all expenses has different due dates', () => {
+    it('when current date is between expenses due dates, should schedule to next month', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      const expenseSchedule = new ExpenseSchedule()
+      const date = new Date(2024, 8, 15)
+      vi.setSystemTime(date)
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expect(expenseSchedule.month).toEqual('October')
+    })
+  })
 })
