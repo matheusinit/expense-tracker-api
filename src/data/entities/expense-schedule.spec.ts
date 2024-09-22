@@ -57,4 +57,17 @@ describe('Given is needed to schedule expenses', () => {
 
     expect(expenseSchedule.month).toEqual('September')
   })
+
+  it('when expenses are included with due date as the same as current date, should schedule to current month', () => {
+    const expense1 = new Expense('Credit card bill', 100, 10)
+    const expense2 = new Expense('Internet bill', 50, 10)
+    const expenseSchedule = new ExpenseSchedule()
+    const date = new Date(2024, 8, 10)
+    vi.setSystemTime(date)
+
+    expenseSchedule.include(expense1)
+    expenseSchedule.include(expense2)
+
+    expect(expenseSchedule.month).toEqual('September')
+  })
 })
