@@ -28,6 +28,10 @@ export class ExpenseSchedule {
         const nextMonthIndex = currentMonth + 1
         month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
       }
+
+      if (e.dueDate > currentDate) {
+        month = new Date().toLocaleString('default', { month: 'long' })
+      }
     })
 
     return month
