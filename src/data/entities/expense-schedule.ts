@@ -12,15 +12,25 @@ export class ExpenseSchedule {
   include(expense: Expense) {
     this._expenses.push(expense)
 
+    this._month = this.determineMonthBasedOnExpensesDueDate()
+  }
+
+  determineMonthBasedOnExpensesDueDate() {
     const date = new Date()
     const currentMonth = date.getMonth()
     const currentDate = date.getDate()
 
-    this.expenses.map(expense => {
-      if (expense.dueDate <= currentDate) {
-        this._month = new Date(date.getFullYear(), currentMonth + 1, 1).toLocaleString('default', { month: 'long' })
+    let month = undefined
+
+    this.expenses.forEach(e => {
+      if (e.dueDate <= currentDate) {
+        const currentYear = date.getFullYear()
+        const nextMonthIndex = currentMonth + 1
+        month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
       }
     })
+
+    return month
   }
 
   get expenses(): Expense[] {
