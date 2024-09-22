@@ -1,6 +1,10 @@
 import 'dotenv/config'
 
 const getLogLevels = () => {
+  if (!process.env.PRISMA_CLIENT_LOG && process.env.NODE_ENV === 'test') {
+    return ['info', 'warn', 'error']
+  }
+
   const logLevels = process.env.PRISMA_CLIENT_LOG?.split(',')
 
   const validLogLevels = ['query', 'info', 'warn', 'error']
