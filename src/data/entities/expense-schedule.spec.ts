@@ -32,42 +32,44 @@ describe('Given is needed to schedule expenses', () => {
     expect(expenseSchedule.expenses).toEqual([expense1, expense2])
   })
 
-  it('when expenses are included with due date below than current date, should schedule to next month', () => {
-    const expense1 = new Expense('Credit card bill', 100, 10)
-    const expense2 = new Expense('Internet bill', 50, 10)
-    const expenseSchedule = new ExpenseSchedule()
-    const date = new Date(2024, 8, 20)
-    vi.setSystemTime(date)
+  describe('Given all expenses has the same due date', () => {
+    it('when expenses are included with due date below than current date, should schedule to next month', () => {
+      const expense1 = new Expense('Credit card bill', 100, 10)
+      const expense2 = new Expense('Internet bill', 50, 10)
+      const expenseSchedule = new ExpenseSchedule()
+      const date = new Date(2024, 8, 20)
+      vi.setSystemTime(date)
 
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
 
-    expect(expenseSchedule.month).toEqual('October')
-  })
+      expect(expenseSchedule.month).toEqual('October')
+    })
 
-  it('when expenses are included with due date above current date, should schedule to current month', () => {
-    const expense1 = new Expense('Credit card bill', 100, 10)
-    const expense2 = new Expense('Internet bill', 50, 10)
-    const expenseSchedule = new ExpenseSchedule()
-    const date = new Date(2024, 8, 2)
-    vi.setSystemTime(date)
+    it('when expenses are included with due date above current date, should schedule to current month', () => {
+      const expense1 = new Expense('Credit card bill', 100, 10)
+      const expense2 = new Expense('Internet bill', 50, 10)
+      const expenseSchedule = new ExpenseSchedule()
+      const date = new Date(2024, 8, 2)
+      vi.setSystemTime(date)
 
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
 
-    expect(expenseSchedule.month).toEqual('September')
-  })
+      expect(expenseSchedule.month).toEqual('September')
+    })
 
-  it('when expenses are included with due date as the same as current date, should schedule to current month', () => {
-    const expense1 = new Expense('Credit card bill', 100, 10)
-    const expense2 = new Expense('Internet bill', 50, 10)
-    const expenseSchedule = new ExpenseSchedule()
-    const date = new Date(2024, 8, 10)
-    vi.setSystemTime(date)
+    it('when expenses are included with due date as the same as current date, should schedule to current month', () => {
+      const expense1 = new Expense('Credit card bill', 100, 10)
+      const expense2 = new Expense('Internet bill', 50, 10)
+      const expenseSchedule = new ExpenseSchedule()
+      const date = new Date(2024, 8, 10)
+      vi.setSystemTime(date)
 
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
 
-    expect(expenseSchedule.month).toEqual('September')
+      expect(expenseSchedule.month).toEqual('September')
+    })
   })
 })
