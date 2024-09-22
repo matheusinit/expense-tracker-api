@@ -23,13 +23,13 @@ export class ExpenseSchedule {
     let month = undefined
 
     this.expenses.forEach(e => {
-      if (e.dueDate <= currentDate) {
+      if (e.dueDate < currentDate) {
         const currentYear = date.getFullYear()
         const nextMonthIndex = currentMonth + 1
         month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
       }
 
-      if (e.dueDate > currentDate) {
+      if (e.dueDate >= currentDate) {
         month = new Date().toLocaleString('default', { month: 'long' })
       }
     })
