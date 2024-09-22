@@ -34,6 +34,16 @@ export class ExpenseSchedule {
       }
     })
 
+    const dueDates = this.expenses.map(e => e.dueDate)
+
+    const existDueDateLessThanCurrentDate = dueDates.some(d => d < currentDate)
+
+    if (existDueDateLessThanCurrentDate) {
+      const currentYear = date.getFullYear()
+      const nextMonthIndex = currentMonth + 1
+      month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
+    }
+
     return month
   }
 
