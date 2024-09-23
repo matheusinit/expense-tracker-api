@@ -20,7 +20,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@eslint/js": "^9.9.0",
+    "@eslint/js": "^9.11.1",
     "@ngneat/falso": "^7.2.0",
     "@stylistic/eslint-plugin": "^2.8.0",
     "@stylistic/eslint-plugin-ts": "^2.8.0",
