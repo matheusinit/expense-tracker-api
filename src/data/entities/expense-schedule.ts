@@ -4,9 +4,11 @@ import { Expense } from './expense'
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
   private _month: string | undefined
+  private _status: string
 
   constructor() {
     this._expenses = []
+    this._status = 'OPEN'
   }
 
   include(expense: Expense) {
@@ -42,6 +44,10 @@ export class ExpenseSchedule {
 
   get month() {
     return this._month
+  }
+
+  get status() {
+    return this._status
   }
 }
 
