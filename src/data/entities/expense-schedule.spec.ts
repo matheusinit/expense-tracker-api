@@ -142,4 +142,19 @@ describe('Given is needed to schedule expenses', () => {
 
     expect(expenseSchedule.status).toEqual('PENDING')
   })
+
+  it('when some expense are with 1 day to overdue, should have status \'PENDING\'', () => {
+    const expense1 = new Expense('Credit card bill', 100, 5)
+    const expense2 = new Expense('Internet bill', 50, 27)
+    vi.setSystemTime(new Date(2024, 8, 27))
+
+    const expenseSchedule = new ExpenseSchedule()
+
+    expenseSchedule.include(expense1)
+    expenseSchedule.include(expense2)
+
+    expense1.pay()
+
+    expect(expenseSchedule.status).toEqual('PENDING')
+  })
 })
