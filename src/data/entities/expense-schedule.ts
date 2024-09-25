@@ -56,7 +56,7 @@ export class ExpenseSchedule {
     return this._status
   }
 
-  determineIfAllExpensesArePaid() {
+  verifyPaymentStatus() {
     const allExpensesArePaid = this.expenses.every(e => e.paidAt !== null)
 
     if (allExpensesArePaid) {
