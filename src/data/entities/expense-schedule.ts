@@ -1,4 +1,4 @@
-import { ExpenseScheduleStatus, ExpenseScheduleStatusEnum } from '@/data/value-objects/expense-schedule-status'
+import { ExpenseScheduleStatus } from '@/data/value-objects/expense-schedule-status'
 import { Expense } from './expense'
 
 export class ExpenseSchedule {
@@ -81,7 +81,7 @@ export class ExpenseSchedule {
       monthIndex === new Date().getMonth())
 
     if (hasExpensesPassedDueDate) {
-      return 'OVERDUE' as ExpenseScheduleStatusEnum
+      return this._status.asEnum('OVERDUE')
     }
 
     const currentDateIsGreaterThanAllDueDates = this.expenses.every(
@@ -99,7 +99,7 @@ export class ExpenseSchedule {
       )
 
       if (hasOverdueDate) {
-        return 'OVERDUE' as ExpenseScheduleStatusEnum
+        return this._status.asEnum('OVERDUE')
       }
     }
 
@@ -108,16 +108,16 @@ export class ExpenseSchedule {
     ).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
 
     if (expensesCloseToOverdue) {
-      return 'PENDING' as ExpenseScheduleStatusEnum
+      return this._status.asEnum('PENDING')
     }
 
     const allExpensesArePaid = this.expenses.every(e => e.paidAt !== null)
 
     if (allExpensesArePaid) {
-      return 'PAID' as ExpenseScheduleStatusEnum
+      return this._status.asEnum('PAID')
     }
 
-    return 'OPEN' as ExpenseScheduleStatusEnum
+    return this._status.asEnum('OPEN')
   }
 }
 
