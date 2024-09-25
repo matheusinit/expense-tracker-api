@@ -90,8 +90,6 @@ export class Expense {
 
   pay() {
     this._paidAt = new Date()
-
-    this._expenseSchedule?.verifyPaymentStatus()
   }
 
   get paidAt() {

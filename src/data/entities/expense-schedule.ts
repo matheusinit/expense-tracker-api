@@ -61,10 +61,12 @@ export class ExpenseSchedule {
       this._status = 'PENDING'
     }
 
+    this.verifyPaymentStatus()
+
     return this._status
   }
 
-  verifyPaymentStatus() {
+  private verifyPaymentStatus() {
     const allExpensesArePaid = this.expenses.every(e => e.paidAt !== null)
 
     if (allExpensesArePaid) {
