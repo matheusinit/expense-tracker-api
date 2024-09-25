@@ -138,4 +138,12 @@ describe('Given is needed to pay a expense,', () => {
 
     expect(expense.paidAt?.toDateString()).toBe(new Date().toDateString())
   })
+
+  it('when a expense is paid, should set payment date as now', () => {
+    const expense = makeSut()
+
+    expense.pay()
+
+    expect(expense.paidAt?.getTime()).toBeGreaterThan(new Date().getTime() - 1000)
+  })
 })
