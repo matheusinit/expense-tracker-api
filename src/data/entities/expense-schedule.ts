@@ -23,7 +23,7 @@ export class ExpenseSchedule {
     expense.expenseSchedule = this
   }
 
-  determineMonthBasedOnExpensesDueDate() {
+  private determineMonthBasedOnExpensesDueDate() {
     const date = new Date()
     const currentMonth = date.getMonth()
     const currentDate = date.getDate()
