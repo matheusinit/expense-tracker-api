@@ -121,3 +121,13 @@ describe('Given is needed to update a expense,', () => {
     expect(expense.amount).toBe(200)
   })
 })
+
+describe('Given is needed to pay a expense,', () => {
+  it('when a expense is paid, should set payment date', () => {
+    const expense = makeSut()
+
+    expense.pay()
+
+    expect(expense.paidAt).not.toBeNull()
+  })
+})
