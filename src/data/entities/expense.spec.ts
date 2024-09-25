@@ -130,4 +130,12 @@ describe('Given is needed to pay a expense,', () => {
 
     expect(expense.paidAt).not.toBeNull()
   })
+
+  it('when a expense is paid, should set payment date as today', () => {
+    const expense = makeSut()
+
+    expense.pay()
+
+    expect(expense.paidAt?.toDateString()).toBe(new Date().toDateString())
+  })
 })
