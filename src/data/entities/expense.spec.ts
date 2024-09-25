@@ -144,6 +144,8 @@ describe('Given is needed to pay a expense,', () => {
 
     expense.pay()
 
-    expect(expense.paidAt?.getTime()).toBeGreaterThan(new Date().getTime() - 1000)
+    expect(expense.paidAt?.getTime()).toBeGreaterThan(
+      new Date().getTime() - 1000
+    )
   })
 })

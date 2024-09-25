@@ -13,14 +13,18 @@ const findPatternInCookie = (pattern: string, cookieList: string[]) =>
     .find(string => string.trim().startsWith(pattern)) !== undefined
 
 const removePatternFromCookie = (pattern: string, cookieList: string[]) => {
-  const index = cookieList.findIndex(string => string.trim().startsWith(pattern))
+  const index = cookieList.findIndex(
+    string => string.trim().startsWith(pattern)
+  )
 
   cookieList.splice(index, 1)
 
   return cookieList
 }
 
-export const parseCookies = (request: IncomingMessage, response: ServerResponse, next: PipeRequest) => {
+export const parseCookies = (
+  request: IncomingMessage, response: ServerResponse, next: PipeRequest
+) => {
   const cookie = request.headers['cookie']
 
   const defaultCookies = {}

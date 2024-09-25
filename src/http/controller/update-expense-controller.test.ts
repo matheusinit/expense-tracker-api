@@ -173,7 +173,8 @@ describe('Given update expense controller', () => {
 
     const responseBody: ExpenseModel = response.body
 
-    const updatedAtIsAfterCreatedAt = dayjs(responseBody.updatedAt).isAfter(dayjs(responseBody.createdAt))
+    const updatedAtIsAfterCreatedAt = dayjs(responseBody.updatedAt)
+      .isAfter(dayjs(responseBody.createdAt))
 
     expect(updatedAtIsAfterCreatedAt).toBeTruthy()
   })

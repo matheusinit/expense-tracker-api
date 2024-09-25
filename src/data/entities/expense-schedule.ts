@@ -65,7 +65,9 @@ export class ExpenseSchedule {
   private verifyPaymentStatus() {
     const currentDate = new Date().getDate()
 
-    const expensesWithDueDateLessThanCreationDate = this.expenses.filter(e => e.dueDate < this._createdAt.getDate())
+    const expensesWithDueDateLessThanCreationDate = this.expenses.filter(
+      e => e.dueDate < this._createdAt.getDate()
+    )
 
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const monthIndex = monthNames.indexOf(this._month || '')
@@ -82,7 +84,9 @@ export class ExpenseSchedule {
       return 'OVERDUE'
     }
 
-    const currentDateIsGreaterThanAllDueDates = this.expenses.every(e => e.dueDate < currentDate)
+    const currentDateIsGreaterThanAllDueDates = this.expenses.every(
+      e => e.dueDate < currentDate
+    )
 
     if (currentDateIsGreaterThanAllDueDates) {
       const dueDates = this.expenses.map(e => e.dueDate)
@@ -90,14 +94,18 @@ export class ExpenseSchedule {
 
       const firstDueDate = dueDatesDescending[0]
 
-      const hasOverdueDate = dueDatesDescending.some(d => d < currentDate && d >= firstDueDate)
+      const hasOverdueDate = dueDatesDescending.some(
+        d => d < currentDate && d >= firstDueDate
+      )
 
       if (hasOverdueDate) {
         return 'OVERDUE'
       }
     }
 
-    const expensesCloseToOverdue = this.expenses.filter(e => !e.paidAt).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
+    const expensesCloseToOverdue = this.expenses.filter(
+      e => !e.paidAt
+    ).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
 
     if (expensesCloseToOverdue) {
       return 'PENDING'

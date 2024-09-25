@@ -75,7 +75,9 @@ describe('Given view expenses controller', () => {
     const responseBody: PageBasedPaginationDTO = response.body
 
     expect(response.status).toBe(200)
-    expect(responseBody.records).toEqual(expect.arrayContaining([expect.objectContaining(expense)]))
+    expect(responseBody.records).toEqual(
+      expect.arrayContaining([expect.objectContaining(expense)])
+    )
   })
 
   it('when multiple expenses is added, then should return expenses in multiple pages', async () => {

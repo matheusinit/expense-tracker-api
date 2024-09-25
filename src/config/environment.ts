@@ -11,7 +11,9 @@ const getLogLevels = () => {
 
   const formattedLogLevels = logLevels?.map((logLevel) => logLevel.trim())
 
-  return formattedLogLevels?.filter((logLevel) => validLogLevels.includes(logLevel))
+  return formattedLogLevels?.filter(
+    (logLevel) => validLogLevels.includes(logLevel)
+  )
 }
 
 const prismaLogLevels = getLogLevels()
