@@ -53,25 +53,27 @@ export class ExpenseSchedule {
   }
 
   get status() {
-    const currentDate = new Date().getDate()
-
-    const expensesCloseToOverdue = this.expenses.filter(e => !e.paidAt).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
-
-    if (expensesCloseToOverdue) {
-      this._status = 'PENDING'
-    }
-
-    this.verifyPaymentStatus()
+    this._status = this.verifyPaymentStatus()
 
     return this._status
   }
 
   private verifyPaymentStatus() {
+    const currentDate = new Date().getDate()
+
+    const expensesCloseToOverdue = this.expenses.filter(e => !e.paidAt).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
+
+    if (expensesCloseToOverdue) {
+      return 'PENDING'
+    }
+
     const allExpensesArePaid = this.expenses.every(e => e.paidAt !== null)
 
     if (allExpensesArePaid) {
-      this._status = 'PAID'
+      return 'PAID'
     }
+
+    return 'OPEN'
   }
 }
 
