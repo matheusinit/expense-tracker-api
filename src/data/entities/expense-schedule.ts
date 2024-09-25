@@ -14,9 +14,13 @@ export class ExpenseSchedule {
   include(expense: Expense) {
     this._expenses.push(expense)
 
-    expense.expenseSchedule = this
+    this.associateExpense(expense)
 
     this._month = this.determineMonthBasedOnExpensesDueDate()
+  }
+
+  private associateExpense(expense: Expense) {
+    expense.expenseSchedule = this
   }
 
   determineMonthBasedOnExpensesDueDate() {
