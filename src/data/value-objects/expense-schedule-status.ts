@@ -1,18 +1,17 @@
-type Status = 'PAID' | 'OVERDUE' | 'OPEN'
-
+export type ExpenseScheduleStatusEnum = 'PAID' | 'OVERDUE' | 'PENDING' | 'OPEN'
 export class ExpenseScheduleStatus {
-  private status: Status
+  private status: ExpenseScheduleStatusEnum
 
-  constructor(status: Status = 'OPEN') {
+  constructor(status: ExpenseScheduleStatusEnum = 'OPEN') {
     this.status = status
   }
 
-  get value(): Status {
+  get value(): ExpenseScheduleStatusEnum {
     return this.status
   }
 
-  set value(status: Status) {
-    if (!['PAID', 'OVERDUE', 'OPEN'].includes(status)) {
+  set value(status: ExpenseScheduleStatusEnum) {
+    if (!['PAID', 'OVERDUE', 'OPEN', 'PENDING'].includes(status)) {
       throw new Error('Invalid status')
     }
 
