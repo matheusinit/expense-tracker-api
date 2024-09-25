@@ -173,4 +173,21 @@ describe('Given is needed to schedule expenses', () => {
 
     expect(expenseSchedule.status).toEqual('OVERDUE')
   })
+
+  it('when some expense of due date month different than schedule creation month pass over the due date, should have status \'OVERDUE\'', () => {
+    const expense1 = new Expense('Credit card bill', 100, 5)
+    const expense2 = new Expense('Internet bill', 50, 27)
+    vi.setSystemTime(new Date(2024, 8, 20))
+
+    const expenseSchedule = new ExpenseSchedule()
+
+    expenseSchedule.include(expense1)
+    expenseSchedule.include(expense2)
+
+    expense2.pay()
+
+    vi.setSystemTime(new Date(2024, 9, 6))
+
+    expect(expenseSchedule.status).toEqual('OVERDUE')
+  })
 })
