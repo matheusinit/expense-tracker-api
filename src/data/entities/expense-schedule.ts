@@ -1,10 +1,12 @@
 import { ExpenseScheduleStatus } from '@/data/value-objects/expense-schedule-status'
 import { Expense } from './expense'
 
+type Status = 'OPEN' | 'PAID' | 'PENDING'
+
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
   private _month: string | undefined
-  private _status: string
+  private _status: Status
 
   constructor() {
     this._expenses = []
