@@ -10,11 +10,13 @@ export class Expense {
   private _description!: string
   private _amount!: number
   private _dueDate!: number
+  private _paidAt: Date | null
 
   constructor(description: string, amount: number | null, dueDate?: number) {
     this.description = description
     this.amount = amount
     this.dueDate = dueDate ?? 10
+    this._paidAt = null
   }
 
   get description(): string {
@@ -81,5 +83,13 @@ export class Expense {
     if (dueDate !== undefined) {
       this.dueDate = dueDate
     }
+  }
+
+  pay() {
+    this._paidAt = new Date()
+  }
+
+  get paidAt() {
+    return this._paidAt
   }
 }
