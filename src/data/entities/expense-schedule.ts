@@ -14,6 +14,8 @@ export class ExpenseSchedule {
   include(expense: Expense) {
     this._expenses.push(expense)
 
+    expense.expenseSchedule = this
+
     this._month = this.determineMonthBasedOnExpensesDueDate()
   }
 
@@ -48,6 +50,14 @@ export class ExpenseSchedule {
 
   get status() {
     return this._status
+  }
+
+  determineIfAllExpensesArePaid() {
+    const allExpensesArePaid = this.expenses.every(e => e.paidAt !== null)
+
+    if (allExpensesArePaid) {
+      this._status = 'PAID'
+    }
   }
 }
 

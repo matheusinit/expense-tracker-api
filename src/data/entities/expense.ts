@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ExpenseSchedule } from './expense-schedule'
 
 type UpdateExpense = {
   description?: string
@@ -11,12 +12,14 @@ export class Expense {
   private _amount!: number
   private _dueDate!: number
   private _paidAt: Date | null
+  private _expenseSchedule: ExpenseSchedule | null
 
   constructor(description: string, amount: number | null, dueDate?: number) {
     this.description = description
     this.amount = amount
     this.dueDate = dueDate ?? 10
     this._paidAt = null
+    this._expenseSchedule = null
   }
 
   get description(): string {
@@ -87,9 +90,19 @@ export class Expense {
 
   pay() {
     this._paidAt = new Date()
+
+    this._expenseSchedule?.determineIfAllExpensesArePaid()
   }
 
   get paidAt() {
     return this._paidAt
+  }
+
+  set expenseSchedule(value: ExpenseSchedule | null) {
+    this._expenseSchedule = value
+  }
+
+  get expenseSchedule() {
+    return this._expenseSchedule
   }
 }
