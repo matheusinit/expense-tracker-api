@@ -7,10 +7,12 @@ export class ExpenseSchedule {
   private readonly _expenses: Expense[]
   private _month: string | undefined
   private _status: Status
+  private _createdAt: Date
 
   constructor() {
     this._expenses = []
     this._status = 'OPEN'
+    this._createdAt = new Date()
   }
 
   include(expense: Expense) {
@@ -62,6 +64,23 @@ export class ExpenseSchedule {
 
   private verifyPaymentStatus() {
     const currentDate = new Date().getDate()
+
+    const expensesWithDueDateLessThanCreationDate = this.expenses.filter(e => e.dueDate < this._createdAt.getDate())
+
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    const monthIndex = monthNames.indexOf(this._month || '')
+
+    const expensesFromNextMonth = expensesWithDueDateLessThanCreationDate
+
+    const hasExpensesPassedDueDate = this.expenses.some(e =>
+      e.dueDate < currentDate &&
+      e.paidAt === null &&
+      expensesFromNextMonth.includes(e) &&
+      monthIndex === new Date().getMonth())
+
+    if (hasExpensesPassedDueDate) {
+      return 'OVERDUE'
+    }
 
     const currentDateIsGreaterThanAllDueDates = this.expenses.every(e => e.dueDate < currentDate)
 
