@@ -53,6 +53,14 @@ export class ExpenseSchedule {
   }
 
   get status() {
+    const currentDate = new Date().getDate()
+
+    const expensesCloseToOverdue = this.expenses.filter(e => !e.paidAt).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
+
+    if (expensesCloseToOverdue) {
+      this._status = 'PENDING'
+    }
+
     return this._status
   }
 
