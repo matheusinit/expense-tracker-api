@@ -88,106 +88,109 @@ describe('Given is needed to schedule expenses', () => {
     })
   })
 
-  it('when expenses are scheduled correctly, should have status \'OPEN\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    vi.setSystemTime(new Date(2024, 8, 15))
-    const expenseSchedule = new ExpenseSchedule()
+  describe('Given is registered in month and past month expenses', () => {
+    it('when expenses are scheduled correctly, should have status \'OPEN\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      vi.setSystemTime(new Date(2024, 8, 15))
+      const expenseSchedule = new ExpenseSchedule()
 
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
 
-    expect(expenseSchedule.status).toEqual('OPEN')
+      expect(expenseSchedule.status).toEqual('OPEN')
+    })
+
+    it('when all expenses are paid, should have status \'PAID\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense1.pay()
+      expense2.pay()
+
+      expect(expenseSchedule.status).toEqual('PAID')
+    })
+
+    it('when some expenses are not paid, should have status \'OPEN\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      const expenseSchedule = new ExpenseSchedule()
+      vi.setSystemTime(new Date(2024, 8, 15))
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense1.pay()
+
+      expect(expenseSchedule.status).toEqual('OPEN')
+    })
+
+    it('when some expense are with 3 days to overdue, should have status \'PENDING\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      vi.setSystemTime(new Date(2024, 8, 25))
+
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense1.pay()
+
+      expect(expenseSchedule.status).toEqual('PENDING')
+    })
+
+    it('when some expense are with 1 day to overdue, should have status \'PENDING\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      vi.setSystemTime(new Date(2024, 8, 27))
+
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense1.pay()
+
+      expect(expenseSchedule.status).toEqual('PENDING')
+    })
+
+    it('when some past month expense pass over the due date, should have status \'OVERDUE\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      vi.setSystemTime(new Date(2024, 8, 20))
+
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      vi.setSystemTime(new Date(2024, 8, 28))
+      expense1.pay()
+
+      expect(expenseSchedule.status).toEqual('OVERDUE')
+    })
+
+    it('when some in month expense pass over the due date, should have status \'OVERDUE\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 27)
+      vi.setSystemTime(new Date(2024, 8, 20))
+
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense2.pay()
+
+      vi.setSystemTime(new Date(2024, 9, 6))
+
+      expect(expenseSchedule.status).toEqual('OVERDUE')
+    })
   })
 
-  it('when all expenses are paid, should have status \'PAID\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    const expenseSchedule = new ExpenseSchedule()
-
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
-
-    expense1.pay()
-    expense2.pay()
-
-    expect(expenseSchedule.status).toEqual('PAID')
-  })
-
-  it('when some expenses are not paid, should have status \'OPEN\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    const expenseSchedule = new ExpenseSchedule()
-    vi.setSystemTime(new Date(2024, 8, 15))
-
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
-
-    expense1.pay()
-
-    expect(expenseSchedule.status).toEqual('OPEN')
-  })
-
-  it('when some expense are with 3 days to overdue, should have status \'PENDING\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    vi.setSystemTime(new Date(2024, 8, 25))
-
-    const expenseSchedule = new ExpenseSchedule()
-
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
-
-    expense1.pay()
-
-    expect(expenseSchedule.status).toEqual('PENDING')
-  })
-
-  it('when some expense are with 1 day to overdue, should have status \'PENDING\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    vi.setSystemTime(new Date(2024, 8, 27))
-
-    const expenseSchedule = new ExpenseSchedule()
-
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
-
-    expense1.pay()
-
-    expect(expenseSchedule.status).toEqual('PENDING')
-  })
-
-  it('when some expense pass over the due date, should have status \'OVERDUE\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    vi.setSystemTime(new Date(2024, 8, 20))
-
-    const expenseSchedule = new ExpenseSchedule()
-
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
-
-    vi.setSystemTime(new Date(2024, 8, 28))
-    expense1.pay()
-
-    expect(expenseSchedule.status).toEqual('OVERDUE')
-  })
-
-  it('when some expense of due date month different than schedule creation month pass over the due date, should have status \'OVERDUE\'', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 27)
-    vi.setSystemTime(new Date(2024, 8, 20))
-
-    const expenseSchedule = new ExpenseSchedule()
-
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
-
-    expense2.pay()
-
-    vi.setSystemTime(new Date(2024, 9, 6))
-
-    expect(expenseSchedule.status).toEqual('OVERDUE')
-  })
 })
