@@ -193,4 +193,17 @@ describe('Given is needed to schedule expenses', () => {
     })
   })
 
+  describe('Given is registered only in month expenses', () => {
+    it('when expenses are scheduled correctly, should have status \'OPEN\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 8)
+      vi.setSystemTime(new Date(2024, 8, 20))
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expect(expenseSchedule.status).toEqual('OPEN')
+    })
+  })
 })
