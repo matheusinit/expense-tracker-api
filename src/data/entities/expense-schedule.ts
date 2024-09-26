@@ -65,7 +65,30 @@ export class ExpenseSchedule {
   }
 
   private verifyPaymentStatus() {
+    const isAnyExpensePastDue = this.isPaymentOverdue()
+
+    if (isAnyExpensePastDue) {
+      return this._status.asEnum('OVERDUE')
+    }
+
+    const expensesCloseToOverdue = this.isPaymentPending()
+
+    if (expensesCloseToOverdue) {
+      return this._status.asEnum('PENDING')
+    }
+
+    const allExpensesArePaid = this.isPaymentPaid()
+
+    if (allExpensesArePaid) {
+      return this._status.asEnum('PAID')
+    }
+
+    return this._status.asEnum('OPEN')
+  }
+
+  private isPaymentOverdue() {
     const currentDate = new Date().getDate()
+    const currentMonth = new Date().getMonth()
 
     const expensesWithDueDateLessThanCreationDate = this.expenses.filter(
       e => e.dueDate < this._createdAt.getDate()
@@ -73,50 +96,31 @@ export class ExpenseSchedule {
 
     const expensesFromNextMonth = expensesWithDueDateLessThanCreationDate
 
-    const hasExpensesPassedDueDate = this.expenses.some(e =>
+    const isAnyExpensePastDueDate = this.expenses.some(e =>
       e.dueDate < currentDate &&
       e.paidAt === null &&
       expensesFromNextMonth.includes(e) &&
-      this._monthIndex === new Date().getMonth())
+      this._monthIndex === currentMonth)
 
-    if (hasExpensesPassedDueDate) {
-      return this._status.asEnum('OVERDUE')
-    }
-
-    const currentDateIsGreaterThanAllDueDates = this.expenses.every(
+    const areAllExpensesAreOverdue = this.expenses.every(
       e => e.dueDate < currentDate
     )
 
-    if (currentDateIsGreaterThanAllDueDates) {
-      const dueDates = this.expenses.map(e => e.dueDate)
-      const dueDatesDescending = dueDates.sort((a, b) => b - a)
+    return isAnyExpensePastDueDate || areAllExpensesAreOverdue
+  }
 
-      const firstDueDate = dueDatesDescending[0]
-
-      const hasOverdueDate = dueDatesDescending.some(
-        d => d < currentDate && d >= firstDueDate
-      )
-
-      if (hasOverdueDate) {
-        return this._status.asEnum('OVERDUE')
-      }
-    }
+  private isPaymentPending() {
+    const currentDate = new Date().getDate()
 
     const expensesCloseToOverdue = this.expenses.filter(
       e => !e.paidAt
     ).some(e => e.dueDate >= currentDate && e.dueDate - 3 <= currentDate)
 
-    if (expensesCloseToOverdue) {
-      return this._status.asEnum('PENDING')
-    }
+    return expensesCloseToOverdue
+  }
 
-    const allExpensesArePaid = this.expenses.every(e => e.paidAt !== null)
-
-    if (allExpensesArePaid) {
-      return this._status.asEnum('PAID')
-    }
-
-    return this._status.asEnum('OPEN')
+  private isPaymentPaid() {
+    return this.expenses.every(e => e.paidAt !== null)
   }
 }
 
