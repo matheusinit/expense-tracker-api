@@ -205,5 +205,19 @@ describe('Given is needed to schedule expenses', () => {
 
       expect(expenseSchedule.status).toEqual('OPEN')
     })
+
+    it('when all expenses are paid, should have status \'PAID\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 8)
+      const expenseSchedule = new ExpenseSchedule()
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense1.pay()
+      expense2.pay()
+
+      expect(expenseSchedule.status).toEqual('PAID')
+    })
   })
 })
