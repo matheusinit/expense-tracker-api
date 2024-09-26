@@ -219,5 +219,19 @@ describe('Given is needed to schedule expenses', () => {
 
       expect(expenseSchedule.status).toEqual('PAID')
     })
+
+    it('when some expenses are not paid, should have status \'OPEN\'', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 8)
+      const expenseSchedule = new ExpenseSchedule()
+      vi.setSystemTime(new Date(2024, 8, 15))
+
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
+
+      expense1.pay()
+
+      expect(expenseSchedule.status).toEqual('OPEN')
+    })
   })
 })
