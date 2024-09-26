@@ -88,25 +88,26 @@ export class ExpenseSchedule {
 
   private isPaymentOverdue() {
     const currentDate = new Date().getDate()
-    const currentMonth = new Date().getMonth()
+    const currentMonthIndex = new Date().getMonth()
 
-    const expensesWithDueDateLessThanCreationDate = this.expenses.filter(
+    const expensesInMonth = this.expenses.filter(
       e => e.dueDate < this._createdAt.getDate()
     )
 
-    const expensesFromNextMonth = expensesWithDueDateLessThanCreationDate
+    const isAnyInMonthExpensePastDueDate = expensesInMonth
+      .filter(e => e.paidAt === null)
+      .some(e => e.dueDate < currentDate) &&
+      this._monthIndex === currentMonthIndex
 
-    const isAnyExpensePastDueDate = this.expenses.some(e =>
-      e.dueDate < currentDate &&
-      e.paidAt === null &&
-      expensesFromNextMonth.includes(e) &&
-      this._monthIndex === currentMonth)
-
-    const areAllExpensesAreOverdue = this.expenses.every(
-      e => e.dueDate < currentDate
+    const expensesPastMonth = this.expenses.filter(
+      e => e.dueDate > this._createdAt.getDate()
     )
 
-    return isAnyExpensePastDueDate || areAllExpensesAreOverdue
+    const isAnyPastMonthExpensePastDueDate = expensesPastMonth
+      .filter(e => e.paidAt === null)
+      .some(e => e.dueDate < currentDate)
+
+    return isAnyInMonthExpensePastDueDate || isAnyPastMonthExpensePastDueDate
   }
 
   private isPaymentPending() {
