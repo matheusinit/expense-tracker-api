@@ -3,7 +3,7 @@ import { Expense } from './expense'
 
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
-  private _monthIndex: number | undefined
+  private _month: number | undefined
   private _status: ExpenseScheduleStatus
   private _createdAt: Date
 
@@ -18,7 +18,7 @@ export class ExpenseSchedule {
 
     this.associateExpense(expense)
 
-    this._monthIndex = this.determineMonthBasedOnExpensesDueDate()
+    this._month = this.determineMonthBasedOnExpensesDueDate()
   }
 
   private associateExpense(expense: Expense) {
@@ -27,7 +27,7 @@ export class ExpenseSchedule {
 
   private determineMonthBasedOnExpensesDueDate() {
     const date = new Date()
-    const currentMonth = date.getMonth()
+    const currentMonth = date.getMonth() + 1
     const currentDate = date.getDate()
 
     const dueDates = this.expenses.map(e => e.dueDate)
@@ -36,12 +36,12 @@ export class ExpenseSchedule {
 
     if (existDueDateLessThanCurrentDate) {
       const currentYear = date.getFullYear()
-      const nextMonthIndex = currentMonth + 1
-      const month = new Date(currentYear, nextMonthIndex).getMonth()
+      const nextMonthIndex = currentMonth
+      const month = new Date(currentYear, nextMonthIndex).getMonth() + 1
       return month
     }
 
-    const month = new Date().getMonth()
+    const month = currentMonth
 
     return month
   }
@@ -51,7 +51,8 @@ export class ExpenseSchedule {
   }
 
   get month() {
-    const date = new Date(2024, this._monthIndex || 0, 1)
+    const currentMonth = this._month || 1
+    const date = new Date(2024, currentMonth - 1, 1)
 
     return date.toLocaleString('default', { month: 'long' })
   }
@@ -88,7 +89,7 @@ export class ExpenseSchedule {
 
   private isPaymentOverdue() {
     const currentDate = new Date().getDate()
-    const currentMonthIndex = new Date().getMonth()
+    const currentMonth = new Date().getMonth() + 1
 
     const expensesInMonth = this.expenses.filter(
       e => e.dueDate < this._createdAt.getDate()
@@ -97,7 +98,7 @@ export class ExpenseSchedule {
     const isAnyInMonthExpensePastDueDate = expensesInMonth
       .filter(e => e.paidAt === null)
       .some(e => e.dueDate < currentDate) &&
-      this._monthIndex === currentMonthIndex
+      this._month === currentMonth
 
     const expensesPastMonth = this.expenses.filter(
       e => e.dueDate > this._createdAt.getDate()
