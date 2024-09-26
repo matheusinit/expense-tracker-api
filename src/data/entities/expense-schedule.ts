@@ -3,7 +3,7 @@ import { Expense } from './expense'
 
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
-  private _month: string | undefined
+  private _monthIndex: number | undefined
   private _status: ExpenseScheduleStatus
   private _createdAt: Date
 
@@ -18,7 +18,7 @@ export class ExpenseSchedule {
 
     this.associateExpense(expense)
 
-    this._month = this.determineMonthBasedOnExpensesDueDate()
+    this._monthIndex = this.determineMonthBasedOnExpensesDueDate()
   }
 
   private associateExpense(expense: Expense) {
@@ -37,11 +37,11 @@ export class ExpenseSchedule {
     if (existDueDateLessThanCurrentDate) {
       const currentYear = date.getFullYear()
       const nextMonthIndex = currentMonth + 1
-      const month = new Date(currentYear, nextMonthIndex).toLocaleString('default', { month: 'long' })
+      const month = new Date(currentYear, nextMonthIndex).getMonth()
       return month
     }
 
-    const month = new Date().toLocaleDateString('default', { month: 'long' })
+    const month = new Date().getMonth()
 
     return month
   }
@@ -51,7 +51,9 @@ export class ExpenseSchedule {
   }
 
   get month() {
-    return this._month
+    const date = new Date(2024, this._monthIndex || 0, 1)
+
+    return date.toLocaleString('default', { month: 'long' })
   }
 
   get status() {
@@ -69,16 +71,13 @@ export class ExpenseSchedule {
       e => e.dueDate < this._createdAt.getDate()
     )
 
-    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    const monthIndex = monthNames.indexOf(this._month || '')
-
     const expensesFromNextMonth = expensesWithDueDateLessThanCreationDate
 
     const hasExpensesPassedDueDate = this.expenses.some(e =>
       e.dueDate < currentDate &&
       e.paidAt === null &&
       expensesFromNextMonth.includes(e) &&
-      monthIndex === new Date().getMonth())
+      this._monthIndex === new Date().getMonth())
 
     if (hasExpensesPassedDueDate) {
       return this._status.asEnum('OVERDUE')
