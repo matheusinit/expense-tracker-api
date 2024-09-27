@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Expense } from '@/data/entities/expense'
 
 describe('Given is needed to create a expense,', () => {
@@ -123,6 +123,14 @@ describe('Given is needed to update a expense,', () => {
 })
 
 describe('Given is needed to pay a expense,', () => {
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+  })
+
   it('when a expense is paid, should set payment date', () => {
     const expense = makeSut()
 
@@ -147,5 +155,20 @@ describe('Given is needed to pay a expense,', () => {
     expect(expense.paidAt?.getTime()).toBeGreaterThan(
       new Date().getTime() - 1000
     )
+  })
+
+  it('when a expenses is already paid, should not be able to pay again', () => {
+    const expense = makeSut()
+    vi.setSystemTime(new Date('2024-01-01'))
+
+    expense.pay()
+
+    const firstPaymentDateTime = expense.paidAt
+
+    vi.setSystemTime(new Date('2024-01-02'))
+    const paymentTry = () => expense.pay()
+
+    expect(expense.paidAt).toEqual(firstPaymentDateTime)
+    expect(paymentTry).toThrowError('Expense already paid')
   })
 })
