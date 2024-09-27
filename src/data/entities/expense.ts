@@ -89,6 +89,10 @@ export class Expense {
   }
 
   pay() {
+    if (this._paidAt) {
+      throw new Error('Expense already paid')
+    }
+
     this._paidAt = new Date()
   }
 
