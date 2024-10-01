@@ -305,4 +305,10 @@ describe('Given is needed to schedule expenses', () => {
 
     expect(expenseSchedule.totalAmount).toEqual(150)
   })
+
+  it('when there is not any expense, should return 0 for total amount', () => {
+    const expenseSchedule = new ExpenseSchedule()
+
+    expect(expenseSchedule.totalAmount).toEqual(0)
+  })
 })
