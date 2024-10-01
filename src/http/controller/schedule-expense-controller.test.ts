@@ -67,4 +67,31 @@ describe('Given schedule expenses controller', () => {
 
     expect(responseBody.id).not.toEqual(expenseId)
   })
+
+  it('when is provided a expense, then should return with status OPEN', async () => {
+    const expense = {
+      description: 'Credit card bill',
+      amount: 100,
+      dueDate: 10
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const expenseResponse = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense)
+
+    const expenseId = expenseResponse.body['id']
+
+    const response = await request(app)
+      .post(`/v1/expenses/${expenseId}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const responseBody = response.body
+
+    expect(responseBody.status).toEqual('OPEN')
+  })
 })
