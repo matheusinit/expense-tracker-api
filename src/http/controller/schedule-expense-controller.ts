@@ -1,45 +1,30 @@
-import { Expense } from '@/data/entities/expense'
-import { ExpenseSchedule } from '@/data/entities/expense-schedule'
-import { ExpenseRepository } from '@/data/protocols/expense-repository'
-import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
 import { Request, Response } from 'express'
 
+import { ScheduleExpenseService } from '@/data/services/schedule-expense'
+
 class ScheduleExpenseController {
-  private expenseRepository: ExpenseRepository
-  private expenseScheduleRepository: ExpenseScheduleRepository
+  private scheduleExpenseService: ScheduleExpenseService
 
   constructor(
-    expenseRepository: ExpenseRepository,
-    expenseScheduleRepository: ExpenseScheduleRepository
+    scheduleExpenseService: ScheduleExpenseService
   ) {
-    this.expenseRepository = expenseRepository
-    this.expenseScheduleRepository = expenseScheduleRepository
+    this.scheduleExpenseService = scheduleExpenseService
   }
 
   async handle(request: Request, response: Response): Promise<Response> {
-    const { id } = request.params
+    try {
+      const { id } = request.params
 
-    const expenseFromDb = await this.expenseRepository.get(id)
+      const expenseSchedule = await this.scheduleExpenseService.schedule(id)
 
-    if (!expenseFromDb) {
+      return response.status(201).json(expenseSchedule)
+    } catch (err) {
+      const error = err as Error
+
       return response.status(404).json({
-        message: 'Expense not found'
+        message: error.message
       })
     }
-
-    const expenseScheduleEntity = new ExpenseSchedule()
-    const expense = new Expense(
-      expenseFromDb?.description,
-      expenseFromDb?.amount,
-      expenseFromDb?.dueDate
-    )
-
-    expenseScheduleEntity.include(expense)
-
-    const expenseSchedule = await this.expenseScheduleRepository
-      .save(expenseScheduleEntity)
-
-    return response.status(201).json(expenseSchedule)
   }
 }
 
