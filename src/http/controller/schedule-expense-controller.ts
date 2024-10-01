@@ -29,8 +29,8 @@ class ScheduleExpenseController {
 
     const expenseScheduleEntity = new ExpenseSchedule()
     const expense = new Expense(
-      (expenseFromDb?.description || ''),
-      (expenseFromDb?.amount || null),
+      expenseFromDb?.description,
+      expenseFromDb?.amount,
       expenseFromDb?.dueDate
     )
 
@@ -39,9 +39,7 @@ class ScheduleExpenseController {
     const expenseSchedule = await this.expenseScheduleRepository
       .save(expenseScheduleEntity)
 
-    return response.status(201).json({
-      ...expenseSchedule,
-    })
+    return response.status(201).json(expenseSchedule)
   }
 }
 
