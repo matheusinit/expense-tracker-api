@@ -5,6 +5,7 @@ import app from '@/http/app'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import db from '@/infra/database'
 import * as falso from '@ngneat/falso'
+import { ExpenseScheduleModel } from '@/data/models/expense-schedule-model'
 
 describe('Given schedule expenses controller', () => {
   it('when is provided a expense, then should return the data in response body', async () => {
@@ -29,7 +30,7 @@ describe('Given schedule expenses controller', () => {
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
-    const responseBody = response.body
+    const responseBody: ExpenseScheduleModel = response.body
 
     expect(response.statusCode).toEqual(201)
     expect(responseBody).toEqual(expect.objectContaining({
@@ -65,7 +66,7 @@ describe('Given schedule expenses controller', () => {
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
-    const responseBody = response.body
+    const responseBody: ExpenseScheduleModel = response.body
 
     expect(responseBody.id).not.toEqual(expenseId)
   })
@@ -92,7 +93,7 @@ describe('Given schedule expenses controller', () => {
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
-    const responseBody = response.body
+    const responseBody: ExpenseScheduleModel = response.body
 
     expect(responseBody.status).toEqual('OPEN')
   })
@@ -125,14 +126,17 @@ describe('Given schedule expenses controller', () => {
       }
     })
 
+    const expenseScheduleModel: ExpenseScheduleModel = expenseScheduleResponse
+      .body
+
     expect(expenseSchedule).toEqual(expect.objectContaining({
-      id: expenseScheduleResponse.body.id,
-      description: expenseScheduleResponse.body.description,
+      id: expenseScheduleModel.id,
+      description: expenseScheduleModel.description,
       totalAmount: expense.amount * 100,
-      period: new Date(expenseScheduleResponse.body.period),
+      period: new Date(expenseScheduleModel.period),
       status: 'OPEN',
-      createdAt: new Date(expenseScheduleResponse.body.createdAt),
-      updatedAt: new Date(expenseScheduleResponse.body.updatedAt),
+      createdAt: new Date(expenseScheduleModel.createdAt),
+      updatedAt: new Date(expenseScheduleModel.updatedAt),
       deletedAt: null
     }))
   })
