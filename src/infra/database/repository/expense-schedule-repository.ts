@@ -7,7 +7,6 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
   async save(data: ExpenseSchedule) {
     const expenseSchedule = await db.expenseSchedule.create({
       data: {
-        description: data.description,
         period: data.period,
         totalAmount: data.totalAmount,
         status: data.status,
@@ -21,11 +20,10 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
     expenseId: string,
     expenseSchedule: ExpenseSchedule
   ) {
-    const { description, period, totalAmount, status } = expenseSchedule
+    const { period, totalAmount, status } = expenseSchedule
 
     const expenseScheduleModel = await db.expenseSchedule.create({
       data: {
-        description,
         period,
         totalAmount,
         status,

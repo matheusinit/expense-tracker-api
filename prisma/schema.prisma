@@ -37,7 +37,6 @@ model ExpenseToExpenseSchedule {
 
 model ExpenseSchedule {
   id          String    @id @default(cuid())
-  description String
   period      DateTime
   status      String
   totalAmount Int

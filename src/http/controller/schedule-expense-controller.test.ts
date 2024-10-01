@@ -35,7 +35,6 @@ describe('Given schedule expenses controller', () => {
     expect(response.statusCode).toEqual(201)
     expect(responseBody).toEqual(expect.objectContaining({
       id: expect.any(String),
-      description: expect.any(String),
       totalAmount: expense.amount * 100,
       status: expect.any(String),
       createdAt: expect.any(String),
@@ -131,7 +130,6 @@ describe('Given schedule expenses controller', () => {
 
     expect(expenseSchedule).toEqual(expect.objectContaining({
       id: expenseScheduleModel.id,
-      description: expenseScheduleModel.description,
       totalAmount: expense.amount * 100,
       period: new Date(expenseScheduleModel.period),
       status: 'OPEN',

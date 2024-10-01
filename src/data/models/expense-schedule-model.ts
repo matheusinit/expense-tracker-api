@@ -1,6 +1,5 @@
 export type ExpenseScheduleModel = {
   id: string
-  description: string
   totalAmount: number
   status: string
   period: Date

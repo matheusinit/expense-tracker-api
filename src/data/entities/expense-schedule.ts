@@ -163,10 +163,4 @@ export class ExpenseSchedule {
 
     return period
   }
-
-  get description() {
-    const monthFullName = new Date(2024, (this._month || 0) - 1, 1).toLocaleString('default', { month: 'long' })
-    const year = this._year
-    return `${monthFullName} ${year}`
-  }
 }
