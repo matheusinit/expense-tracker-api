@@ -295,31 +295,33 @@ describe('Given is needed to schedule expenses', () => {
     })
   })
 
-  it('when calculate the total amount of expenses, should return the sum of all expenses', () => {
-    const expense1 = new Expense('Credit card bill', 100, 5)
-    const expense2 = new Expense('Internet bill', 50, 8)
-    const expenseSchedule = new ExpenseSchedule()
+  describe('Calculate total amount of expenses', () => {
+    it('when calculate the total amount of expenses, should return the sum of all expenses', () => {
+      const expense1 = new Expense('Credit card bill', 100, 5)
+      const expense2 = new Expense('Internet bill', 50, 8)
+      const expenseSchedule = new ExpenseSchedule()
 
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
 
-    expect(expenseSchedule.totalAmount).toEqual(15000)
-  })
+      expect(expenseSchedule.totalAmount).toEqual(15000)
+    })
 
-  it('when there is not any expense, should return 0 for total amount', () => {
-    const expenseSchedule = new ExpenseSchedule()
+    it('when there is not any expense, should return 0 for total amount', () => {
+      const expenseSchedule = new ExpenseSchedule()
 
-    expect(expenseSchedule.totalAmount).toEqual(0)
-  })
+      expect(expenseSchedule.totalAmount).toEqual(0)
+    })
 
-  it('when calculate the amount of expenses with pennies, should return the total amount as integer', () => {
-    const expense1 = new Expense('Credit card bill', 100.25, 5)
-    const expense2 = new Expense('Internet bill', 50.75, 8)
-    const expenseSchedule = new ExpenseSchedule()
+    it('when calculate the amount of expenses with pennies, should return the total amount as integer', () => {
+      const expense1 = new Expense('Credit card bill', 100.25, 5)
+      const expense2 = new Expense('Internet bill', 50.75, 8)
+      const expenseSchedule = new ExpenseSchedule()
 
-    expenseSchedule.include(expense1)
-    expenseSchedule.include(expense2)
+      expenseSchedule.include(expense1)
+      expenseSchedule.include(expense2)
 
-    expect(expenseSchedule.totalAmount).toEqual(15100)
+      expect(expenseSchedule.totalAmount).toEqual(15100)
+    })
   })
 })
