@@ -4,6 +4,7 @@ import { Expense } from './expense'
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
   private _month: number | undefined
+  private _totalAmount: number
   private _status: ExpenseScheduleStatus
   private _createdAt: Date
 
@@ -11,12 +12,15 @@ export class ExpenseSchedule {
     this._expenses = []
     this._status = new ExpenseScheduleStatus()
     this._createdAt = new Date()
+    this._totalAmount = 0
   }
 
   include(expense: Expense) {
     this._expenses.push(expense)
 
     this.associateExpense(expense)
+
+    this._totalAmount += expense.amount
 
     this._month = this.determineMonthBasedOnExpensesDueDate()
   }
@@ -123,5 +127,9 @@ export class ExpenseSchedule {
 
   private isPaymentPaid() {
     return this.expenses.every(e => e.paidAt !== null)
+  }
+
+  get totalAmount() {
+    return this._totalAmount
   }
 }
