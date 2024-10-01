@@ -324,4 +324,16 @@ describe('Given is needed to schedule expenses', () => {
       expect(expenseSchedule.totalAmount).toEqual(15100)
     })
   })
+
+  it('when include expenses, should determine the year based on the current date', () => {
+    const expense1 = new Expense('Credit card bill', 100.25, 5)
+    const expense2 = new Expense('Internet bill', 50.75, 8)
+    const expenseSchedule = new ExpenseSchedule()
+    vi.setSystemTime(new Date(2024, 8, 20))
+
+    expenseSchedule.include(expense1)
+    expenseSchedule.include(expense2)
+
+    expect(expenseSchedule.year).toEqual(2024)
+  })
 })
