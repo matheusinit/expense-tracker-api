@@ -1,3 +1,4 @@
+import db from '@/infra/database'
 import { Expense } from '../entities/expense'
 import { ExpenseSchedule } from '../entities/expense-schedule'
 import { ExpenseRepository } from '../protocols/expense-repository'
@@ -31,8 +32,32 @@ export class ScheduleExpenseService {
 
     expenseScheduleEntity.include(expense)
 
+    const expenseScheduleFromDb = await db.expenseSchedule.findFirst({
+      where: {
+        period: expenseScheduleEntity.period
+      }
+    })
+
+    if (expenseScheduleFromDb) {
+      await db.expenseToExpenseSchedule.create({
+        data: {
+          expenseId: expenseFromDb.id,
+          expenseScheduleId: expenseScheduleFromDb.id
+        }
+      })
+
+      return expenseScheduleFromDb
+    }
+
     const expenseSchedule = await this.expenseScheduleRepository
       .save(expenseScheduleEntity)
+
+    await db.expenseToExpenseSchedule.create({
+      data: {
+        expenseId: expenseFromDb.id,
+        expenseScheduleId: expenseSchedule.id
+      }
+    })
 
     return expenseSchedule
   }
