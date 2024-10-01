@@ -336,4 +336,16 @@ describe('Given is needed to schedule expenses', () => {
 
     expect(expenseSchedule.year).toEqual(2024)
   })
+
+  it('when there is in month and past month expenses in different years, should determine the more recent year', () => {
+    const expense1 = new Expense('Credit card bill', 100.25, 25)
+    const expense2 = new Expense('Internet bill', 50.75, 8)
+    const expenseSchedule = new ExpenseSchedule()
+    vi.setSystemTime(new Date(2024, 11, 20))
+
+    expenseSchedule.include(expense1)
+    expenseSchedule.include(expense2)
+
+    expect(expenseSchedule.year).toEqual(2025)
+  })
 })
