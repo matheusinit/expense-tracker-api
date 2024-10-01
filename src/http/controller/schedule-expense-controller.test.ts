@@ -153,4 +153,53 @@ describe('Given schedule expenses controller', () => {
 
     expect(response.statusCode).toEqual(404)
   })
+
+  it('when multiple expenses are scheduled, then should expense schedule be the same', async () => {
+    const expense1 = {
+      description: 'Credit card bill',
+      amount: 100,
+      dueDate: 10
+    }
+
+    const expense2 = {
+      description: 'Internet bill',
+      amount: 50,
+      dueDate: 10
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const expenseResponse1 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense1)
+
+    const expenseId1 = expenseResponse1.body['id']
+
+    const expenseResponse2 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense2)
+
+    const expenseId2 = expenseResponse2.body['id']
+
+    const response1 = await request(app)
+      .post(`/v1/expenses/${expenseId1}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const responseBody1: ExpenseScheduleModel = response1.body
+
+    const response2 = await request(app)
+      .post(`/v1/expenses/${expenseId2}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const responseBody2: ExpenseScheduleModel = response2.body
+
+    expect(responseBody1.id).toEqual(responseBody2.id)
+
+  })
 })
