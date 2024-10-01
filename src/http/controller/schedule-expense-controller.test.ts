@@ -4,6 +4,7 @@ import request from 'supertest'
 import app from '@/http/app'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import db from '@/infra/database'
+import * as falso from '@ngneat/falso'
 
 describe('Given schedule expenses controller', () => {
   it('when is provided a expense, then should return the data in response body', async () => {
@@ -134,5 +135,18 @@ describe('Given schedule expenses controller', () => {
       updatedAt: new Date(expenseScheduleResponse.body.updatedAt),
       deletedAt: null
     }))
+  })
+
+  it('when is provided an invalid expense id, then should return status 404', async () => {
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const invalidId = falso.randUuid()
+
+    const response = await request(app)
+      .post(`/v1/expenses/${invalidId}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    expect(response.statusCode).toEqual(404)
   })
 })
