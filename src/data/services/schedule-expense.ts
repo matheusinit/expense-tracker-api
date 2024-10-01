@@ -39,25 +39,16 @@ export class ScheduleExpenseService {
     })
 
     if (expenseScheduleFromDb) {
-      await db.expenseToExpenseSchedule.create({
-        data: {
-          expenseId: expenseFromDb.id,
-          expenseScheduleId: expenseScheduleFromDb.id
-        }
-      })
+      await this.expenseScheduleRepository.scheduleExpense(
+        expenseId,
+        expenseScheduleFromDb.id
+      )
 
       return expenseScheduleFromDb
     }
 
     const expenseSchedule = await this.expenseScheduleRepository
-      .save(expenseScheduleEntity)
-
-    await db.expenseToExpenseSchedule.create({
-      data: {
-        expenseId: expenseFromDb.id,
-        expenseScheduleId: expenseSchedule.id
-      }
-    })
+      .createExpenseSchedule(expenseId, expenseScheduleEntity)
 
     return expenseSchedule
   }

@@ -16,4 +16,42 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
 
     return expenseSchedule
   }
+
+  async createExpenseSchedule(
+    expenseId: string,
+    expenseSchedule: ExpenseSchedule
+  ) {
+    const { description, period, totalAmount, status } = expenseSchedule
+
+    const expenseScheduleModel = await db.expenseSchedule.create({
+      data: {
+        description,
+        period,
+        totalAmount,
+        status,
+
+        ExpenseExpenseSchedule: {
+          create: {
+            expenseId: expenseId
+          }
+        }
+      }
+    })
+
+    return expenseScheduleModel
+  }
+
+  async scheduleExpense(expenseId: string, scheduleExpenseId: string) {
+    const expenseToExpenseSchedule = await db.expenseToExpenseSchedule.create({
+      data: {
+        expenseId,
+        expenseScheduleId: scheduleExpenseId
+      },
+      include: {
+        expenseSchedule: true
+      }
+    })
+
+    return expenseToExpenseSchedule.expenseSchedule
+  }
 }
