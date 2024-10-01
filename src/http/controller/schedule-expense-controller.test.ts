@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 
 import request from 'supertest'
 import app from '@/http/app'
+import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 
 describe('Given schedule expenses controller', () => {
   it('when is provided a expense, then should return the data in response body', async () => {
@@ -11,10 +12,7 @@ describe('Given schedule expenses controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken'] ?? ''
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
 
     const expenseResponse = await request(app)
       .post('/v1/expenses')
