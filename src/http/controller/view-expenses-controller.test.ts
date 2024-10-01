@@ -25,6 +25,8 @@ describe('Given view expenses controller', () => {
   })
 
   beforeEach(async () => {
+    await db.expenseToExpenseSchedule.deleteMany({})
+    await db.expenseSchedule.deleteMany({})
     await db.expense.deleteMany({})
   })
 
