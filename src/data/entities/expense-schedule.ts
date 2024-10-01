@@ -4,7 +4,7 @@ import { Expense } from './expense'
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
   private _month: number | undefined
-  private _year: number
+  private _year: number | undefined
   private _totalAmount: number
   private _status: ExpenseScheduleStatus
   private _createdAt: Date
@@ -24,11 +24,30 @@ export class ExpenseSchedule {
     this._totalAmount += expense.amount * 100
 
     this._month = this.determineMonthBasedOnExpensesDueDate()
-    this._year = new Date().getFullYear()
+    this._year = this.determineYearBasedOnExpensesDueDate()
   }
 
   private associateExpense(expense: Expense) {
     expense.expenseSchedule = this
+  }
+
+  private determineYearBasedOnExpensesDueDate() {
+    const date = new Date()
+    const currentYear = date.getFullYear()
+    const currentMonth = date.getMonth() + 1
+    const currentDate = date.getDate()
+
+    const dueDates = this.expenses.map(e => e.dueDate)
+
+    const existDueDateLessThanCurrentDate = dueDates.some(d => d < currentDate)
+
+    if (existDueDateLessThanCurrentDate) {
+      const nextMonthIndex = currentMonth
+      const year = new Date(currentYear, nextMonthIndex).getFullYear()
+      return year
+    }
+
+    return currentYear
   }
 
   private determineMonthBasedOnExpensesDueDate() {
