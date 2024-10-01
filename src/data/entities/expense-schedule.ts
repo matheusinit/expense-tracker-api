@@ -4,6 +4,7 @@ import { Expense } from './expense'
 export class ExpenseSchedule {
   private readonly _expenses: Expense[]
   private _month: number | undefined
+  private _year: number
   private _totalAmount: number
   private _status: ExpenseScheduleStatus
   private _createdAt: Date
@@ -23,6 +24,7 @@ export class ExpenseSchedule {
     this._totalAmount += expense.amount * 100
 
     this._month = this.determineMonthBasedOnExpensesDueDate()
+    this._year = new Date().getFullYear()
   }
 
   private associateExpense(expense: Expense) {
@@ -131,5 +133,9 @@ export class ExpenseSchedule {
 
   get totalAmount() {
     return this._totalAmount
+  }
+
+  get year() {
+    return this._year
   }
 }
