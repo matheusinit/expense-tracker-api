@@ -3,8 +3,8 @@ export type ExpenseScheduleModel = {
   description: string
   totalAmount: number
   status: string
-  period: string
-  createdAt: string
-  updatedAt: string
-  deletedAt: string | null
+  period: Date
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date | null
 }

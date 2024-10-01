@@ -1,14 +1,19 @@
 import { Expense } from '@/data/entities/expense'
 import { ExpenseSchedule } from '@/data/entities/expense-schedule'
 import { ExpenseRepository } from '@/data/protocols/expense-repository'
-import db from '@/infra/database'
+import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
 import { Request, Response } from 'express'
 
 class ScheduleExpenseController {
   private expenseRepository: ExpenseRepository
+  private expenseScheduleRepository: ExpenseScheduleRepository
 
-  constructor(expenseRepository: ExpenseRepository) {
+  constructor(
+    expenseRepository: ExpenseRepository,
+    expenseScheduleRepository: ExpenseScheduleRepository
+  ) {
     this.expenseRepository = expenseRepository
+    this.expenseScheduleRepository = expenseScheduleRepository
   }
 
   async handle(request: Request, response: Response): Promise<Response> {
@@ -22,23 +27,17 @@ class ScheduleExpenseController {
       })
     }
 
-    const expenseScheduleModel = new ExpenseSchedule()
+    const expenseScheduleEntity = new ExpenseSchedule()
     const expense = new Expense(
       (expenseFromDb?.description || ''),
       (expenseFromDb?.amount || null),
       expenseFromDb?.dueDate
     )
 
-    expenseScheduleModel.include(expense)
+    expenseScheduleEntity.include(expense)
 
-    const expenseSchedule = await db.expenseSchedule.create({
-      data: {
-        description: expenseScheduleModel.description,
-        period: expenseScheduleModel.period,
-        totalAmount: expenseScheduleModel.totalAmount,
-        status: expenseScheduleModel.status,
-      }
-    })
+    const expenseSchedule = await this.expenseScheduleRepository
+      .save(expenseScheduleEntity)
 
     return response.status(201).json({
       ...expenseSchedule,

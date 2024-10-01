@@ -6,6 +6,7 @@ import { makeUpdateExpenseController } from '@/http/factory/update-expense-contr
 import { makeViewExpensesController } from '@/http/factory/view-expense-controller-factory'
 import ScheduleExpenseController from '../controller/schedule-expense-controller'
 import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
+import { ExpenseScheduleRepositoryRelationalDatabase } from '@/infra/database/repository/expense-schedule-repository'
 
 const router = Router()
 
@@ -15,7 +16,13 @@ router.put('/expenses/:id', (request, response) => makeUpdateExpenseController()
 router.delete('/expenses/:id', (request, response) => makeDeleteExpenseController().handle(request, response))
 
 const repository = new ExpenseRepositoryRelationalDatabase()
-const scheduleExpenseController = new ScheduleExpenseController(repository)
+
+// eslint-disable-next-line @stylistic/max-len
+const expenseScheduleRepository = new ExpenseScheduleRepositoryRelationalDatabase()
+const scheduleExpenseController = new ScheduleExpenseController(
+  repository,
+  expenseScheduleRepository
+)
 
 router.post('/expenses/:id/schedule', (request, response) => scheduleExpenseController.handle(request, response))
 
