@@ -41,11 +41,11 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
     return expenseScheduleModel
   }
 
-  async scheduleExpense(expenseId: string, scheduleExpenseId: string) {
+  async scheduleExpense(expenseId: string, expenseScheduleId: string) {
     const expenseToExpenseSchedule = await db.expenseToExpenseSchedule.create({
       data: {
         expenseId,
-        expenseScheduleId: scheduleExpenseId
+        expenseScheduleId
       },
       include: {
         expenseSchedule: true
