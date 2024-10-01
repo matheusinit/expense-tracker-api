@@ -4,7 +4,7 @@ import { ExpenseScheduleModel } from '../models/expense-schedule-model'
 export abstract class ExpenseScheduleRepository {
   abstract save(data: ExpenseSchedule): Promise<ExpenseScheduleModel>
 
-  abstract createExpenseSchedule(
+  abstract createExpenseScheduleAndScheduleExpense(
     expenseId: string,
     expenseSchedule: ExpenseSchedule
   ): Promise<ExpenseScheduleModel>

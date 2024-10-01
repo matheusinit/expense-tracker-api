@@ -17,7 +17,7 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
     return expenseSchedule
   }
 
-  async createExpenseSchedule(
+  async createExpenseScheduleAndScheduleExpense(
     expenseId: string,
     expenseSchedule: ExpenseSchedule
   ) {

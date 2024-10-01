@@ -48,7 +48,7 @@ export class ScheduleExpenseService {
     }
 
     const expenseSchedule = await this.expenseScheduleRepository
-      .createExpenseSchedule(expenseId, expenseScheduleEntity)
+      .createExpenseScheduleAndScheduleExpense(expenseId, expenseScheduleEntity)
 
     return expenseSchedule
   }
