@@ -294,4 +294,15 @@ describe('Given is needed to schedule expenses', () => {
       expect(expenseSchedule.status).toEqual('OVERDUE')
     })
   })
+
+  it('when calculate the total amount of expenses, should return the sum of all expenses', () => {
+    const expense1 = new Expense('Credit card bill', 100, 5)
+    const expense2 = new Expense('Internet bill', 50, 8)
+    const expenseSchedule = new ExpenseSchedule()
+
+    expenseSchedule.include(expense1)
+    expenseSchedule.include(expense2)
+
+    expect(expenseSchedule.totalAmount).toEqual(150)
+  })
 })
