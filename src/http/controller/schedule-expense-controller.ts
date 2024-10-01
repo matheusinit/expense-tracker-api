@@ -14,10 +14,15 @@ class ScheduleExpenseController {
   async handle(request: Request, response: Response): Promise<Response> {
     const { id } = request.params
 
-    const expenseScheduleModel = new ExpenseSchedule()
-
     const expenseFromDb = await this.expenseRepository.get(id)
 
+    if (!expenseFromDb) {
+      return response.status(404).json({
+        message: 'Expense not found'
+      })
+    }
+
+    const expenseScheduleModel = new ExpenseSchedule()
     const expense = new Expense(
       (expenseFromDb?.description || ''),
       (expenseFromDb?.amount || null),
