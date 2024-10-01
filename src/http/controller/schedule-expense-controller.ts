@@ -29,14 +29,14 @@ class ScheduleExpenseController {
     const expenseSchedule = await db.expenseSchedule.create({
       data: {
         description: expenseScheduleModel.description,
-        period: expenseScheduleModel.period
+        period: expenseScheduleModel.period,
+        totalAmount: expenseScheduleModel.totalAmount,
+        status: expenseScheduleModel.status,
       }
     })
 
     return response.status(201).json({
       ...expenseSchedule,
-      status: expenseScheduleModel.status,
-      totalAmount: expenseScheduleModel.totalAmount,
     })
   }
 }

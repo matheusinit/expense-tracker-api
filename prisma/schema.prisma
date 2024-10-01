@@ -39,6 +39,8 @@ model ExpenseSchedule {
   id          String    @id @default(cuid())
   description String
   period      DateTime
+  status      String
+  totalAmount Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
