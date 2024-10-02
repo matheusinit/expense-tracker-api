@@ -55,7 +55,7 @@ export class Expense {
       throw new Error('Amount cannot be a negative value. It should be greater than 0')
     }
 
-    this._amount = value
+    this._amount = value * 100
   }
 
   get dueDate(): number {

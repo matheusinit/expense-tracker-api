@@ -104,6 +104,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
+    payload.amount *= 100
     const responseBody: ExpenseModel = response.body
 
     expect(response.status).toBe(200)
@@ -138,6 +139,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
+    payload.amount *= 100
     const responseBody: ExpenseModel = response.body
 
     expect(response.status).toBe(200)

@@ -76,6 +76,7 @@ describe('Given view expenses controller', () => {
 
     const responseBody: PageBasedPaginationDTO = response.body
 
+    expense.amount *= 100
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(
       expect.arrayContaining([expect.objectContaining(expense)])

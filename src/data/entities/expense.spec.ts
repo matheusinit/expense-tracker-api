@@ -42,7 +42,7 @@ describe('Given is needed to create a expense,', () => {
     const expense = new Expense('Credit card bill', 100, 10)
 
     expect(expense.description).toBe('Credit card bill')
-    expect(expense.amount).toBe(100)
+    expect(expense.amount).toBe(10000)
   })
 
   it('when due date is not provided, should set default value as 10', () => {
@@ -55,6 +55,12 @@ describe('Given is needed to create a expense,', () => {
     const expense = new Expense('Credit card bill', 200.5, 10)
 
     expect(expense.amount).not.toBe(200)
+  })
+
+  it('when the amount is provided, then should set to cents format as integer', () => {
+    const expense = new Expense('Credit card bill', 200.5, 10)
+
+    expect(expense.amount).toBe(20050)
   })
 })
 
@@ -124,7 +130,7 @@ describe('Given is needed to update a expense,', () => {
     })
 
     expect(expense.description).toBe('Credit card bill updated')
-    expect(expense.amount).toBe(200)
+    expect(expense.amount).toBe(20000)
   })
 })
 

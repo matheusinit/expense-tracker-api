@@ -21,7 +21,7 @@ export class ExpenseSchedule {
 
     this.associateExpense(expense)
 
-    this._totalAmount += expense.amount * 100
+    this._totalAmount += expense.amount
 
     this._month = this.determineMonthBasedOnExpensesDueDate()
     this._year = this.determineYearBasedOnExpensesDueDate()

@@ -27,9 +27,10 @@ describe('Given add expense controller', () => {
       .send(expense)
 
     const responseBody: ExpenseModel = response.body
+    const amountInCents = expense.amount * 100
 
     expect(responseBody.description).toEqual(expense.description)
-    expect(responseBody.amount).toEqual(expense.amount)
+    expect(responseBody.amount).toEqual(amountInCents)
   })
 
   it('when required field description is missing, then should return bad request status and message error', async () => {
@@ -158,11 +159,13 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
+    const amountInCents = expense.amount * 100
+
     expect(response.status).toEqual(201)
     expect(response.body).toEqual(expect.objectContaining({
       id: expect.any(String),
       description: expense.description,
-      amount: expense.amount,
+      amount: amountInCents,
       createdAt: expect.any(String),
       updatedAt: expect.any(String),
       deletedAt: null
