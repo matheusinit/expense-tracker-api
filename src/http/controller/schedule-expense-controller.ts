@@ -21,9 +21,16 @@ class ScheduleExpenseController {
     } catch (err) {
       const error = err as Error
 
-      return response.status(404).json({
-        message: error.message
+      if (error.message === 'Expense not found') {
+        return response.status(404).json({
+          message: error.message
+        })
+      }
+
+      return response.status(500).send({
+        message: 'Internal server error'
       })
+
     }
   }
 }
