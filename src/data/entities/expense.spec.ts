@@ -50,6 +50,12 @@ describe('Given is needed to create a expense,', () => {
 
     expect(expense.dueDate).toBe(10)
   })
+
+  it('when a number with decimal places is provided, should not truncate amount', () => {
+    const expense = new Expense('Credit card bill', 200.5, 10)
+
+    expect(expense.amount).not.toBe(200)
+  })
 })
 
 const makeSut = () => new Expense('Credit card bill', 100, 10)
