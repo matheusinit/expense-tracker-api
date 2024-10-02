@@ -1,4 +1,6 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vitest } from 'vitest'
+
+import { Request, Response } from 'express'
 
 import request from 'supertest'
 import app from '@/http/app'
@@ -6,6 +8,10 @@ import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies
 import db from '@/infra/database'
 import * as falso from '@ngneat/falso'
 import { ExpenseScheduleModel } from '@/data/models/expense-schedule-model'
+import { ExpenseScheduleRepositoryRelationalDatabase } from '@/infra/database/repository/expense-schedule-repository'
+import ScheduleExpenseController from './schedule-expense-controller'
+import { ScheduleExpenseService } from '@/data/services/schedule-expense'
+import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 
 describe('Given schedule expenses controller', () => {
   it('when is provided a expense, then should return the data in response body', async () => {
@@ -199,5 +205,39 @@ describe('Given schedule expenses controller', () => {
 
     expect(responseBody1.id).toEqual(responseBody2.id)
 
+  })
+
+  it('when a error is thrown, then should return internal server error', async () => {
+    // eslint-disable-next-line @stylistic/max-len
+    const expenseScheduleRepository = new ExpenseScheduleRepositoryRelationalDatabase()
+    const expenseRepository = new ExpenseRepositoryRelationalDatabase()
+
+    const service = new ScheduleExpenseService(
+      expenseRepository,
+      expenseScheduleRepository
+    )
+
+    vitest.spyOn(service, 'schedule').mockReturnValueOnce(Promise.reject(new Error('Internal server error')))
+
+    const controller = new ScheduleExpenseController(service)
+
+    const requestParams = {
+      params: {
+        id: '123'
+      }
+    } as unknown as Request
+
+    const responseParams = {
+      status: vitest.fn().mockReturnThis(),
+      send: vitest.fn(),
+      json: vitest.fn()
+    } as unknown as Response
+
+    await controller.handle(requestParams, responseParams)
+
+    expect(responseParams.status).toBeCalledWith(500)
+    expect(responseParams.send).toBeCalledWith({
+      message: 'Internal server error'
+    })
   })
 })
