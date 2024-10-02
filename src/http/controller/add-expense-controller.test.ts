@@ -6,6 +6,7 @@ import * as falso from '@ngneat/falso'
 import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { ExpenseModel } from '@/data/models/expense-model'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
+import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
 
 describe('Given add expense controller', () => {
   it('when required data is provided, then should return the data in response body', async () => {
@@ -27,7 +28,7 @@ describe('Given add expense controller', () => {
       .send(expense)
 
     const responseBody: ExpenseModel = response.body
-    const amountInCents = expense.amount * 100
+    const amountInCents = convertAmountToCents(expense.amount)
 
     expect(responseBody.description).toEqual(expense.description)
     expect(responseBody.amount).toEqual(amountInCents)
@@ -159,7 +160,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const amountInCents = expense.amount * 100
+    const amountInCents = convertAmountToCents(expense.amount)
 
     expect(response.status).toEqual(201)
     expect(response.body).toEqual(expect.objectContaining({

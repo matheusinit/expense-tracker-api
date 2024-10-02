@@ -9,6 +9,7 @@ import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { ExpenseModel } from '@/data/models/expense-model'
+import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
 
 describe('Given update expense controller', () => {
   beforeAll(async () => {
@@ -104,7 +105,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    payload.amount *= 100
+    payload.amount = convertAmountToCents(payload.amount)
     const responseBody: ExpenseModel = response.body
 
     expect(response.status).toBe(200)
@@ -139,7 +140,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    payload.amount *= 100
+    payload.amount = convertAmountToCents(payload.amount)
     const responseBody: ExpenseModel = response.body
 
     expect(response.status).toBe(200)

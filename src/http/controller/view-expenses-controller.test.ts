@@ -8,6 +8,7 @@ import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { ExpenseModel } from '@/data/models/expense-model'
+import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
 
 type PageBasedPaginationDTO = {
   records: ExpenseModel[],
@@ -76,7 +77,7 @@ describe('Given view expenses controller', () => {
 
     const responseBody: PageBasedPaginationDTO = response.body
 
-    expense.amount *= 100
+    expense.amount = convertAmountToCents(expense.amount)
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(
       expect.arrayContaining([expect.objectContaining(expense)])
