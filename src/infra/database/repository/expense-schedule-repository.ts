@@ -8,7 +8,6 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
     const expenseSchedule = await db.expenseSchedule.create({
       data: {
         period: data.period,
-        totalAmount: data.totalAmount,
         status: data.status,
       }
     })
@@ -20,12 +19,11 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
     expenseId: string,
     expenseSchedule: ExpenseSchedule
   ) {
-    const { period, totalAmount, status } = expenseSchedule
+    const { period, status } = expenseSchedule
 
     const expenseScheduleModel = await db.expenseSchedule.create({
       data: {
         period,
-        totalAmount,
         status,
 
         ExpenseExpenseSchedule: {

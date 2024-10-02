@@ -154,6 +154,10 @@ export class ExpenseSchedule {
     return this._totalAmount
   }
 
+  set totalAmount(value: number) {
+    this._totalAmount = value
+  }
+
   get year() {
     return this._year
   }

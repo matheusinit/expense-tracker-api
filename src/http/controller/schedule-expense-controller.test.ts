@@ -12,6 +12,7 @@ import { ExpenseScheduleRepositoryRelationalDatabase } from '@/infra/database/re
 import ScheduleExpenseController from './schedule-expense-controller'
 import { ScheduleExpenseService } from '@/data/services/schedule-expense'
 import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
+import { ExpenseScheduleDTO } from '@/data/dtos/expense-schedule'
 
 describe('Given schedule expenses controller', () => {
   it('when is provided a expense, then should return the data in response body', async () => {
@@ -131,12 +132,11 @@ describe('Given schedule expenses controller', () => {
       }
     })
 
-    const expenseScheduleModel: ExpenseScheduleModel = expenseScheduleResponse
+    const expenseScheduleModel: ExpenseScheduleDTO = expenseScheduleResponse
       .body
 
     expect(expenseSchedule).toEqual(expect.objectContaining({
       id: expenseScheduleModel.id,
-      totalAmount: expenseScheduleModel.totalAmount,
       period: new Date(expenseScheduleModel.period),
       status: 'OPEN',
       createdAt: new Date(expenseScheduleModel.createdAt),
