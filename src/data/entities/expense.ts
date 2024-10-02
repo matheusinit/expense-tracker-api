@@ -55,7 +55,11 @@ export class Expense {
       throw new Error('Amount cannot be a negative value. It should be greater than 0')
     }
 
-    this._amount = value * 100
+    this._amount = this.convertAmountToCents(value)
+  }
+
+  private convertAmountToCents(amount: number) {
+    return amount * 100
   }
 
   get dueDate(): number {
