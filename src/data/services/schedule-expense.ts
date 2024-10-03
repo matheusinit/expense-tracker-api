@@ -49,6 +49,7 @@ export class ScheduleExpenseService {
           amount: true
         },
         where: {
+          deletedAt: null,
           ExpenseToExpenseSchedule: {
             every: {
               expenseScheduleId: expenseScheduleFromDb.id
