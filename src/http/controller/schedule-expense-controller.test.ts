@@ -1,4 +1,4 @@
-import { describe, it, expect, vitest } from 'vitest'
+import { describe, it, expect, vitest, afterAll, afterEach, beforeAll } from 'vitest'
 
 import { Request, Response } from 'express'
 
@@ -13,8 +13,23 @@ import ScheduleExpenseController from './schedule-expense-controller'
 import { ScheduleExpenseService } from '@/data/services/schedule-expense'
 import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 import { ExpenseScheduleDTO } from '@/data/dtos/expense-schedule'
+import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
 
 describe('Given schedule expenses controller', () => {
+  beforeAll(async () => {
+    await db.$connect()
+  })
+
+  afterEach(async () => {
+    await db.expenseToExpenseSchedule.deleteMany({})
+    await db.expenseSchedule.deleteMany({})
+    await db.expense.deleteMany({})
+  })
+
+  afterAll(async () => {
+    await db.$disconnect()
+  })
+
   it('when is provided a expense, then should return the data in response body', async () => {
     const expense = {
       description: 'Credit card bill',
@@ -239,5 +254,78 @@ describe('Given schedule expenses controller', () => {
     expect(responseParams.send).toBeCalledWith({
       message: 'Internal server error'
     })
+  })
+
+  it('when delete a expense from multiple expenses scheduled, then expense should not be taken for total amount calculation', async () => {
+    const expense1 = {
+      description: 'Credit card bill',
+      amount: 100,
+      dueDate: 10
+    }
+
+    const expense2 = {
+      description: 'Internet bill',
+      amount: 50,
+      dueDate: 10
+    }
+
+    const expense3 = {
+      description: 'Phone bill',
+      amount: 63,
+      dueDate: 12
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const expenseResponse1 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense1)
+
+    const expenseId1 = expenseResponse1.body['id']
+
+    const expenseResponse2 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense2)
+
+    const expenseId2 = expenseResponse2.body['id']
+
+    const expenseResponse3 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense3)
+
+    const expenseId3 = expenseResponse3.body['id']
+
+    await request(app)
+      .post(`/v1/expenses/${expenseId1}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    await request(app)
+      .post(`/v1/expenses/${expenseId2}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const deleteResponse = await request(app)
+      .delete(`/v1/expenses/${expenseId2}`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const expenseScheduleResponse = await request(app)
+      .post(`/v1/expenses/${expenseId3}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const expenseSchedule: ExpenseScheduleDTO = expenseScheduleResponse.body
+
+    const totalAmount = convertAmountToCents(expense1.amount)
+      + convertAmountToCents(expense3.amount)
+    expect(deleteResponse.statusCode).toEqual(204)
+    expect(expenseSchedule.totalAmount).toEqual(totalAmount)
   })
 })
