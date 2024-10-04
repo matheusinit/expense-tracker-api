@@ -27,7 +27,8 @@ export class ScheduleExpenseService {
     const expense = new Expense(
       expenseFromDb.description,
       expenseFromDb.amount,
-      expenseFromDb.dueDate
+      expenseFromDb.dueDate,
+      expenseFromDb.createdAt
     )
 
     expenseScheduleEntity.include(expense)

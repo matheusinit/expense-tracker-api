@@ -14,7 +14,16 @@ export class Expense {
   private _paidAt: Date | null
   private _expenseSchedule: ExpenseSchedule | null
 
-  constructor(description: string, amount: number | null, dueDate?: number) {
+  private createdAt?: Date
+
+  constructor(
+    description: string,
+    amount: number | null,
+    dueDate?: number,
+    createdAt?: Date
+  ) {
+    this.createdAt = createdAt
+
     this.description = description
     this.amount = amount
     this.dueDate = dueDate ?? 10
@@ -55,7 +64,7 @@ export class Expense {
       throw new Error('Amount cannot be a negative value. It should be greater than 0')
     }
 
-    this._amount = this.convertAmountToCents(value)
+    this._amount = this.createdAt ? value : this.convertAmountToCents(value)
   }
 
   private convertAmountToCents(amount: number) {
