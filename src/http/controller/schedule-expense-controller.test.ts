@@ -1,4 +1,4 @@
-import { describe, it, expect, vitest, afterAll, afterEach, beforeAll } from 'vitest'
+import { describe, it, expect, vitest, afterAll, afterEach, beforeAll, vi, beforeEach } from 'vitest'
 
 import { Request, Response } from 'express'
 
@@ -20,7 +20,13 @@ describe('Given schedule expenses controller', () => {
     await db.$connect()
   })
 
+  beforeEach(() => {
+    vi.useFakeTimers()
+  })
+
   afterEach(async () => {
+    vi.useRealTimers()
+
     await db.expenseToExpenseSchedule.deleteMany({})
     await db.expenseSchedule.deleteMany({})
     await db.expense.deleteMany({})
@@ -354,5 +360,59 @@ describe('Given schedule expenses controller', () => {
     const responseBody: ExpenseScheduleDTO = response.body
 
     expect(responseBody.totalAmount).toEqual(9354)
+  })
+
+  describe('Given there is a expense schedule', () => {
+    it('when is provided a expense for next month, then should return the period of next month', async () => {
+      vi.setSystemTime(new Date('2024-10-04'))
+      const expense = {
+        description: 'Internet bill',
+        amount: 93.54,
+        dueDate: 15
+      }
+
+      const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+      const expenseResponse = await request(app)
+        .post('/v1/expenses')
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+        .send(expense)
+
+      const expenseId = expenseResponse.body['id']
+
+      await request(app)
+        .post(`/v1/expenses/${expenseId}/schedule`)
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+
+      const expense2 = {
+        description: 'Phone bill',
+        amount: 63.99,
+        dueDate: 1
+      }
+
+      const expenseResponse2 = await request(app)
+        .post('/v1/expenses')
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+        .send(expense2)
+
+      const expenseId2 = expenseResponse2.body['id']
+
+      const response2 = await request(app)
+        .post(`/v1/expenses/${expenseId2}/schedule`)
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+
+      const responseBody: ExpenseScheduleDTO = response2.body
+
+      const today = new Date()
+      const nextMonth = new Date(today)
+      nextMonth.setMonth(today.getMonth() + 1)
+      nextMonth.setDate(0)
+      const nextMonthDate = nextMonth.toISOString().split('T')[0]
+      expect(responseBody.period.split('T')[0]).toEqual(nextMonthDate)
+    })
   })
 })
