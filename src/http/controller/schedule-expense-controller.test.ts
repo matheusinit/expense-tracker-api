@@ -328,4 +328,31 @@ describe('Given schedule expenses controller', () => {
     expect(deleteResponse.statusCode).toEqual(204)
     expect(expenseSchedule.totalAmount).toEqual(totalAmount)
   })
+
+  it('when is provided a expense, then should return the total amount of the expense correctly', async () => {
+    const expense = {
+      description: 'Internet bill',
+      amount: 93.54,
+      dueDate: 15
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const expenseResponse = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense)
+
+    const expenseId = expenseResponse.body['id']
+
+    const response = await request(app)
+      .post(`/v1/expenses/${expenseId}/schedule`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+
+    const responseBody: ExpenseScheduleDTO = response.body
+
+    expect(responseBody.totalAmount).toEqual(9354)
+  })
 })
