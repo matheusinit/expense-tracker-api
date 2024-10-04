@@ -70,7 +70,7 @@ Agora, vamos gerar os tipos para a aplicação com base nos modelos:
 pnpm prisma generate
 ```
 
-Precisamos aplicar as migrações ao nosso banco de dados usando o ORM escolhido. Para desenvolvimento, você pode executar o seguinte comando:
+Precisamos aplicar as migrações ao nosso banco de dados usando o ORM escolhido. Para que os testes possam rodar, você pode executar o seguinte comando:
 
 ```bash
 pnpm migrate:test
