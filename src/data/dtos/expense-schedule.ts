@@ -1,7 +1,7 @@
 export type ExpenseScheduleDTO = {
   id: string
   status: string
-  period: Date
+  period: string
   totalAmount: number
   createdAt: Date
   updatedAt: Date
