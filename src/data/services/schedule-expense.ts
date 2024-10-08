@@ -39,20 +39,9 @@ export class ScheduleExpenseService {
       }
     })
 
-    const periodDateTime = expenseScheduleEntity.period
+    const previousMonthScheduleIsOpen = await this.verifyIfPreviousMonthExpenseScheduleIsOpen(expenseScheduleEntity)
 
-    periodDateTime.setMonth(expenseScheduleEntity.period.getMonth() - 1)
-
-    const previousMonthPeriod = periodDateTime
-
-    const expenseScheduleFromPreviousMonth = await db.expenseSchedule
-      .findFirst({
-        where: {
-          period: previousMonthPeriod
-        }
-      })
-
-    if (expenseScheduleFromPreviousMonth && expenseScheduleFromPreviousMonth.status === 'OPEN') {
+    if (previousMonthScheduleIsOpen) {
       expenseScheduleEntity.status = 'SCHEDULED'
     }
 
@@ -99,5 +88,25 @@ export class ScheduleExpenseService {
       totalAmount: expense.amount,
       ...timestamps,
     }
+  }
+
+  private async verifyIfPreviousMonthExpenseScheduleIsOpen(
+    expenseScheduleEntity: ExpenseSchedule
+  ) {
+    const periodDateTime = expenseScheduleEntity.period
+
+    periodDateTime.setMonth(expenseScheduleEntity.period.getMonth() - 1)
+
+    const previousMonthPeriod = periodDateTime
+
+    const expenseScheduleFromPreviousMonth = await db.expenseSchedule
+      .findFirst({
+        where: {
+          period: previousMonthPeriod
+        }
+      })
+
+    return expenseScheduleFromPreviousMonth
+      && expenseScheduleFromPreviousMonth.status === 'OPEN'
   }
 }
