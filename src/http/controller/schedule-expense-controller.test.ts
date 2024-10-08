@@ -37,6 +37,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when is provided a expense, then should return the data in response body', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     const expense = {
       description: 'Credit card bill',
       amount: 100,
@@ -72,6 +73,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when is provided a expense, then the id should not be equal to expense id', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     const expense = {
       description: 'Credit card bill',
       amount: 100,
@@ -99,6 +101,8 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when is provided a expense, then should return with status OPEN', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
+
     const expense = {
       description: 'Credit card bill',
       amount: 100,
@@ -126,6 +130,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when is provided a expense, then should be stored in database', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     const expense = {
       description: 'Credit card bill',
       amount: 100,
@@ -180,6 +185,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when multiple expenses are scheduled, then should expense schedule be the same', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     const expense1 = {
       description: 'Credit card bill',
       amount: 100,
@@ -229,6 +235,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when a error is thrown, then should return internal server error', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     // eslint-disable-next-line @stylistic/max-len
     const expenseScheduleRepository = new ExpenseScheduleRepositoryRelationalDatabase()
     const expenseRepository = new ExpenseRepositoryRelationalDatabase()
@@ -263,6 +270,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when delete a expense from multiple expenses scheduled, then expense should not be taken for total amount calculation', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     const expense1 = {
       description: 'Credit card bill',
       amount: 100,
@@ -336,6 +344,7 @@ describe('Given schedule expenses controller', () => {
   })
 
   it('when is provided a expense, then should return the total amount of the expense correctly', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
     const expense = {
       description: 'Internet bill',
       amount: 93.54,
