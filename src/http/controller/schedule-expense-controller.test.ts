@@ -236,7 +236,6 @@ describe('Given schedule expenses controller', () => {
 
   it('when a error is thrown, then should return internal server error', async () => {
     vi.setSystemTime(new Date('2024-10-04'))
-    // eslint-disable-next-line @stylistic/max-len
     const expenseScheduleRepository = new ExpenseScheduleRepositoryRelationalDatabase()
     const expenseRepository = new ExpenseRepositoryRelationalDatabase()
 
