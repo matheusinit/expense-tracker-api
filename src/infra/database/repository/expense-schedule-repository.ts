@@ -50,4 +50,22 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
 
     return expenseToExpenseSchedule.expenseSchedule
   }
+
+  async getTotalAmount(expenseScheduleId: string) {
+    const aggregate = await db.expense.aggregate({
+      _sum: {
+        amount: true
+      },
+      where: {
+        deletedAt: null,
+        ExpenseToExpenseSchedule: {
+          every: {
+            expenseScheduleId: expenseScheduleId
+          }
+        }
+      }
+    })
+
+    return aggregate._sum.amount ?? 0
+  }
 }

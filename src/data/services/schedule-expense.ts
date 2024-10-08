@@ -51,19 +51,8 @@ export class ScheduleExpenseService {
         expenseScheduleFromDb.id
       )
 
-      const totalAmountAggregate = await db.expense.aggregate({
-        _sum: {
-          amount: true
-        },
-        where: {
-          deletedAt: null,
-          ExpenseToExpenseSchedule: {
-            every: {
-              expenseScheduleId: expenseScheduleFromDb.id
-            }
-          }
-        }
-      })
+      const totalAmount = await this.expenseScheduleRepository
+        .getTotalAmount(expenseScheduleFromDb.id)
 
       const { id, period, status, ...timestamps } = expenseScheduleFromDb
 
@@ -71,7 +60,7 @@ export class ScheduleExpenseService {
         id,
         period,
         status,
-        totalAmount: totalAmountAggregate._sum.amount ?? 0,
+        totalAmount: totalAmount,
         ...timestamps
       }
     }

@@ -12,4 +12,6 @@ export abstract class ExpenseScheduleRepository {
   abstract scheduleExpense(
     expenseId: string, expenseScheduleId: string
   ): Promise<ExpenseScheduleModel>
+
+  abstract getTotalAmount(expenseScheduleId: string): Promise<number>
 }
