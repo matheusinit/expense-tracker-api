@@ -109,7 +109,7 @@ export class ExpenseSchedule {
       return this._status.asEnum('PAID')
     }
 
-    return this._status.asEnum('OPEN')
+    return this._status.value !== 'OPEN' ? this._status.value : this._status.asEnum('OPEN')
   }
 
   private isPaymentOverdue() {
@@ -166,5 +166,9 @@ export class ExpenseSchedule {
     const period = new Date(this._year || 0, (this._month || 0) - 1, 1)
 
     return period
+  }
+
+  set status(status: string) {
+    this._status.value = this._status.asEnum(status)
   }
 }

@@ -39,6 +39,23 @@ export class ScheduleExpenseService {
       }
     })
 
+    const periodDateTime = expenseScheduleEntity.period
+
+    periodDateTime.setMonth(expenseScheduleEntity.period.getMonth() - 1)
+
+    const previousMonthPeriod = periodDateTime
+
+    const expenseScheduleFromPreviousMonth = await db.expenseSchedule
+      .findFirst({
+        where: {
+          period: previousMonthPeriod
+        }
+      })
+
+    if (expenseScheduleFromPreviousMonth && expenseScheduleFromPreviousMonth.status === 'OPEN') {
+      expenseScheduleEntity.status = 'SCHEDULED'
+    }
+
     if (expenseScheduleFromDb) {
       await this.expenseScheduleRepository.scheduleExpense(
         expenseId,

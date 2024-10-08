@@ -2,7 +2,8 @@ export enum Status {
   PAID = 'PAID',
   OVERDUE = 'OVERDUE',
   PENDING = 'PENDING',
-  OPEN = 'OPEN'
+  OPEN = 'OPEN',
+  SCHEDULED = 'SCHEDULED'
 }
 export class ExpenseScheduleStatus {
   private status: Status
@@ -16,7 +17,7 @@ export class ExpenseScheduleStatus {
   }
 
   set value(status: Status) {
-    if (!['PAID', 'OVERDUE', 'OPEN', 'PENDING'].includes(status)) {
+    if (!['PAID', 'OVERDUE', 'OPEN', 'PENDING', 'SCHEDULED'].includes(status)) {
       throw new Error('Invalid status')
     }
 
