@@ -85,7 +85,9 @@ export class ExpenseSchedule {
   get status() {
     const status = this.verifyPaymentStatus()
 
-    this._status.value = status
+    if (status) {
+      this._status.value = status
+    }
 
     return this._status.value
   }
@@ -109,7 +111,7 @@ export class ExpenseSchedule {
       return this._status.asEnum('PAID')
     }
 
-    return this._status.value !== 'OPEN' ? this._status.value : this._status.asEnum('OPEN')
+    return null
   }
 
   private isPaymentOverdue() {
