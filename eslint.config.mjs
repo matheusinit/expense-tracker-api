@@ -20,7 +20,7 @@ export default [
       '@stylistic/no-mixed-spaces-and-tabs': ['error', 'smart-tabs'],
       '@stylistic/no-multi-spaces': 'error',
       '@stylistic/no-trailing-spaces': 'error',
-      '@stylistic/max-len': ['error', { 'code': 80, 'ignoreUrls': true, 'ignoreStrings': true, 'ignoreTemplateLiterals': true }],
+      '@stylistic/max-len': ['error', { 'code': 120, 'ignoreUrls': true, 'ignoreStrings': true, 'ignoreTemplateLiterals': true }],
       '@stylistic/object-curly-spacing': ['error', 'always'],
       '@stylistic/rest-spread-spacing': ['error', 'never'],
       '@stylistic/function-paren-newline': ['error', 'consistent'],
