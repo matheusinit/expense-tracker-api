@@ -414,5 +414,52 @@ describe('Given schedule expenses controller', () => {
       const nextMonthDate = nextMonth.toISOString().split('T')[0]
       expect(responseBody.period.split('T')[0]).toEqual(nextMonthDate)
     })
+
+    it('when is provided a expense for next month, then should return the status \'SCHEDULED\'', async () => {
+      vi.setSystemTime(new Date('2024-10-04'))
+      const expense = {
+        description: 'Internet bill',
+        amount: 93.54,
+        dueDate: 15
+      }
+
+      const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+      const expenseResponse = await request(app)
+        .post('/v1/expenses')
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+        .send(expense)
+
+      const expenseId = expenseResponse.body['id']
+
+      await request(app)
+        .post(`/v1/expenses/${expenseId}/schedule`)
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+
+      const expense2 = {
+        description: 'Phone bill',
+        amount: 63.99,
+        dueDate: 1
+      }
+
+      const expenseResponse2 = await request(app)
+        .post('/v1/expenses')
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+        .send(expense2)
+
+      const expenseId2 = expenseResponse2.body['id']
+
+      const response2 = await request(app)
+        .post(`/v1/expenses/${expenseId2}/schedule`)
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+
+      const responseBody: ExpenseScheduleDTO = response2.body
+
+      expect(responseBody.status).toEqual('SCHEDULED')
+    })
   })
 })
