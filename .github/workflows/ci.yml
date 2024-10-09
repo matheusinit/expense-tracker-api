@@ -92,7 +92,7 @@ jobs:
           echo "SESSION_SECRET=$(openssl rand -base64 24 | tr -d '=' | cut -c1-32)" >> .env.test.local
 
       - name: Generate Prisma client
-        run: npx prisma generate
+        run: pnpm prisma generate
 
       - name: Run migrations
         run: pnpm migrate:test
