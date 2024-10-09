@@ -98,4 +98,4 @@ jobs:
         run: pnpm migrate:test
 
       - name: Run tests
-        run: npm test:integration
+        run: pnpm test:integration
