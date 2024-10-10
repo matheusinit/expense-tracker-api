@@ -8,7 +8,8 @@ export abstract class ExpenseRepository {
 
   abstract get: (id: string) => Promise<ExpenseModel | null>
 
-  abstract getMany: (take: number, skip: number, select?: string[]) => Promise<ExpenseModel[]>
+  abstract getMany: (
+    take: number, skip: number, select?: string[]) => Promise<ExpenseModel[]>
 
   abstract update: (id: string, data: Partial<Expense>) => Promise<ExpenseModel>
 

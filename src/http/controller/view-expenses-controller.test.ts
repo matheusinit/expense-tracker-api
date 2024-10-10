@@ -8,6 +8,7 @@ import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { ExpenseModel } from '@/data/models/expense-model'
+import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
 
 type PageBasedPaginationDTO = {
   records: ExpenseModel[],
@@ -25,6 +26,8 @@ describe('Given view expenses controller', () => {
   })
 
   beforeEach(async () => {
+    await db.expenseToExpenseSchedule.deleteMany({})
+    await db.expenseSchedule.deleteMany({})
     await db.expense.deleteMany({})
   })
 
@@ -74,8 +77,11 @@ describe('Given view expenses controller', () => {
 
     const responseBody: PageBasedPaginationDTO = response.body
 
+    expense.amount = convertAmountToCents(expense.amount)
     expect(response.status).toBe(200)
-    expect(responseBody.records).toEqual(expect.arrayContaining([expect.objectContaining(expense)]))
+    expect(responseBody.records).toEqual(
+      expect.arrayContaining([expect.objectContaining(expense)])
+    )
   })
 
   it('when multiple expenses is added, then should return expenses in multiple pages', async () => {

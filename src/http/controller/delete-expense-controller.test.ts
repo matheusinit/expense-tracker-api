@@ -18,6 +18,8 @@ describe('Given remove expense controller', () => {
   })
 
   afterEach(async () => {
+    await db.expenseToExpenseSchedule.deleteMany({})
+    await db.expenseSchedule.deleteMany({})
     await db.expense.deleteMany({})
   })
 

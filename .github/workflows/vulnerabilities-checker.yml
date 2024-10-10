@@ -10,12 +10,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Run Trivy vulnerability scanner in fs mode
         uses: aquasecurity/trivy-action@0.20.0

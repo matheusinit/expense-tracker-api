@@ -12,16 +12,34 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
-      - name: Security audit dependencies
-        run: npm audit
+        run: pnpm install
       - name: Lint TypeScript files
-        run: npm run lint
+        run: pnpm lint
+
+  audit-dependencies:
+    name: Audit dependencies
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+      - name: Set up TypeScript
+        uses: actions/setup-node@v2
+        with:
+          node-version: '21'
+      - name: Install dependencies
+        run: pnpm install
+      - name: Security audit dependencies
+        run: pnpm audit
+    needs: static-analysis
 
   unit-test:
     name: Unit test
@@ -29,15 +47,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Run unit tests
-        run: npm run test:unit
-    needs: static-analysis
+        run: pnpm test:unit
 
   integration-test:
     name: Integration test
@@ -59,12 +78,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
 
       - name: Load .env variables
         run: |
@@ -77,11 +98,10 @@ jobs:
           echo "SESSION_SECRET=$(openssl rand -base64 24 | tr -d '=' | cut -c1-32)" >> .env.test.local
 
       - name: Generate Prisma client
-        run: npx prisma generate
+        run: pnpm prisma generate
 
       - name: Run migrations
-        run: npm run migrate:test
+        run: pnpm migrate:test
 
       - name: Run tests
-        run: npm run test:integration
-    needs: static-analysis
+        run: pnpm test:integration

@@ -22,20 +22,33 @@ class UpdateExpenseController {
         return response.status(404).send({ message: 'Cannot update a deleted resource' })
       }
 
-      const expense = new Expense(expenseFound.description, expenseFound.amount, expenseFound.dueDate)
+      const expense = new Expense(
+        expenseFound.description, expenseFound.amount, expenseFound.dueDate
+      )
 
       const fieldsToCheck = ['description', 'amount', 'dueDate']
 
-      const noneFieldsIsProvided = fieldsToCheck.every(field => request.body[field] === undefined)
+      const noneFieldsIsProvided = fieldsToCheck.every(
+        field => request.body[field] === undefined
+      )
 
       if (noneFieldsIsProvided) {
         return response.status(400).send({ message: 'At least one field must be provided' })
       }
 
-      const { description, amount: amountField, dueDate: dueDateField } = request.body
+      const {
+        description,
+        amount: amountField,
+        dueDate: dueDateField
+      } = request.body
 
-      const amount = amountField !== undefined ? Number(amountField) : amountField
-      const dueDate = dueDateField !== undefined ? Number(dueDateField) : dueDateField
+      const amount = amountField !== undefined
+        ? Number(amountField)
+        : amountField
+
+      const dueDate = dueDateField !== undefined
+        ? Number(dueDateField)
+        : dueDateField
 
       expense.update({
         description,

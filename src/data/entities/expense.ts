@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ExpenseSchedule } from './expense-schedule'
 
 type UpdateExpense = {
   description?: string
@@ -10,11 +11,24 @@ export class Expense {
   private _description!: string
   private _amount!: number
   private _dueDate!: number
+  private _paidAt: Date | null
+  private _expenseSchedule: ExpenseSchedule | null
 
-  constructor(description: string, amount: number | null, dueDate?: number) {
+  private createdAt?: Date
+
+  constructor(
+    description: string,
+    amount: number | null,
+    dueDate?: number,
+    createdAt?: Date
+  ) {
+    this.createdAt = createdAt
+
     this.description = description
     this.amount = amount
     this.dueDate = dueDate ?? 10
+    this._paidAt = null
+    this._expenseSchedule = null
   }
 
   get description(): string {
@@ -50,7 +64,11 @@ export class Expense {
       throw new Error('Amount cannot be a negative value. It should be greater than 0')
     }
 
-    this._amount = value
+    this._amount = this.createdAt ? value : this.convertAmountToCents(value)
+  }
+
+  private convertAmountToCents(amount: number) {
+    return amount * 100
   }
 
   get dueDate(): number {
@@ -81,5 +99,25 @@ export class Expense {
     if (dueDate !== undefined) {
       this.dueDate = dueDate
     }
+  }
+
+  pay() {
+    if (this._paidAt) {
+      throw new Error('Expense already paid')
+    }
+
+    this._paidAt = new Date()
+  }
+
+  get paidAt() {
+    return this._paidAt
+  }
+
+  set expenseSchedule(value: ExpenseSchedule | null) {
+    this._expenseSchedule = value
+  }
+
+  get expenseSchedule() {
+    return this._expenseSchedule
   }
 }

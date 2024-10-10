@@ -21,4 +21,27 @@ model Expense {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+
+  ExpenseToExpenseSchedule ExpenseToExpenseSchedule[]
+}
+
+model ExpenseToExpenseSchedule {
+  expenseId         String
+  expenseScheduleId String
+
+  expenseSchedule ExpenseSchedule @relation(fields: [expenseScheduleId], references: [id])
+  expense         Expense         @relation(fields: [expenseId], references: [id])
+
+  @@id([expenseId, expenseScheduleId])
+}
+
+model ExpenseSchedule {
+  id        String    @id @default(cuid())
+  period    DateTime
+  status    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  ExpenseExpenseSchedule ExpenseToExpenseSchedule[]
 }
