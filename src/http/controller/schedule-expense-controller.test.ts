@@ -417,8 +417,11 @@ describe('Given schedule expenses controller', () => {
 
       const today = new Date()
       const nextMonth = new Date(today)
+      console.log('today', today)
       nextMonth.setMonth(today.getMonth() + 1)
       nextMonth.setDate(0)
+      console.log('nextMonth', nextMonth)
+      console.log(nextMonth.toISOString())
       const nextMonthDate = nextMonth.toISOString().split('T')[0]
       expect(responseBody.period.split('T')[0]).toEqual(nextMonthDate)
     })
