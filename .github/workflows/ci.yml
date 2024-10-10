@@ -12,14 +12,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Lint TypeScript files
-        run: npm run lint
+        run: pnpm lint
 
   audit-dependencies:
     name: Audit dependencies
@@ -27,14 +29,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Security audit dependencies
-        run: npm audit
+        run: pnpm audit
     needs: static-analysis
 
   unit-test:
@@ -43,14 +47,16 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
       - name: Set up TypeScript
         uses: actions/setup-node@v2
         with:
           node-version: '21'
       - name: Install dependencies
-        run: npm install
+        run: pnpm install
       - name: Run unit tests
-        run: npm run test:unit
+        run: pnpm test:unit
 
   integration-test:
     name: Integration test
