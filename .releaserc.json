@@ -8,5 +8,6 @@
     "@semantic-release/changelog",
     "@semantic-release/github",
     "@semantic-release/git"
-  ]
+  ],
+  "initialVersion": "0.1.0"
 }
