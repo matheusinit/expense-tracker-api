@@ -68,4 +68,12 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
 
     return aggregate._sum.amount ?? 0
   }
+
+  async getExpenseByPeriod(period: Date) {
+    return await db.expenseSchedule.findFirst({
+      where: {
+        period
+      }
+    })
+  }
 }

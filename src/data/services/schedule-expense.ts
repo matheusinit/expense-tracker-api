@@ -1,4 +1,3 @@
-import db from '@/infra/database'
 import { Expense } from '../entities/expense'
 import { ExpenseSchedule } from '../entities/expense-schedule'
 import { ExpenseRepository } from '../protocols/expense-repository'
@@ -33,11 +32,7 @@ export class ScheduleExpenseService {
 
     expenseScheduleEntity.include(expense)
 
-    const expenseScheduleFromDb = await db.expenseSchedule.findFirst({
-      where: {
-        period: expenseScheduleEntity.period
-      }
-    })
+    const expenseScheduleFromDb = await this.expenseScheduleRepository.getExpenseByPeriod(expenseScheduleEntity.period)
 
     const previousMonthScheduleIsOpen = await this.verifyIfPreviousMonthExpenseScheduleIsOpen(expenseScheduleEntity)
 
@@ -88,12 +83,8 @@ export class ScheduleExpenseService {
 
     const previousMonthPeriod = periodDateTime
 
-    const expenseScheduleFromPreviousMonth = await db.expenseSchedule
-      .findFirst({
-        where: {
-          period: previousMonthPeriod
-        }
-      })
+    const expenseScheduleFromPreviousMonth = await this.expenseScheduleRepository
+      .getExpenseByPeriod(previousMonthPeriod)
 
     return expenseScheduleFromPreviousMonth
       && expenseScheduleFromPreviousMonth.status === 'OPEN'
