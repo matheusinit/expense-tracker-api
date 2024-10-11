@@ -14,6 +14,12 @@ class DetailExpenseScheduleController {
 
       const expenseSchedule = await this.repository.getById(id)
 
+      if (!expenseSchedule) {
+        return response.status(404).send({
+          message: 'Schedule not found'
+        })
+      }
+
       return response.status(200).send(expenseSchedule)
     } catch (_err) {
       return response.status(500).send({ message: 'Internal server error' })
