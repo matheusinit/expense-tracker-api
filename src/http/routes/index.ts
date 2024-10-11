@@ -13,6 +13,6 @@ router.post('/expenses', (request, response) => makeAddExpenseController().handl
 router.put('/expenses/:id', (request, response) => makeUpdateExpenseController().handle(request, response))
 router.delete('/expenses/:id', (request, response) => makeDeleteExpenseController().handle(request, response))
 
-router.post('/expenses/:id/schedule', (request, response) => makeScheduleExpenseController().handle(request, response))
+router.post('/expenses/:id/schedules', (request, response) => makeScheduleExpenseController().handle(request, response))
 
 export default router

@@ -55,7 +55,7 @@ describe('Given schedule expenses controller', () => {
     const expenseId = expenseResponse.body['id']
 
     const response = await request(app)
-      .post(`/v1/expenses/${expenseId}/schedule`)
+      .post(`/v1/expenses/${expenseId}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -91,7 +91,7 @@ describe('Given schedule expenses controller', () => {
     const expenseId = expenseResponse.body['id']
 
     const response = await request(app)
-      .post(`/v1/expenses/${expenseId}/schedule`)
+      .post(`/v1/expenses/${expenseId}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -120,7 +120,7 @@ describe('Given schedule expenses controller', () => {
     const expenseId = expenseResponse.body['id']
 
     const response = await request(app)
-      .post(`/v1/expenses/${expenseId}/schedule`)
+      .post(`/v1/expenses/${expenseId}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -148,7 +148,7 @@ describe('Given schedule expenses controller', () => {
     const expenseId = expenseResponse.body['id']
 
     const expenseScheduleResponse = await request(app)
-      .post(`/v1/expenses/${expenseId}/schedule`)
+      .post(`/v1/expenses/${expenseId}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -177,7 +177,7 @@ describe('Given schedule expenses controller', () => {
     const invalidId = falso.randUuid()
 
     const response = await request(app)
-      .post(`/v1/expenses/${invalidId}/schedule`)
+      .post(`/v1/expenses/${invalidId}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -217,14 +217,14 @@ describe('Given schedule expenses controller', () => {
     const expenseId2 = expenseResponse2.body['id']
 
     const response1 = await request(app)
-      .post(`/v1/expenses/${expenseId1}/schedule`)
+      .post(`/v1/expenses/${expenseId1}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
     const responseBody1: ExpenseScheduleModel = response1.body
 
     const response2 = await request(app)
-      .post(`/v1/expenses/${expenseId2}/schedule`)
+      .post(`/v1/expenses/${expenseId2}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -315,12 +315,12 @@ describe('Given schedule expenses controller', () => {
     const expenseId3 = expenseResponse3.body['id']
 
     await request(app)
-      .post(`/v1/expenses/${expenseId1}/schedule`)
+      .post(`/v1/expenses/${expenseId1}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
     await request(app)
-      .post(`/v1/expenses/${expenseId2}/schedule`)
+      .post(`/v1/expenses/${expenseId2}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -330,7 +330,7 @@ describe('Given schedule expenses controller', () => {
       .set('x-csrf-token', csrfToken)
 
     const expenseScheduleResponse = await request(app)
-      .post(`/v1/expenses/${expenseId3}/schedule`)
+      .post(`/v1/expenses/${expenseId3}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -361,7 +361,7 @@ describe('Given schedule expenses controller', () => {
     const expenseId = expenseResponse.body['id']
 
     const response = await request(app)
-      .post(`/v1/expenses/${expenseId}/schedule`)
+      .post(`/v1/expenses/${expenseId}/schedules`)
       .set('Cookie', cookies)
       .set('x-csrf-token', csrfToken)
 
@@ -390,7 +390,7 @@ describe('Given schedule expenses controller', () => {
       const expenseId = expenseResponse.body['id']
 
       await request(app)
-        .post(`/v1/expenses/${expenseId}/schedule`)
+        .post(`/v1/expenses/${expenseId}/schedules`)
         .set('Cookie', cookies)
         .set('x-csrf-token', csrfToken)
 
@@ -409,7 +409,7 @@ describe('Given schedule expenses controller', () => {
       const expenseId2 = expenseResponse2.body['id']
 
       const response2 = await request(app)
-        .post(`/v1/expenses/${expenseId2}/schedule`)
+        .post(`/v1/expenses/${expenseId2}/schedules`)
         .set('Cookie', cookies)
         .set('x-csrf-token', csrfToken)
 
@@ -443,7 +443,7 @@ describe('Given schedule expenses controller', () => {
       const expenseId = expenseResponse.body['id']
 
       await request(app)
-        .post(`/v1/expenses/${expenseId}/schedule`)
+        .post(`/v1/expenses/${expenseId}/schedules`)
         .set('Cookie', cookies)
         .set('x-csrf-token', csrfToken)
 
@@ -462,7 +462,7 @@ describe('Given schedule expenses controller', () => {
       const expenseId2 = expenseResponse2.body['id']
 
       const response2 = await request(app)
-        .post(`/v1/expenses/${expenseId2}/schedule`)
+        .post(`/v1/expenses/${expenseId2}/schedules`)
         .set('Cookie', cookies)
         .set('x-csrf-token', csrfToken)
 
