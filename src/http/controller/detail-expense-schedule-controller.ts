@@ -1,17 +1,24 @@
-import db from '@/infra/database'
+import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
 import { Request, Response } from 'express'
 
 class DetailExpenseScheduleController {
+  private readonly repository: ExpenseScheduleRepository
+
+  constructor(repository: ExpenseScheduleRepository) {
+    this.repository = repository
+  }
+
   async handle(request: Request, response: Response) {
-    const { id } = request.params
+    try {
+      const { id } = request.params
 
-    const expenseSchedule = await db.expenseSchedule.findUnique({
-      where: {
-        id
-      }
-    })
+      const expenseSchedule = await this.repository.getById(id)
 
-    response.status(200).send(expenseSchedule)
+      return response.status(200).send(expenseSchedule)
+    } catch (_err) {
+      return response.status(500).send({ message: 'Internal server error' })
+    }
+
   }
 }
 
