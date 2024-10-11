@@ -1,9 +1,12 @@
-import db from '@/infra/database'
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
-
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi, vitest } from 'vitest'
+import { Request, Response } from 'express'
 import request from 'supertest'
+
+import db from '@/infra/database'
 import app from '@/http/app'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
+import { ExpenseScheduleRepositoryRelationalDatabase } from '@/infra/database/repository/expense-schedule-repository'
+import DetailExpenseScheduleController from './detail-expense-schedule-controller'
 
 describe('Given detail expense schedule controller', () => {
   beforeAll(async () => {
@@ -80,5 +83,31 @@ describe('Given detail expense schedule controller', () => {
       status: 'OPEN',
       period: expenseScheduleResponse.body['period']
     }))
+  })
+
+  it('when an unpexpected error is thrown, then should return internal server error', async () => {
+    const repository = new ExpenseScheduleRepositoryRelationalDatabase()
+
+    vitest.spyOn(repository, 'getById').mockReturnValueOnce(Promise.reject(new Error('Internal server error')))
+
+    const controller = new DetailExpenseScheduleController(repository)
+
+    const requestParams = {
+      params: {
+        id: '123'
+      }
+    } as unknown as Request
+
+    const responseParams = {
+      status: vitest.fn().mockReturnThis(),
+      send: vitest.fn()
+    } as unknown as Response
+
+    await controller.handle(requestParams, responseParams)
+
+    expect(responseParams.status).toBeCalledWith(500)
+    expect(responseParams.send).toBeCalledWith({
+      message: 'Internal server error'
+    })
   })
 })
