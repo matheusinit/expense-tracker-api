@@ -16,10 +16,7 @@ describe('Given add expense controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken'] ?? ''
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -39,10 +36,7 @@ describe('Given add expense controller', () => {
       amount: 100
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -61,10 +55,7 @@ describe('Given add expense controller', () => {
       description: 'Credit card bill'
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -81,10 +72,7 @@ describe('Given add expense controller', () => {
   it('when all required fields is missing, then should return message error listing all fields', async () => {
     const expense = {}
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -101,10 +89,7 @@ describe('Given add expense controller', () => {
   it('when all required fields is missing, then should return bad request status code', async () => {
     const expense = {}
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -125,10 +110,7 @@ describe('Given add expense controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -149,10 +131,7 @@ describe('Given add expense controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
