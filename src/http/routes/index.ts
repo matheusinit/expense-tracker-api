@@ -5,8 +5,7 @@ import { makeDeleteExpenseController } from '@/http/factory/delete-expense-contr
 import { makeUpdateExpenseController } from '@/http/factory/update-expense-controller-factory'
 import { makeViewExpensesController } from '@/http/factory/view-expense-controller-factory'
 import { makeScheduleExpenseController } from '../factory/schedule-expense-controller'
-import DetailExpenseScheduleController from '../controller/detail-expense-schedule-controller'
-import { ExpenseScheduleRepositoryRelationalDatabase } from '@/infra/database/repository/expense-schedule-repository'
+import { makeDetailExpenseScheduleController } from '@/http/factory/detail-expense-schedule-controller-factory'
 
 const router = Router()
 
@@ -16,10 +15,6 @@ router.put('/expenses/:id', (request, response) => makeUpdateExpenseController()
 router.delete('/expenses/:id', (request, response) => makeDeleteExpenseController().handle(request, response))
 
 router.post('/expenses/:id/schedules', (request, response) => makeScheduleExpenseController().handle(request, response))
-
-const repository = new ExpenseScheduleRepositoryRelationalDatabase()
-const controller = new DetailExpenseScheduleController(repository)
-
-router.get('/schedules/:id', (request, response) => controller.handle(request, response))
+router.get('/schedules/:id', (request, response) => makeDetailExpenseScheduleController().handle(request, response))
 
 export default router
