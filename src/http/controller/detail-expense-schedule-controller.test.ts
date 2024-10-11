@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi, vitest } from 'vitest'
 import { Request, Response } from 'express'
 import request from 'supertest'
+import * as falso from '@ngneat/falso'
 
 import db from '@/infra/database'
 import app from '@/http/app'
@@ -108,6 +109,19 @@ describe('Given detail expense schedule controller', () => {
     expect(responseParams.status).toBeCalledWith(500)
     expect(responseParams.send).toBeCalledWith({
       message: 'Internal server error'
+    })
+  })
+
+  it('when the schedule is not found, then should return not found', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
+
+    const id = falso.randUuid()
+
+    const response = await request(app).get(`/v1/schedules/${id}`)
+
+    expect(response.status).toBe(404)
+    expect(response.body).toEqual({
+      message: 'Schedule not found'
     })
   })
 })
