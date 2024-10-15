@@ -14,6 +14,14 @@ class ViewExpensesFromExpenseScheduleController {
   async handle(request: Request, response: Response) {
     const id = request.params['id']
 
+    const pageQuery = request.query['page']
+    const pageSizeQuery = request.query['pageSize']
+
+    const page = Number(pageQuery ?? '1')
+    const pageSize = Number(pageSizeQuery ?? '5')
+
+    const skip = (page - 1) * pageSize
+
     const expenseSchedule = await this.repository.getById(id)
 
     if (!expenseSchedule) {
@@ -29,16 +37,30 @@ class ViewExpensesFromExpenseScheduleController {
             expenseScheduleId: id
           }
         }
+      },
+      take: pageSize,
+      skip
+    })
+
+    const totalCount = await db.expense.count({
+      where: {
+        ExpenseToExpenseSchedule: {
+          every: {
+            expenseScheduleId: id
+          }
+        }
       }
     })
+
+    const pageCount = Math.ceil(totalCount / pageSize)
 
     const paginationData: PageBasedPagination<ExpenseModel> = {
       records: expenses,
       _metadata: {
-        page: 1,
-        per_page: 5,
-        page_count: 1,
-        total_count: 2
+        page: page,
+        per_page: pageSize,
+        page_count: pageCount,
+        total_count: totalCount
       }
     }
 
