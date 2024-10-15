@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 
 import app from '@/http/app'
 import db from '@/infra/database'
-import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ErrorMessage } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { ExpenseModel } from '@/data/models/expense-model'
@@ -47,7 +47,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send()
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(404)
     expect(responseBody.message).toBe('Expense not found')
@@ -72,7 +72,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send()
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('At least one field must be provided')
@@ -211,7 +211,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('Invalid value for amount. It should be greater than 0.')
@@ -245,7 +245,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('Description is required')
@@ -278,7 +278,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('Invalid value for dueDate. It should be in interval of days of a month.')
@@ -311,7 +311,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toBe('Invalid value for dueDate. It should be in interval of days of a month.')
@@ -351,7 +351,7 @@ describe('Given update expense controller', () => {
       .set('Cookie', cookies)
       .send(payload)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(404)
     expect(responseBody.message).toBe('Cannot update a deleted resource')

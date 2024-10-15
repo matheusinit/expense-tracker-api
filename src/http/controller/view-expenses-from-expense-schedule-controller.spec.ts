@@ -5,7 +5,7 @@ import * as falso from '@ngneat/falso'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import db from '@/infra/database'
 import app from '../app'
-import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ErrorMessage } from '@/data/dtos/error-message'
 import { ExpenseModel } from '@/data/models/expense-model'
 import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
 
@@ -35,7 +35,7 @@ describe('View expenses from expense schedule controller', () => {
 
     const response = await request(app).get(`/v1/schedules/${id}/expenses`)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.statusCode).toBe(404)
     expect(responseBody.message).toBe('Expense schedule not found')

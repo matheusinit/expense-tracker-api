@@ -3,7 +3,7 @@ import request from 'supertest'
 import app from '@/http/app'
 import * as falso from '@ngneat/falso'
 
-import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ErrorMessage } from '@/data/dtos/error-message'
 import { ExpenseModel } from '@/data/models/expense-model'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
@@ -44,7 +44,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: description')
@@ -63,7 +63,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount')
@@ -80,7 +80,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount, description, dueDate')
@@ -97,7 +97,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount, description, dueDate')
@@ -118,7 +118,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for amount. It should be greater than 0.')
@@ -166,7 +166,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: dueDate')
@@ -187,7 +187,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')
@@ -208,7 +208,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')
@@ -229,7 +229,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')

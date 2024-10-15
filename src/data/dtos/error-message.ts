@@ -1,3 +1,3 @@
-export type MessageErrorDTO = {
+export type ErrorMessage = {
   message: string
 }

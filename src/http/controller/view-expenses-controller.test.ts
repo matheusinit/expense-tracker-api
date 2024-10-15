@@ -4,7 +4,7 @@ import * as falso from '@ngneat/falso'
 
 import app from '@/http/app'
 import db from '@/infra/database'
-import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ErrorMessage } from '@/data/dtos/error-message'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { ExpenseModel } from '@/data/models/expense-model'
@@ -283,7 +283,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toEqual('Invalid fields: producedBy')
@@ -310,7 +310,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(400)
     expect(responseBody.message).toEqual('Invalid fields: producedBy, createdBy')
