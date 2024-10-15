@@ -8,6 +8,7 @@ import app from '../app'
 import { ErrorMessage } from '@/data/dtos/error-message'
 import { ExpenseModel } from '@/data/models/expense-model'
 import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
+import { generateExpenses } from '@/utils/tests/generate-expenses'
 
 describe('View expenses from expense schedule controller', () => {
   beforeAll(async () => {
@@ -210,6 +211,68 @@ describe('View expenses from expense schedule controller', () => {
       per_page: 5,
       page_count: 1,
       total_count: 2
+    })
+  })
+
+  it('given pagination query parameters, when attempts to define pagination structure, then should return records and metadata accordingly', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
+
+    const expenses = generateExpenses(10, 5, 15)
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    let id = undefined
+    const expensesModels: ExpenseModel[] = []
+
+    for (const expense of expenses) {
+      const response = await request(app)
+        .post('/v1/expenses')
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+        .send(expense)
+
+      expensesModels.push(response.body)
+
+      const expenseId = response.body.id
+
+      const scheduleResponse = await request(app)
+        .post(`/v1/expenses/${expenseId}/schedules`)
+        .set('Cookie', cookies)
+        .set('x-csrf-token', csrfToken)
+        .send()
+
+      id = scheduleResponse.body.id
+    }
+
+    const expensesModelsToExpect = expensesModels.slice(0, 3)
+
+    const response = await request(app)
+      .get(`/v1/schedules/${id}/expenses`)
+      .query({
+        page: 1,
+        pageSize: 3
+      })
+      .send()
+
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
+
+    expect(responseBody.records.length).toEqual(3)
+    expect(responseBody.records).toEqual([
+      expect.objectContaining({
+        id: expensesModelsToExpect[0].id
+      }),
+      expect.objectContaining({
+        id: expensesModelsToExpect[1].id
+      }),
+      expect.objectContaining({
+        id: expensesModelsToExpect[2].id
+      })
+    ])
+    expect(responseBody._metadata).toEqual({
+      page: 1,
+      per_page: 3,
+      page_count: 4,
+      total_count: 10
     })
   })
 })
