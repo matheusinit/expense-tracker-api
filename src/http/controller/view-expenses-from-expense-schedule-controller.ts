@@ -1,3 +1,5 @@
+import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
+import { ExpenseModel } from '@/data/models/expense-model'
 import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
 import db from '@/infra/database'
 import { Request, Response } from 'express'
@@ -30,9 +32,17 @@ class ViewExpensesFromExpenseScheduleController {
       }
     })
 
-    return response.status(200).send({
-      records: expenses
-    })
+    const paginationData: PageBasedPagination<ExpenseModel> = {
+      records: expenses,
+      _metadata: {
+        page: 1,
+        per_page: 5,
+        page_count: 1,
+        total_count: 2
+      }
+    }
+
+    return response.status(200).send(paginationData)
   }
 }
 
