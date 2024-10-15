@@ -1,4 +1,5 @@
 import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
+import db from '@/infra/database'
 import { Request, Response } from 'express'
 
 class ViewExpensesFromExpenseScheduleController {
@@ -19,7 +20,19 @@ class ViewExpensesFromExpenseScheduleController {
       })
     }
 
-    return response.status(200).send()
+    const expenses = await db.expense.findMany({
+      where: {
+        ExpenseToExpenseSchedule: {
+          every: {
+            expenseScheduleId: id
+          }
+        }
+      }
+    })
+
+    return response.status(200).send({
+      records: expenses
+    })
   }
 }
 
