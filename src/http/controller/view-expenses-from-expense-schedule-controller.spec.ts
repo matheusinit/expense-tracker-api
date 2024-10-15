@@ -6,6 +6,17 @@ import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies
 import db from '@/infra/database'
 import app from '../app'
 import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ExpenseModel } from '@/data/models/expense-model'
+
+type PageBasedPaginationDTO = {
+  records: ExpenseModel[],
+  _metadata: {
+    page: number
+    per_page: number
+    page_count: number
+    total_count: number
+  }
+}
 
 describe('View expenses from expense schedule controller', () => {
   beforeAll(async () => {
@@ -90,5 +101,64 @@ describe('View expenses from expense schedule controller', () => {
       .send()
 
     expect(response.statusCode).toBe(200)
+  })
+
+  it('given a valid id, when attempts to retrieve the resource associated with id, then should return the expenses', async () => {
+    vi.setSystemTime(new Date('2024-10-04'))
+    const expense = {
+      description: 'Credit card',
+      amount: 95.50,
+      dueDate: 10
+    }
+
+    const { cookies, csrfToken } = await getCSRFTokenAndCookies()
+
+    const expenseResponse1 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense)
+
+    const expenseId = expenseResponse1.body.id
+
+    await request(app)
+      .post(`/v1/expenses/${expenseId}/schedules`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send()
+
+    const expense2 = {
+      description: 'Gym',
+      amount: 85.45,
+      dueDate: 10
+    }
+
+    const expenseResponse2 = await request(app)
+      .post('/v1/expenses')
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send(expense2)
+
+    const expense2Id = expenseResponse2.body.id
+
+    const expenseScheduleResponse = await request(app)
+      .post(`/v1/expenses/${expense2Id}/schedules`)
+      .set('Cookie', cookies)
+      .set('x-csrf-token', csrfToken)
+      .send()
+
+    const id = expenseScheduleResponse.body.id
+
+    const response = await request(app)
+      .get(`/v1/schedules/${id}/expenses`)
+      .send()
+
+    const responseBody: PageBasedPaginationDTO = response.body
+
+    expect(Array.isArray(responseBody.records)).toEqual(true)
+    expect(responseBody.records).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: expenseId }),
+      expect.objectContaining({ id: expense2Id })
+    ]))
   })
 })
