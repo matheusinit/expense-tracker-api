@@ -7,16 +7,7 @@ import db from '@/infra/database'
 import app from '../app'
 import { MessageErrorDTO } from '@/data/dtos/error-message'
 import { ExpenseModel } from '@/data/models/expense-model'
-
-type PageBasedPaginationDTO = {
-  records: ExpenseModel[],
-  _metadata: {
-    page: number
-    per_page: number
-    page_count: number
-    total_count: number
-  }
-}
+import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
 
 describe('View expenses from expense schedule controller', () => {
   beforeAll(async () => {
@@ -153,7 +144,7 @@ describe('View expenses from expense schedule controller', () => {
       .get(`/v1/schedules/${id}/expenses`)
       .send()
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(Array.isArray(responseBody.records)).toEqual(true)
     expect(responseBody.records).toEqual(expect.arrayContaining([

@@ -9,16 +9,7 @@ import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { ExpenseModel } from '@/data/models/expense-model'
 import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
-
-type PageBasedPaginationDTO = {
-  records: ExpenseModel[],
-  _metadata: {
-    page: number
-    per_page: number
-    page_count: number
-    total_count: number
-  }
-}
+import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
 
 describe('Given view expenses controller', () => {
   beforeAll(async () => {
@@ -51,7 +42,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses')
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toBeInstanceOf(Array)
@@ -75,7 +66,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses')
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expense.amount = convertAmountToCents(expense.amount)
     expect(response.status).toBe(200)
@@ -100,7 +91,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses')
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records.length).toEqual(5)
@@ -129,7 +120,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query({ page })
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records.length).toEqual(5)
@@ -157,7 +148,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query({ pageSize })
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records.length).toEqual(pageSize)
@@ -191,7 +182,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
     const pageCount = Math.ceil(expenses.length / pageSize)
 
     const recordsLength = expenses.length - pageSize * (page - 1)
@@ -225,7 +216,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(expect.arrayContaining([
@@ -257,7 +248,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(expect.arrayContaining([
@@ -346,7 +337,7 @@ describe('Given view expenses controller', () => {
       .get('/v1/expenses')
       .query(query)
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody.records).toEqual(expect.arrayContaining([
@@ -394,7 +385,7 @@ describe('Given view expenses controller', () => {
     const response = await request(app)
       .get('/v1/expenses?pageSize=10')
 
-    const responseBody: PageBasedPaginationDTO = response.body
+    const responseBody: PageBasedPagination<ExpenseModel> = response.body
 
     expect(response.status).toBe(200)
     expect(responseBody._metadata.total_count).toEqual(9)
