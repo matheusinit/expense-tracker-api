@@ -1,5 +1,6 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import request from 'supertest'
+import * as falso from '@ngneat/falso'
 
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import db from '@/infra/database'
@@ -27,7 +28,18 @@ describe('View expenses from expense schedule controller', () => {
     await db.$disconnect()
   })
 
-  it('Given an invalid id, when attempts to retrieve the resource associated with id, then should return not found error', async () => {
+  it('given an invalid id, when attempts to retrieve the resource associated with id, then should return not found error', async () => {
+    const id = falso.randUuid()
+
+    const response = await request(app).get(`/v1/schedules/${id}/expenses`)
+
+    const responseBody: MessageErrorDTO = response.body
+
+    expect(response.statusCode).toBe(404)
+    expect(responseBody.message).toBe('Expense schedule not found')
+  })
+
+  it('given a valid id, when attempts to retrieve the resource associated with id, then should return ok status', async () => {
     vi.setSystemTime(new Date('2024-10-04'))
     const expense = {
       description: 'Credit card',
@@ -71,13 +83,12 @@ describe('View expenses from expense schedule controller', () => {
       .set('x-csrf-token', csrfToken)
       .send()
 
-    const expenseScheduleId = expenseScheduleResponse.body.id
+    const id = expenseScheduleResponse.body.id
 
-    const response = await request(app).get(`/v1/schedules/${expenseScheduleId}/expenses`)
+    const response = await request(app)
+      .get(`/v1/schedules/${id}/expenses`)
+      .send()
 
-    const responseBody: MessageErrorDTO = response.body
-
-    expect(response.statusCode).toBe(404)
-    expect(responseBody.message).toBe('Expense schedule not found')
+    expect(response.statusCode).toBe(200)
   })
 })
