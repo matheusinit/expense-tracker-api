@@ -1,14 +1,20 @@
-import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
-import { ExpenseModel } from '@/data/models/expense-model'
-import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
-import db from '@/infra/database'
 import { Request, Response } from 'express'
 
-class ViewExpensesFromExpenseScheduleController {
-  private readonly repository: ExpenseScheduleRepository
+import { PageBasedPagination } from '@/data/dtos/page-based-pagination'
+import { ExpenseModel } from '@/data/models/expense-model'
+import { ExpenseRepository } from '@/data/protocols/expense-repository'
+import { ExpenseScheduleRepository } from '@/data/protocols/expense-schedule-repository'
 
-  constructor(repository: ExpenseScheduleRepository) {
-    this.repository = repository
+class ViewExpensesFromExpenseScheduleController {
+  private readonly expenseScheduleRepository: ExpenseScheduleRepository
+  private readonly expenseRepository: ExpenseRepository
+
+  constructor(
+    repository: ExpenseScheduleRepository,
+    expenseRepository: ExpenseRepository
+  ) {
+    this.expenseScheduleRepository = repository
+    this.expenseRepository = expenseRepository
   }
 
   async handle(request: Request, response: Response) {
@@ -22,7 +28,7 @@ class ViewExpensesFromExpenseScheduleController {
 
     const skip = (page - 1) * pageSize
 
-    const expenseSchedule = await this.repository.getById(id)
+    const expenseSchedule = await this.expenseScheduleRepository.getById(id)
 
     if (!expenseSchedule) {
       return response.status(404).send({
@@ -30,27 +36,9 @@ class ViewExpensesFromExpenseScheduleController {
       })
     }
 
-    const expenses = await db.expense.findMany({
-      where: {
-        ExpenseToExpenseSchedule: {
-          every: {
-            expenseScheduleId: id
-          }
-        }
-      },
-      take: pageSize,
-      skip
-    })
+    const expenses = await this.expenseRepository.getByScheduleId(id, pageSize, skip)
 
-    const totalCount = await db.expense.count({
-      where: {
-        ExpenseToExpenseSchedule: {
-          every: {
-            expenseScheduleId: id
-          }
-        }
-      }
-    })
+    const totalCount = await this.expenseRepository.countByScheduleId(id)
 
     const pageCount = Math.ceil(totalCount / pageSize)
 
