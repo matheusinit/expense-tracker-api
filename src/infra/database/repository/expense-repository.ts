@@ -3,6 +3,7 @@ import { ExpenseRepository } from '@/data/protocols/expense-repository'
 import db from '@/infra/database'
 
 class ExpenseRepositoryRelationalDatabase implements ExpenseRepository {
+
   async add(data: Expense) {
     const expense = await db.expense.create({
       data: {
@@ -86,6 +87,32 @@ class ExpenseRepositoryRelationalDatabase implements ExpenseRepository {
     const columns = columnsQuery.map(column => column.column_name)
 
     return columns
+  }
+
+  async getByScheduleId(id: string, take: number, skip: number) {
+    return await db.expense.findMany({
+      where: {
+        ExpenseToExpenseSchedule: {
+          every: {
+            expenseScheduleId: id
+          }
+        }
+      },
+      take,
+      skip
+    })
+  }
+
+  async countByScheduleId(id: string) {
+    return await db.expense.count({
+      where: {
+        ExpenseToExpenseSchedule: {
+          every: {
+            expenseScheduleId: id
+          }
+        }
+      }
+    })
   }
 }
 

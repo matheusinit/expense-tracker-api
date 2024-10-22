@@ -3,7 +3,7 @@ import request from 'supertest'
 import app from '@/http/app'
 import * as falso from '@ngneat/falso'
 
-import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ErrorMessage } from '@/data/dtos/error-message'
 import { ExpenseModel } from '@/data/models/expense-model'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
 import { convertAmountToCents } from '@/utils/tests/convertAmountToCents'
@@ -16,10 +16,7 @@ describe('Given add expense controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken'] ?? ''
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -39,10 +36,7 @@ describe('Given add expense controller', () => {
       amount: 100
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -50,7 +44,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: description')
@@ -61,10 +55,7 @@ describe('Given add expense controller', () => {
       description: 'Credit card bill'
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -72,7 +63,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount')
@@ -81,10 +72,7 @@ describe('Given add expense controller', () => {
   it('when all required fields is missing, then should return message error listing all fields', async () => {
     const expense = {}
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -92,7 +80,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount, description, dueDate')
@@ -101,10 +89,7 @@ describe('Given add expense controller', () => {
   it('when all required fields is missing, then should return bad request status code', async () => {
     const expense = {}
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -112,7 +97,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: amount, description, dueDate')
@@ -125,10 +110,7 @@ describe('Given add expense controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -136,7 +118,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for amount. It should be greater than 0.')
@@ -149,10 +131,7 @@ describe('Given add expense controller', () => {
       dueDate: 10
     }
 
-    const csrfResponse = await request(app).get('/csrf-token')
-    const csrfToken = csrfResponse.body['csrfToken']
-
-    const cookies = csrfResponse.headers['set-cookie'].at(0) ?? ''
+    const { csrfToken, cookies } = await getCSRFTokenAndCookies()
 
     const response = await request(app)
       .post('/v1/expenses')
@@ -187,7 +166,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Missing required fields: dueDate')
@@ -208,7 +187,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')
@@ -229,7 +208,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')
@@ -250,7 +229,7 @@ describe('Given add expense controller', () => {
       .set('x-csrf-token', csrfToken)
       .send(expense)
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toEqual(400)
     expect(responseBody.message).toEqual('Invalid value for dueDate. It should be in interval of days of a month.')

@@ -76,4 +76,12 @@ export class ExpenseScheduleRepositoryRelationalDatabase implements
       }
     })
   }
+
+  async getById(id: string) {
+    return await db.expenseSchedule.findUnique({
+      where: {
+        id
+      }
+    })
+  }
 }

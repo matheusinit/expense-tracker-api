@@ -16,4 +16,8 @@ export abstract class ExpenseRepository {
   abstract delete: (id: string) => Promise<void>
 
   abstract getColumns: () => Promise<string[]>
+
+  abstract getByScheduleId: (id: string, take: number, skip: number) => Promise<ExpenseModel[]>
+
+  abstract countByScheduleId: (id: string) => Promise<number>
 }

@@ -1,10 +1,10 @@
 import * as falso from '@ngneat/falso'
 
-export const generateExpenses = (length: number) => {
+export const generateExpenses = (length: number, minDate?: number, maxDate?: number) => {
   const generateExpense = () => {
     const description = falso.randProductName()
     const amount = falso.randAmount({ fraction: 0 })
-    const dueDate = falso.randNumber({ min: 1, max: 31 })
+    const dueDate = falso.randNumber({ min: minDate ?? 1, max: maxDate ?? 31 })
     return { description, amount, dueDate }
   }
 

@@ -6,7 +6,7 @@ import app from '@/http/app'
 import db from '@/infra/database'
 import { generateExpenses } from '@/utils/tests/generate-expenses'
 import { getCSRFTokenAndCookies } from '@/utils/tests/get-csrf-token-and-cookies'
-import { MessageErrorDTO } from '@/data/dtos/error-message'
+import { ErrorMessage } from '@/data/dtos/error-message'
 import DeleteExpenseController from './delete-expense-controller'
 import ExpenseRepositoryRelationalDatabase from '@/infra/database/repository/expense-repository'
 import { Request, Response } from 'express'
@@ -48,7 +48,7 @@ describe('Given remove expense controller', () => {
       .set('Cookie', cookies)
       .send()
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(404)
     expect(responseBody.message).toBe('Expense not found')
@@ -89,7 +89,7 @@ describe('Given remove expense controller', () => {
       .set('Cookie', cookies)
       .send()
 
-    const responseBody: MessageErrorDTO = response.body
+    const responseBody: ErrorMessage = response.body
 
     expect(response.status).toBe(404)
     expect(responseBody.message).toBe('Resource already deleted')
