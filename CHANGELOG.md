@@ -1,3 +1,5 @@
+# [1.0.0-alpha.2](https://github.com/matheusinit/expense-tracker-api/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) (2024-10-22)
+
 # 1.0.0-alpha.1 (2024-10-10)
 
 
