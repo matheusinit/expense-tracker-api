@@ -1,10 +1,16 @@
 import { z } from 'zod'
 import { ExpenseSchedule } from './expense-schedule'
+import { Installment } from './installment'
 
 type UpdateExpense = {
   description?: string
   amount?: number | null
   dueDate?: number
+}
+
+enum ExpenseType {
+  FIXED = 'FIXED',
+  WITH_INSTALLMENTS = 'WITH_INSTALLMENTS',
 }
 
 export class Expense {
@@ -13,6 +19,8 @@ export class Expense {
   private _dueDate!: number
   private _paidAt: Date | null
   private _expenseSchedule: ExpenseSchedule | null
+  private _installment?: Installment
+  private _type: ExpenseType = ExpenseType.FIXED
 
   private createdAt?: Date
 
@@ -20,6 +28,7 @@ export class Expense {
     description: string,
     amount: number | null,
     dueDate?: number,
+    installment?: Installment,
     createdAt?: Date
   ) {
     this.createdAt = createdAt
@@ -29,6 +38,11 @@ export class Expense {
     this.dueDate = dueDate ?? 10
     this._paidAt = null
     this._expenseSchedule = null
+    this._installment = installment
+
+    if (installment) {
+      this._type = ExpenseType.WITH_INSTALLMENTS
+    }
   }
 
   get description(): string {
@@ -119,5 +133,13 @@ export class Expense {
 
   get expenseSchedule() {
     return this._expenseSchedule
+  }
+
+  get installment() {
+    return this._installment
+  }
+
+  get type() {
+    return this._type
   }
 }
