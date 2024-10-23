@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { Expense } from '@/data/entities/expense'
+import { Installment } from './installment'
 
 describe('Given is needed to create a expense,', () => {
   it('when a empty description is provided, should throw an exception', () => {
@@ -182,5 +183,16 @@ describe('Given is needed to pay a expense,', () => {
 
     expect(expense.paidAt).toEqual(firstPaymentDateTime)
     expect(paymentTry).toThrowError('Expense already paid')
+  })
+})
+
+describe('Given is needed to add a expense with installments', () => {
+  it('when a valid description, amount and total installments is provided, then should create a new expense with installments', () => {
+    const installment = new Installment(100, 1, 3)
+
+    const expense = new Expense('Credit card bill', 300, 10, installment)
+
+    expect(expense.installment).toBe(installment)
+    expect(expense.type).toBe('WITH_INSTALLMENTS')
   })
 })
